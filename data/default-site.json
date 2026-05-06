@@ -259,6 +259,8 @@
     ]
   },
   "scrapbook": {
+    "itemsPerSpread": 4,
+    "layoutStyle": "album",
     "pages": [
       {
         "id": "s1",

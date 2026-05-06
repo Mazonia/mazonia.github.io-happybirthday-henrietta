@@ -56,10 +56,10 @@
     style.textContent =
       "@keyframes bdayFall{0%{transform:translateY(-12vh) rotate(0deg)}100%{transform:translateY(112vh) rotate(720deg)}}\
       @keyframes bdayDrift{0%{transform:translate(-50%,-50%) rotate(var(--rot-start))}50%{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) rotate(var(--rot-mid))}100%{transform:translate(calc(-50% + var(--dx2)),calc(-50% + var(--dy2))) rotate(var(--rot-end))}}\
-      @keyframes bdayFloat{0%,100%{margin-top:0}50%{margin-top:-6px}}\
+      @keyframes bdayFloat{0%,100%{margin-top:0}50%{margin-top:-3px}}\
       .bday-lock-screen{position:fixed;inset:0;z-index:9999;background:radial-gradient(circle at 20% 15%,rgba(250,204,21,.18),transparent 40%),#090b17;overflow:hidden}\
       .bday-lock-collage{position:absolute;inset:0;pointer-events:none;z-index:1}\
-      .bday-lock-frame{position:absolute;padding:8px 8px 14px;border-radius:18px;background:linear-gradient(155deg,rgba(255,248,220,.9),rgba(255,239,186,.58));box-shadow:0 16px 34px rgba(0,0,0,.5),0 0 0 1px rgba(255,235,170,.35),inset 0 1px 0 rgba(255,255,255,.55);opacity:.94;animation:bdayDrift var(--drift,26s) ease-in-out infinite alternate,bdayFloat 4.6s ease-in-out infinite}\
+      .bday-lock-frame{position:absolute;padding:8px 8px 14px;border-radius:18px;background:linear-gradient(155deg,rgba(255,248,220,.9),rgba(255,239,186,.58));box-shadow:0 16px 34px rgba(0,0,0,.5),0 0 0 1px rgba(255,235,170,.35),inset 0 1px 0 rgba(255,255,255,.55);opacity:.94;animation:bdayDrift var(--drift,34s) cubic-bezier(.25,.46,.45,.94) infinite alternate,bdayFloat 6.2s ease-in-out infinite}\
       .bday-lock-frame::before{content:'';position:absolute;top:-4px;left:50%;transform:translateX(-50%) rotate(-2deg);width:34px;height:12px;border-radius:3px;background:linear-gradient(180deg,rgba(255,217,102,.95),rgba(255,179,71,.9));box-shadow:0 2px 6px rgba(0,0,0,.35)}\
       .bday-lock-frame-inner{width:100%;height:100%;overflow:hidden;border-radius:12px;border:2px solid rgba(94,60,5,.26);box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)}\
       .bday-lock-frame img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(1.08) contrast(1.02)}\
@@ -75,10 +75,10 @@
       .bday-lock-emoji{position:absolute;font-size:clamp(1.3rem,2vw,2rem);opacity:.92;filter:drop-shadow(0 3px 6px rgba(0,0,0,.3));animation:bdayFloat 5s ease-in-out infinite}\
       @keyframes partySwing{0%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}100%{transform:rotate(-6deg)}}\
       @keyframes partyPop{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}\
-      .party-room{position:fixed;inset:0;pointer-events:none;z-index:6}\
-      .party-hang{position:absolute;top:0;font-size:24px;transform-origin:top center;animation:partySwing 4.8s ease-in-out infinite;color:#fff}\
-      .party-string{position:absolute;top:0;width:2px;height:58px;background:linear-gradient(to bottom,rgba(255,255,255,.7),rgba(255,255,255,.1));}\
-      .party-side{position:absolute;font-size:26px;animation:partyPop 3.8s ease-in-out infinite}";
+      .party-room{position:fixed;inset:0;pointer-events:none;z-index:60}\
+      .party-hang{position:absolute;top:0;font-size:30px;transform-origin:top center;animation:partySwing 4.8s ease-in-out infinite}\
+      .party-string{position:absolute;top:0;width:2px;height:72px;background:linear-gradient(to bottom,rgba(255,255,255,.85),rgba(255,255,255,.12));}\
+      .party-side{position:absolute;font-size:32px;animation:partyPop 3.8s ease-in-out infinite}";
     document.head.appendChild(style);
   }
 
@@ -118,11 +118,11 @@
       frame.style.setProperty("--rot-start", ((-6 + Math.random() * 12) + (angle * 180) / Math.PI / 18).toFixed(1) + "deg");
       frame.style.setProperty("--rot-mid", (-8 + Math.random() * 16).toFixed(1) + "deg");
       frame.style.setProperty("--rot-end", (-6 + Math.random() * 12).toFixed(1) + "deg");
-      frame.style.setProperty("--dx", (-16 + Math.random() * 32).toFixed(1) + "px");
-      frame.style.setProperty("--dy", (-12 + Math.random() * 24).toFixed(1) + "px");
-      frame.style.setProperty("--dx2", (-20 + Math.random() * 40).toFixed(1) + "px");
-      frame.style.setProperty("--dy2", (-16 + Math.random() * 32).toFixed(1) + "px");
-      frame.style.setProperty("--drift", (18 + Math.random() * 17).toFixed(2) + "s");
+      frame.style.setProperty("--dx", (-8 + Math.random() * 16).toFixed(1) + "px");
+      frame.style.setProperty("--dy", (-6 + Math.random() * 12).toFixed(1) + "px");
+      frame.style.setProperty("--dx2", (-10 + Math.random() * 20).toFixed(1) + "px");
+      frame.style.setProperty("--dy2", (-8 + Math.random() * 16).toFixed(1) + "px");
+      frame.style.setProperty("--drift", (28 + Math.random() * 14).toFixed(2) + "s");
       frame.style.animationDelay = (Math.random() * 2.5).toFixed(2) + "s";
       frame.style.zIndex = String(1 + (i % 3));
       var inner = document.createElement("div");
@@ -306,7 +306,7 @@
       h.className = "party-hang";
       h.textContent = topItems[idx % topItems.length];
       h.style.left = x + "%";
-      h.style.top = (42 + (idx % 3) * 8) + "px";
+      h.style.top = (64 + (idx % 3) * 10) + "px";
       h.style.animationDelay = (idx * 0.27).toFixed(2) + "s";
       layer.appendChild(h);
     });

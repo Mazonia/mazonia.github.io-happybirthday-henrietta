@@ -65,6 +65,26 @@
           </select>
         </div>
         <div class="space-y-6">
+          <div class="rounded-3xl border border-violet-800/30 bg-violet-950/20 p-6 space-y-3">
+            <h2 class="font-handwritten-note text-2xl text-violet-200/90">Album Settings</h2>
+            <div class="grid sm:grid-cols-2 gap-3">
+              <div>
+                <label class="text-[10px] uppercase text-violet-200/55">Items per spread</label>
+                <select id="fld-scrap-per-spread" class="w-full bg-black/35 border border-violet-900/40 rounded-xl px-3 py-2 text-sm">
+                  <option value="2">2</option>
+                  <option value="4">4</option>
+                  <option value="6">6</option>
+                </select>
+              </div>
+              <div>
+                <label class="text-[10px] uppercase text-violet-200/55">Layout style</label>
+                <select id="fld-scrap-layout" class="w-full bg-black/35 border border-violet-900/40 rounded-xl px-3 py-2 text-sm">
+                  <option value="album">Album</option>
+                  <option value="grid">Grid</option>
+                </select>
+              </div>
+            </div>
+          </div>
           <div class="rounded-3xl border border-violet-800/30 bg-violet-950/20 p-6 space-y-4">
             <h2 class="font-handwritten-note text-2xl text-violet-200/90">Spreads</h2>
             <div id="list-scrap"></div>

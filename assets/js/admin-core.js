@@ -82,6 +82,8 @@
     }
     data.scrapbook = data.scrapbook || { pages: [] };
     data.scrapbook.pages = data.scrapbook.pages || [];
+    if (!data.scrapbook.itemsPerSpread) data.scrapbook.itemsPerSpread = 4;
+    if (!data.scrapbook.layoutStyle) data.scrapbook.layoutStyle = "album";
     data.meta.lockdown = data.meta.lockdown || {};
     if (data.meta.lockdown.enabled == null) data.meta.lockdown.enabled = false;
     if (!data.meta.lockdown.targetDate) data.meta.lockdown.targetDate = "2026-05-29T00:00:00";
@@ -238,6 +240,8 @@
     }
     setVal("fld-lock-images", (data.meta.lockdown.images || []).join("\n"));
     renderLockdownImagesList();
+    setVal("fld-scrap-per-spread", data.scrapbook.itemsPerSpread || 4);
+    setVal("fld-scrap-layout", data.scrapbook.layoutStyle || "album");
   }
 
   function readSiteFieldsIntoData() {
@@ -293,6 +297,10 @@
         })
         .filter(Boolean);
     }
+    if ($("fld-scrap-per-spread")) {
+      data.scrapbook.itemsPerSpread = Math.max(2, Number(getVal("fld-scrap-per-spread")) || 4);
+    }
+    if ($("fld-scrap-layout")) data.scrapbook.layoutStyle = getVal("fld-scrap-layout") || "album";
   }
 
   function syncLockdownTextarea() {
@@ -1250,39 +1258,6 @@
     }
   }
 
-  function injectAdminQuickNav() {
-    if (document.getElementById("admin-quick-nav")) return;
-    var path = (location.pathname || "").toLowerCase();
-    var links = [
-      ["/admin/index.html", "Overview"],
-      ["/admin/gallery.html", "Gallery"],
-      ["/admin/vault.html", "Vault"],
-      ["/admin/messages.html", "Messages"],
-      ["/admin/questions.html", "Truth Drill"],
-      ["/admin/scrapbook.html", "Scrapbook"],
-    ];
-    var wrap = document.createElement("div");
-    wrap.id = "admin-quick-nav";
-    wrap.className =
-      "sticky top-2 z-[260] mb-4 rounded-xl border border-white/15 bg-black/35 backdrop-blur px-2 py-2 overflow-x-auto";
-    wrap.innerHTML = links
-      .map(function (l) {
-        var active = path.indexOf(l[0]) >= 0;
-        return (
-          '<a href="' +
-          l[0] +
-          '" class="inline-block whitespace-nowrap text-xs uppercase tracking-widest rounded-lg px-3 py-2 mr-2 ' +
-          (active ? "bg-white/20 text-white border border-white/25" : "text-white/70 hover:bg-white/10 border border-transparent") +
-          '">' +
-          l[1] +
-          "</a>"
-        );
-      })
-      .join("");
-    var host = document.querySelector(".relative.z-\\[90\\]") || document.querySelector(".relative.z-\\[90\\].p-4") || document.body;
-    host.insertBefore(wrap, host.firstChild);
-  }
-
   function wireAll() {
     var save = $("btn-save-all");
     if (save) {
@@ -1550,6 +1525,14 @@
     }
 
     wireGlobalImagePickers();
+    ["fld-scrap-per-spread", "fld-scrap-layout"].forEach(function (id) {
+      var el = $(id);
+      if (!el) return;
+      el.addEventListener("change", function () {
+        readSiteFieldsIntoData();
+        schedulePersist();
+      });
+    });
   }
 
   function boot() {
@@ -1567,7 +1550,6 @@
       renderVaultTimeline();
       renderScrapbook();
       renderVaultLetters();
-      injectAdminQuickNav();
       wireAll();
     });
   }
