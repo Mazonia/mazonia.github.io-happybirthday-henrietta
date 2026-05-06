@@ -43,10 +43,18 @@
     <main class="lg:ml-72 pt-28 px-margin pb-24 lg:pb-16 relative z-10">
       <header class="mb-10">
         <h1 class="font-display-lg text-display-lg text-primary">Birthday Scrapbook</h1>
-        <p class="text-yellow-100/80 max-w-2xl">A pin-board diary: taped photos, mini clips, and handwritten crumbs of the day.</p>
+        <p class="text-yellow-100/80 max-w-2xl">Flip through a two-page memory album.</p>
       </header>
       <div class="rounded-[28px] border border-yellow-200/20 bg-[#4a2c19]/60 shadow-[0_24px_80px_rgba(0,0,0,.45)] p-4 sm:p-6 backdrop-blur-sm">
-        <div id="sb-strip" class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 auto-rows-[120px]"></div>
+        <div class="relative rounded-3xl overflow-hidden border border-amber-900/40 bg-[#f6e8c9] text-slate-900">
+          <div class="absolute inset-y-0 left-1/2 w-[2px] bg-gradient-to-b from-amber-800/50 via-amber-950/30 to-amber-800/50 z-20"></div>
+          <div id="sb-book" class="grid grid-cols-1 md:grid-cols-2 gap-0 min-h-[560px]"></div>
+        </div>
+        <div class="mt-4 flex items-center justify-between">
+          <button id="sb-prev" type="button" class="px-4 py-2 rounded-xl bg-amber-900/70 text-amber-100 text-sm hover:bg-amber-800 disabled:opacity-40 disabled:cursor-not-allowed">← Previous</button>
+          <span id="sb-page-indicator" class="text-amber-100/90 text-sm font-semibold"></span>
+          <button id="sb-next" type="button" class="px-4 py-2 rounded-xl bg-amber-900/70 text-amber-100 text-sm hover:bg-amber-800 disabled:opacity-40 disabled:cursor-not-allowed">Next →</button>
+        </div>
       </div>
     </main>
     <footer class="px-12 pb-24 lg:pb-8 flex justify-between">
@@ -63,26 +71,70 @@
     <script>
       document.addEventListener("DOMContentLoaded", async function () {
         var data = await applySiteShell({ active: "scrapbook" });
-        var root = document.getElementById("sb-strip");
-        (data.scrapbook && data.scrapbook.pages ? data.scrapbook.pages : []).forEach(function (p, i) {
+        var pages = data.scrapbook && data.scrapbook.pages ? data.scrapbook.pages : [];
+        var book = document.getElementById("sb-book");
+        var prev = document.getElementById("sb-prev");
+        var next = document.getElementById("sb-next");
+        var indicator = document.getElementById("sb-page-indicator");
+        var spread = 0;
+        function renderSpread() {
+          book.innerHTML = "";
+          var start = spread * 4;
+          var pack = pages.slice(start, start + 4);
+          var left = document.createElement("section");
+          left.className = "p-4 sm:p-6 md:border-r md:border-amber-900/20";
+          left.innerHTML = '<div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="sb-left"></div>';
+          var right = document.createElement("section");
+          right.className = "p-4 sm:p-6";
+          right.innerHTML = '<div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="sb-right"></div>';
+          book.appendChild(left);
+          book.appendChild(right);
+          var leftRoot = left.querySelector("#sb-left");
+          var rightRoot = right.querySelector("#sb-right");
+          [0, 1].forEach(function (i) {
+            var p = pack[i];
+            if (p) leftRoot.appendChild(cardFor(p, start + i));
+          });
+          [2, 3].forEach(function (i) {
+            var p = pack[i];
+            if (p) rightRoot.appendChild(cardFor(p, start + i));
+          });
+          var total = Math.max(1, Math.ceil(pages.length / 4));
+          indicator.textContent = "Spread " + (spread + 1) + " of " + total;
+          prev.disabled = spread <= 0;
+          next.disabled = spread >= total - 1;
+        }
+        function cardFor(p, i) {
           var card = document.createElement("article");
-          var span = (i % 7 === 0 || i % 7 === 3) ? "row-span-2 col-span-2" : i % 5 === 0 ? "row-span-2" : "row-span-1";
           card.className =
-            span +
-            " group relative rounded-2xl overflow-hidden border border-amber-900/30 shadow-[0_14px_28px_rgba(0,0,0,.38)] bg-[#fff7e8] text-slate-900 transition-transform hover:-translate-y-1";
-          card.style.transform = "rotate(" + ((i % 2 === 0 ? -1 : 1) * (1 + (i % 3))) + "deg)";
+            "group relative rounded-2xl overflow-hidden border border-amber-900/30 shadow-[0_10px_24px_rgba(0,0,0,.25)] bg-[#fff7e8] text-slate-900 transition-transform hover:-translate-y-1";
+          card.style.transform = "rotate(" + ((i % 2 === 0 ? -1.2 : 1.2) * (1 + (i % 2))) + "deg)";
           card.innerHTML =
             mediaBlock(p) +
             '<div class="p-3 sm:p-4 space-y-1.5">' +
-            '<h2 class="font-headline-md text-slate-800 text-lg sm:text-xl">' +
+            '<h2 class="font-headline-md text-slate-800 text-base sm:text-lg">' +
             escapeHtml(p.title) +
             "</h2>" +
-            '<p class="font-handwritten-note text-lg text-slate-700">' +
+            '<p class="font-handwritten-note text-base sm:text-lg text-slate-700">' +
             escapeHtml(p.note) +
             "</p></div>" +
             '<span class="absolute -top-1 left-1/2 -translate-x-1/2 w-12 h-3 rounded-sm bg-yellow-200/90 shadow"></span>';
-          root.appendChild(card);
+          return card;
+        }
+        prev.addEventListener("click", function () {
+          if (spread > 0) {
+            spread--;
+            renderSpread();
+          }
         });
+        next.addEventListener("click", function () {
+          var total = Math.max(1, Math.ceil(pages.length / 4));
+          if (spread < total - 1) {
+            spread++;
+            renderSpread();
+          }
+        });
+        renderSpread();
       });
       function escapeHtml(s) {
         return String(s || "")

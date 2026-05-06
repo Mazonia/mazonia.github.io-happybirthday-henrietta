@@ -72,7 +72,13 @@
       .bday-lock-num{font-weight:800;font-size:1.4rem;line-height:1.2;color:#facc15}\
       .bday-lock-lbl{text-transform:uppercase;font-size:.65rem;letter-spacing:.09em;opacity:.7}\
       .bday-lock-deco{position:absolute;inset:0;pointer-events:none;z-index:4}\
-      .bday-lock-emoji{position:absolute;font-size:clamp(1.3rem,2vw,2rem);opacity:.88;filter:drop-shadow(0 3px 6px rgba(0,0,0,.3));animation:bdayFloat 5s ease-in-out infinite}";
+      .bday-lock-emoji{position:absolute;font-size:clamp(1.3rem,2vw,2rem);opacity:.92;filter:drop-shadow(0 3px 6px rgba(0,0,0,.3));animation:bdayFloat 5s ease-in-out infinite}\
+      @keyframes partySwing{0%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}100%{transform:rotate(-6deg)}}\
+      @keyframes partyPop{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}\
+      .party-room{position:fixed;inset:0;pointer-events:none;z-index:6}\
+      .party-hang{position:absolute;top:0;font-size:24px;transform-origin:top center;animation:partySwing 4.8s ease-in-out infinite;color:#fff}\
+      .party-string{position:absolute;top:0;width:2px;height:58px;background:linear-gradient(to bottom,rgba(255,255,255,.7),rgba(255,255,255,.1));}\
+      .party-side{position:absolute;font-size:26px;animation:partyPop 3.8s ease-in-out infinite}";
     document.head.appendChild(style);
   }
 
@@ -89,33 +95,36 @@
     collage.className = "bday-lock-collage";
     var imgs = (meta.lockdown.images || []).filter(Boolean);
     if (!imgs.length && meta.profileImage) imgs = [meta.profileImage];
-    var slots = [
-      { x: 10, y: 11 }, { x: 24, y: 12 }, { x: 38, y: 11 }, { x: 52, y: 12 }, { x: 66, y: 11 }, { x: 80, y: 12 },
-      { x: 89, y: 24 }, { x: 89, y: 38 }, { x: 89, y: 52 }, { x: 89, y: 66 },
-      { x: 80, y: 83 }, { x: 66, y: 84 }, { x: 52, y: 83 }, { x: 38, y: 84 }, { x: 24, y: 83 }, { x: 10, y: 84 },
-      { x: 11, y: 66 }, { x: 11, y: 52 }, { x: 11, y: 38 }, { x: 11, y: 24 }
-    ];
-    var frameCount = Math.min(slots.length, Math.max(12, imgs.length * 2));
+    var centerX = 50;
+    var centerY = 50;
+    var radiusX = 38;
+    var radiusY = 31;
+    var frameCount = Math.max(12, Math.min(18, imgs.length * 2));
     for (var i = 0; i < frameCount; i++) {
       var frame = document.createElement("div");
       frame.className = "bday-lock-frame";
       var w = 112 + Math.round(Math.random() * 34);
       var h = w + Math.round(Math.random() * 46);
-      var pos = slots[i];
+      var angle = (Math.PI * 2 * i) / frameCount - Math.PI / 2;
+      var jitter = (Math.random() - 0.5) * 2.2;
+      var pos = {
+        x: centerX + Math.cos(angle) * (radiusX + jitter),
+        y: centerY + Math.sin(angle) * (radiusY + jitter),
+      };
       frame.style.width = w + "px";
       frame.style.height = h + "px";
       frame.style.left = pos.x.toFixed(2) + "%";
       frame.style.top = pos.y.toFixed(2) + "%";
-      frame.style.setProperty("--rot-start", (-18 + Math.random() * 36).toFixed(1) + "deg");
-      frame.style.setProperty("--rot-mid", (-18 + Math.random() * 36).toFixed(1) + "deg");
-      frame.style.setProperty("--rot-end", (-18 + Math.random() * 36).toFixed(1) + "deg");
+      frame.style.setProperty("--rot-start", ((-6 + Math.random() * 12) + (angle * 180) / Math.PI / 18).toFixed(1) + "deg");
+      frame.style.setProperty("--rot-mid", (-8 + Math.random() * 16).toFixed(1) + "deg");
+      frame.style.setProperty("--rot-end", (-6 + Math.random() * 12).toFixed(1) + "deg");
       frame.style.setProperty("--dx", (-16 + Math.random() * 32).toFixed(1) + "px");
       frame.style.setProperty("--dy", (-12 + Math.random() * 24).toFixed(1) + "px");
       frame.style.setProperty("--dx2", (-20 + Math.random() * 40).toFixed(1) + "px");
       frame.style.setProperty("--dy2", (-16 + Math.random() * 32).toFixed(1) + "px");
       frame.style.setProperty("--drift", (18 + Math.random() * 17).toFixed(2) + "s");
       frame.style.animationDelay = (Math.random() * 2.5).toFixed(2) + "s";
-      frame.style.zIndex = "1";
+      frame.style.zIndex = String(1 + (i % 3));
       var inner = document.createElement("div");
       inner.className = "bday-lock-frame-inner";
       var img = document.createElement("img");
@@ -144,7 +153,7 @@
     center.innerHTML =
       '<div class="bday-lock-card">' +
       '<p style="letter-spacing:.18em;font-size:.65rem;text-transform:uppercase;opacity:.72">Birthday countdown</p>' +
-      '<h1 style="margin:.2rem 0 0;font-size:clamp(1.4rem,3vw,2.3rem);font-weight:700;color:#fde68a;font-family:Caveat,cursive;letter-spacing:.02em">Henrietta turns ....(it\'s a secret!) on May 29, 2026</h1>' +
+      '<h1 style="margin:.2rem 0 0;font-size:clamp(1.4rem,3vw,2.3rem);font-weight:700;color:#fde68a;font-family:Caveat,cursive;letter-spacing:.02em">Henrietta turns ....(it\'s a secret!) <br> on May 29, 2026</h1>' +
       '<p style="margin:.55rem 0 0;opacity:.82;font-size:.92rem">The site opens soon. Until then, enjoy the celebration countdown.</p>' +
       '<div class="bday-lock-count">' +
       '<div class="bday-lock-box"><div class="bday-lock-num" data-cd="d">0</div><div class="bday-lock-lbl">Days</div></div>' +
@@ -155,12 +164,12 @@
     var deco = document.createElement("div");
     deco.className = "bday-lock-deco";
     var decoItems = [
-      { e: "pinata", x: 6, y: 8 }, { e: "cake", x: 93, y: 8 }, { e: "icecream", x: 4, y: 50 },
-      { e: "pinata", x: 94, y: 52 }, { e: "cake", x: 8, y: 92 }, { e: "icecream", x: 92, y: 91 }
+      { e: "🪅", x: 6, y: 8 }, { e: "🎂", x: 93, y: 8 }, { e: "🍦", x: 4, y: 50 },
+      { e: "🎉", x: 94, y: 52 }, { e: "🍰", x: 8, y: 92 }, { e: "🍧", x: 92, y: 91 }
     ];
     decoItems.forEach(function (it, idx) {
       var span = document.createElement("span");
-      span.className = "material-symbols-outlined bday-lock-emoji";
+      span.className = "bday-lock-emoji";
       span.textContent = it.e;
       span.style.left = it.x + "%";
       span.style.top = it.y + "%";
@@ -281,6 +290,42 @@
     });
   }
 
+  function attachPartyRoomDecor() {
+    if (global.__orePartyRoomDecorAttached) return;
+    global.__orePartyRoomDecorAttached = true;
+    var layer = document.createElement("div");
+    layer.className = "party-room";
+    var topItems = ["🪅", "🎈", "🎉", "🎂", "🍰", "🍦", "🎊", "🧁"];
+    [9, 21, 33, 45, 57, 69, 81, 93].forEach(function (x, idx) {
+      var str = document.createElement("span");
+      str.className = "party-string";
+      str.style.left = x + "%";
+      str.style.height = (44 + (idx % 3) * 8) + "px";
+      layer.appendChild(str);
+      var h = document.createElement("span");
+      h.className = "party-hang";
+      h.textContent = topItems[idx % topItems.length];
+      h.style.left = x + "%";
+      h.style.top = (42 + (idx % 3) * 8) + "px";
+      h.style.animationDelay = (idx * 0.27).toFixed(2) + "s";
+      layer.appendChild(h);
+    });
+    var left = document.createElement("span");
+    left.className = "party-side";
+    left.textContent = "🎈";
+    left.style.left = "0.4rem";
+    left.style.top = "42%";
+    var right = document.createElement("span");
+    right.className = "party-side";
+    right.textContent = "🎉";
+    right.style.right = "0.4rem";
+    right.style.top = "57%";
+    right.style.animationDelay = "0.6s";
+    layer.appendChild(left);
+    layer.appendChild(right);
+    document.body.appendChild(layer);
+  }
+
   function highlightNav(active) {
     document.querySelectorAll("[data-nav]").forEach(function (el) {
       var page = el.getAttribute("data-nav");
@@ -317,7 +362,10 @@
     applyNav(features);
     if (opts && opts.active) highlightNav(opts.active);
     var isLocked = renderLockdownOverlay(m);
-    if (!isLocked) attachSubtleConfetti();
+    if (!isLocked) {
+      attachSubtleConfetti();
+      attachPartyRoomDecor();
+    }
     attachMediaProtection();
     decorateSideNavBirthday();
 

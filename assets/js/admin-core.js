@@ -1250,6 +1250,39 @@
     }
   }
 
+  function injectAdminQuickNav() {
+    if (document.getElementById("admin-quick-nav")) return;
+    var path = (location.pathname || "").toLowerCase();
+    var links = [
+      ["/admin/index.html", "Overview"],
+      ["/admin/gallery.html", "Gallery"],
+      ["/admin/vault.html", "Vault"],
+      ["/admin/messages.html", "Messages"],
+      ["/admin/questions.html", "Truth Drill"],
+      ["/admin/scrapbook.html", "Scrapbook"],
+    ];
+    var wrap = document.createElement("div");
+    wrap.id = "admin-quick-nav";
+    wrap.className =
+      "sticky top-2 z-[260] mb-4 rounded-xl border border-white/15 bg-black/35 backdrop-blur px-2 py-2 overflow-x-auto";
+    wrap.innerHTML = links
+      .map(function (l) {
+        var active = path.indexOf(l[0]) >= 0;
+        return (
+          '<a href="' +
+          l[0] +
+          '" class="inline-block whitespace-nowrap text-xs uppercase tracking-widest rounded-lg px-3 py-2 mr-2 ' +
+          (active ? "bg-white/20 text-white border border-white/25" : "text-white/70 hover:bg-white/10 border border-transparent") +
+          '">' +
+          l[1] +
+          "</a>"
+        );
+      })
+      .join("");
+    var host = document.querySelector(".relative.z-\\[90\\]") || document.querySelector(".relative.z-\\[90\\].p-4") || document.body;
+    host.insertBefore(wrap, host.firstChild);
+  }
+
   function wireAll() {
     var save = $("btn-save-all");
     if (save) {
@@ -1534,6 +1567,7 @@
       renderVaultTimeline();
       renderScrapbook();
       renderVaultLetters();
+      injectAdminQuickNav();
       wireAll();
     });
   }
