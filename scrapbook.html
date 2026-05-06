@@ -97,12 +97,32 @@
         var modalTitle = document.getElementById("sb-modal-title");
         var modalNote = document.getElementById("sb-modal-note");
         var modalMedia = document.getElementById("sb-modal-media");
+        function inferMediaType(src) {
+          var s = String(src || "").toLowerCase();
+          if (s.indexOf("youtube.com") >= 0 || s.indexOf("youtu.be") >= 0) return "video";
+          if (/^data:video\//.test(s)) return "video";
+          if (/\.(mp4|webm|ogg|mov)(\?|$)/.test(s)) return "video";
+          return "image";
+        }
+        function listMedia(p) {
+          var out = [];
+          var arr = Array.isArray(p.media) ? p.media : [];
+          arr.forEach(function (m) {
+            if (m && m.src) out.push({ type: m.type || inferMediaType(m.src), src: m.src });
+          });
+          if (!out.length) {
+            if (p.image) out.push({ type: "image", src: p.image });
+            if (p.video) out.push({ type: "video", src: p.video });
+          }
+          return out;
+        }
         function openModal(p) {
+          var mm = listMedia(p);
           modal.classList.remove("hidden");
           document.body.style.overflow = "hidden";
           modalTitle.textContent = p.title || "";
           modalNote.textContent = p.note || "";
-          modalMedia.innerHTML = mediaBlock(p, true);
+          modalMedia.innerHTML = mediaBlock(mm[0] || { type: "image", src: p.image || "" }, true);
         }
         function closeModal() {
           modal.classList.add("hidden");
@@ -155,7 +175,7 @@
             "group relative rounded-2xl overflow-hidden border border-amber-900/30 shadow-[0_10px_24px_rgba(0,0,0,.25)] bg-[#fff7e8] text-slate-900 transition-transform hover:-translate-y-1 cursor-zoom-in";
           card.style.transform = "rotate(" + ((i % 2 === 0 ? -1.2 : 1.2) * (1 + (i % 2))) + "deg)";
           card.innerHTML =
-            mediaBlock(p, false) +
+            pageMediaBlock(p) +
             '<div class="p-3 sm:p-4 space-y-1.5">' +
             '<h2 class="font-headline-md text-slate-800 text-base sm:text-lg">' +
             escapeHtml(p.title) +
@@ -168,6 +188,20 @@
             openModal(p);
           });
           return card;
+        }
+        function pageMediaBlock(p) {
+          var items = listMedia(p);
+          var show = Math.max(1, Number(p.showCount) || 1);
+          var pack = items.slice(0, show);
+          if (!pack.length) return '<div class="h-full min-h-[120px] bg-amber-100 flex items-center justify-center text-xs text-slate-500">No media</div>';
+          if (pack.length === 1) return mediaBlock(pack[0], false);
+          var cols = pack.length >= 4 ? 2 : pack.length === 3 ? 3 : 2;
+          var html = '<div class="grid gap-1 h-full min-h-[120px] bg-black" style="grid-template-columns:repeat(' + cols + ',minmax(0,1fr))">';
+          pack.forEach(function (m) {
+            html += '<div class="overflow-hidden">' + mediaBlock(m, false) + "</div>";
+          });
+          html += "</div>";
+          return html;
         }
         prev.addEventListener("click", function () {
           if (spread > 0) {
@@ -205,8 +239,8 @@
         return m2 ? m2[1] : null;
       }
       function mediaBlock(p, large) {
-        var vid = String(p.video || "").trim();
-        var img = String(p.image || "").trim();
+        var vid = p.type === "video" ? String(p.src || "").trim() : String(p.video || "").trim();
+        var img = p.type === "image" ? String(p.src || "").trim() : String(p.image || "").trim();
         var yt = youtubeId(vid);
         var cls = large ? "h-full max-h-[72vh]" : "h-full min-h-[120px]";
         if (yt) {

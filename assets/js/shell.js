@@ -76,9 +76,11 @@
       @keyframes partySwing{0%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}100%{transform:rotate(-6deg)}}\
       @keyframes partyPop{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}\
       .party-room{position:fixed;inset:0;pointer-events:none;z-index:60}\
-      .party-hang{position:absolute;top:0;font-size:30px;transform-origin:top center;animation:partySwing 4.8s ease-in-out infinite}\
-      .party-string{position:absolute;top:0;width:2px;height:72px;background:linear-gradient(to bottom,rgba(255,255,255,.85),rgba(255,255,255,.12));}\
-      .party-side{position:absolute;font-size:32px;animation:partyPop 3.8s ease-in-out infinite}";
+      .party-string{position:absolute;top:0;width:2px;height:84px;background:linear-gradient(to bottom,rgba(255,255,255,.9),rgba(255,255,255,.08));}\
+      .party-hang{position:absolute;top:70px;width:0;height:0;border-left:16px solid transparent;border-right:16px solid transparent;border-top:34px solid var(--party-color,#f43f5e);filter:drop-shadow(0 4px 8px rgba(0,0,0,.35));transform-origin:50% -70px;animation:partySwing 4.8s ease-in-out infinite}\
+      .party-hang::after{content:'';position:absolute;left:-5px;top:-36px;width:10px;height:10px;border-radius:999px;background:#fff8}\
+      .party-side{position:absolute;width:30px;height:40px;border-radius:50% 50% 45% 45%;background:var(--party-color,#22d3ee);box-shadow:inset -4px -6px 0 rgba(255,255,255,.2),0 6px 12px rgba(0,0,0,.35);animation:partyPop 3.8s ease-in-out infinite}\
+      .party-side::after{content:'';position:absolute;left:50%;bottom:-16px;width:2px;height:16px;background:rgba(255,255,255,.75)}";
     document.head.appendChild(style);
   }
 
@@ -268,34 +270,12 @@
     obs.observe(document.body, { childList: true, subtree: true });
   }
 
-  function decorateSideNavBirthday() {
-    if (global.__oreSideNavDecorated) return;
-    global.__oreSideNavDecorated = true;
-    var aside = document.querySelector("aside");
-    if (!aside) return;
-    var header = aside.querySelector("div p");
-    if (header && !header.getAttribute("data-bday")) {
-      header.setAttribute("data-bday", "1");
-      header.textContent = "The Dig Site  🎂 🎉";
-    }
-    aside.querySelectorAll("[data-nav]").forEach(function (a, idx) {
-      if (a.querySelector(".bday-nav-emoji")) return;
-      var deco = document.createElement("span");
-      deco.className = "bday-nav-emoji";
-      deco.textContent = ["🎈", "🎂", "🎊", "🍰", "🎉", "🪅"][idx % 6];
-      deco.style.marginLeft = "auto";
-      deco.style.fontSize = "13px";
-      deco.style.opacity = "0.9";
-      a.appendChild(deco);
-    });
-  }
-
   function attachPartyRoomDecor() {
     if (global.__orePartyRoomDecorAttached) return;
     global.__orePartyRoomDecorAttached = true;
     var layer = document.createElement("div");
     layer.className = "party-room";
-    var topItems = ["🪅", "🎈", "🎉", "🎂", "🍰", "🍦", "🎊", "🧁"];
+    var topColors = ["#ef4444", "#f59e0b", "#eab308", "#22c55e", "#06b6d4", "#3b82f6", "#a855f7", "#ec4899"];
     [9, 21, 33, 45, 57, 69, 81, 93].forEach(function (x, idx) {
       var str = document.createElement("span");
       str.className = "party-string";
@@ -304,20 +284,20 @@
       layer.appendChild(str);
       var h = document.createElement("span");
       h.className = "party-hang";
-      h.textContent = topItems[idx % topItems.length];
+      h.style.setProperty("--party-color", topColors[idx % topColors.length]);
       h.style.left = x + "%";
-      h.style.top = (64 + (idx % 3) * 10) + "px";
+      h.style.top = "0px";
       h.style.animationDelay = (idx * 0.27).toFixed(2) + "s";
       layer.appendChild(h);
     });
     var left = document.createElement("span");
     left.className = "party-side";
-    left.textContent = "🎈";
+    left.style.setProperty("--party-color", "#22d3ee");
     left.style.left = "0.4rem";
     left.style.top = "42%";
     var right = document.createElement("span");
     right.className = "party-side";
-    right.textContent = "🎉";
+    right.style.setProperty("--party-color", "#f97316");
     right.style.right = "0.4rem";
     right.style.top = "57%";
     right.style.animationDelay = "0.6s";
@@ -367,7 +347,6 @@
       attachPartyRoomDecor();
     }
     attachMediaProtection();
-    decorateSideNavBirthday();
 
     return data;
   };

@@ -91,8 +91,17 @@
     (data.gallery || []).forEach(function (g) {
       if (g.video == null) g.video = "";
     });
+    (data.messages || []).forEach(function (m) {
+      if (m.textColor == null) m.textColor = "";
+    });
     (data.scrapbook.pages || []).forEach(function (p) {
       if (p.video == null) p.video = "";
+      p.media = Array.isArray(p.media) ? p.media : [];
+      if (!p.media.length) {
+        if (p.image) p.media.push({ type: "image", src: p.image });
+        if (p.video) p.media.push({ type: "video", src: p.video });
+      }
+      if (!p.showCount) p.showCount = Math.max(1, p.media.length || 1);
     });
   }
 
@@ -523,7 +532,19 @@
       ">Gold</option>" +
       '<option value="slate"' +
       (val === "slate" ? " selected" : "") +
-      ">Slate</option>"
+      ">Slate</option>" +
+      '<option value="violet"' +
+      (val === "violet" ? " selected" : "") +
+      ">Violet</option>" +
+      '<option value="mint"' +
+      (val === "mint" ? " selected" : "") +
+      ">Mint</option>" +
+      '<option value="sunset"' +
+      (val === "sunset" ? " selected" : "") +
+      ">Sunset</option>" +
+      '<option value="sky"' +
+      (val === "sky" ? " selected" : "") +
+      ">Sky</option>"
     );
   }
 
@@ -567,7 +588,13 @@
         id +
         '" data-k="tint">' +
         tintOpts(m.tint) +
-        "</select></div></div>" +
+        "</select></div>" +
+        '<div><label class="text-[10px] uppercase text-amber-100/60">Text color</label>' +
+        '<input type="text" class="msg-fld w-full mt-0.5 bg-black/25 border border-amber-900/40 rounded-lg px-2 py-1.5 text-xs font-mono" data-id="' +
+        id +
+        '" data-k="textColor" value="' +
+        escapeAttr(m.textColor || "") +
+        '" placeholder="#ffffff or auto" /></div></div>' +
         '<div><label class="text-[10px] uppercase text-amber-100/60">Message</label>' +
         '<textarea rows="4" class="msg-fld w-full mt-0.5 bg-black/25 border border-amber-900/40 rounded-lg px-2 py-1.5 text-sm font-handwritten-note text-lg leading-snug" data-id="' +
         id +
@@ -1066,28 +1093,18 @@
         '">' +
         escapeHtml(p.note) +
         "</textarea>" +
-        '<label class="text-[10px] uppercase text-violet-200/50">Image (URL or file)</label>' +
-        '<input class="sp-img w-full bg-black/30 border border-violet-900/40 rounded-lg px-2 py-1 text-xs font-mono" data-id="' +
+        '<label class="text-[10px] uppercase text-violet-200/50">Media URLs (one per line)</label>' +
+        '<textarea rows="4" class="sp-media w-full bg-black/30 border border-violet-900/40 rounded-lg px-2 py-1 text-xs font-mono" data-id="' +
+        escapeAttr(p.id) +
+        '">' +
+        escapeHtml((p.media || []).map(function (m) { return m.src; }).join("\n")) +
+        "</textarea>" +
+        '<label class="text-[10px] uppercase text-violet-200/50">How many media to show on this page</label>' +
+        '<input type="number" min="1" class="sp-show w-full bg-black/30 border border-violet-900/40 rounded-lg px-2 py-1 text-xs font-mono" data-id="' +
         escapeAttr(p.id) +
         '" value="' +
-        escapeAttr(p.image) +
-        '" />' +
-        '<label class="text-[10px] uppercase text-violet-200/50">Video (optional URL/data)</label>' +
-        '<input class="sp-vid w-full bg-black/30 border border-violet-900/40 rounded-lg px-2 py-1 text-xs font-mono" data-id="' +
-        escapeAttr(p.id) +
-        '" value="' +
-        escapeAttr(p.video || "") +
-        '" placeholder="YouTube or direct .mp4 / .webm URL" />' +
-        '<label class="inline-flex items-center gap-1 text-[10px] uppercase text-violet-200/80 cursor-pointer rounded-lg border border-violet-700/40 px-2 py-1 w-fit">' +
-        '<span class="material-symbols-outlined text-sm">upload</span> File' +
-        '<input type="file" accept="image/*" class="hidden sp-img-file" data-id="' +
-        escapeAttr(p.id) +
-        '" /></label>' +
-        '<label class="inline-flex items-center gap-1 text-[10px] uppercase text-violet-200/80 cursor-pointer rounded-lg border border-violet-700/40 px-2 py-1 w-fit ml-2">' +
-        '<span class="material-symbols-outlined text-sm">movie</span> Video file' +
-        '<input type="file" accept="video/*" class="hidden sp-vid-file" data-id="' +
-        escapeAttr(p.id) +
-        '" /></label>';
+        escapeAttr(p.showCount || 1) +
+        '" />';
       root.appendChild(box);
     });
     root.querySelectorAll(".btn-del-scrap").forEach(function (btn) {
@@ -1121,43 +1138,36 @@
         schedulePersist();
       });
     });
-    root.querySelectorAll(".sp-img").forEach(function (inp) {
+    root.querySelectorAll(".sp-media").forEach(function (inp) {
       inp.addEventListener("input", function () {
         var id = inp.getAttribute("data-id");
         var p = data.scrapbook.pages.find(function (x) {
           return x.id === id;
         });
-        if (p) p.image = inp.value;
+        if (p) {
+          var lines = String(inp.value || "")
+            .split("\n")
+            .map(function (s) {
+              return s.trim();
+            })
+            .filter(Boolean);
+          p.media = lines.map(function (src) {
+            return { type: inferMediaType(src), src: src };
+          });
+          p.image = p.media[0] && p.media[0].type === "image" ? p.media[0].src : "";
+          p.video = p.media[0] && p.media[0].type === "video" ? p.media[0].src : "";
+        }
         schedulePersist();
       });
     });
-    root.querySelectorAll(".sp-vid").forEach(function (inp) {
+    root.querySelectorAll(".sp-show").forEach(function (inp) {
       inp.addEventListener("input", function () {
         var id = inp.getAttribute("data-id");
         var p = data.scrapbook.pages.find(function (x) {
           return x.id === id;
         });
-        if (p) p.video = inp.value;
+        if (p) p.showCount = Math.max(1, Number(inp.value) || 1);
         schedulePersist();
-      });
-    });
-    root.querySelectorAll(".sp-img-file").forEach(function (fi) {
-      var id = fi.getAttribute("data-id");
-      var urlInp = root.querySelector('.sp-img[data-id="' + id + '"]');
-      bindImageFileToUrlInput(fi, urlInp);
-    });
-    root.querySelectorAll(".sp-vid-file").forEach(function (fi) {
-      fi.addEventListener("change", function () {
-        var f = fi.files && fi.files[0];
-        if (!f) return;
-        var id = fi.getAttribute("data-id");
-        var urlInp = root.querySelector('.sp-vid[data-id="' + id + '"]');
-        if (!urlInp) return;
-        readMediaFileToUrl(f, /^video\//, "This embedded video is large. Continue?", function (url) {
-          urlInp.value = url;
-          urlInp.dispatchEvent(new Event("input", { bubbles: true }));
-          fi.value = "";
-        });
       });
     });
   }
@@ -1279,6 +1289,7 @@
           body: body.value.trim(),
           shape: getVal("new-msg-shape") || "square",
           tint: getVal("new-msg-tint") || "rose",
+          textColor: (getVal("new-msg-text-color") || "").trim(),
           tag: (getVal("new-msg-tag") || "").trim(),
           image: (getVal("new-msg-img") || "").trim(),
         });
