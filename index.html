@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ore Celebrations</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="assets/js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Caveat:wght@400;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" />
+    <link rel="stylesheet" href="assets/css/site.css" />
+  </head>
+  <body class="bg-surface text-on-surface font-body-md overflow-x-hidden">
+    <div class="fixed inset-0 grainy-overlay z-50 pointer-events-none"></div>
+    <header class="fixed top-0 left-0 right-0 z-50 flex items-center justify-center p-4">
+      <nav class="bg-slate-900/20 backdrop-blur-xl rounded-full px-6 py-2 border border-white/10 shadow-[0_8px_32px_0_rgba(241,213,146,0.1)] flex items-center gap-6 md:gap-8">
+        <a href="index.html" class="text-2xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent tracking-tight" data-bind="site-title">Ore Celebrations</a>
+        <div class="hidden md:flex items-center gap-6">
+          <a data-feature="scrapbook" data-nav-top="scrapbook" class="transition-colors cursor-pointer font-sans tracking-tight" href="scrapbook.html">Scrapbook</a>
+          <a data-feature="vault" data-nav-top="vault" class="transition-colors cursor-pointer font-sans tracking-tight" href="vault.html">Vault</a>
+          <a data-feature="gallery" data-nav-top="gallery" class="transition-colors cursor-pointer font-sans tracking-tight" href="gallery.html">Gallery</a>
+          <a data-feature="messages" data-nav-top="messages" class="transition-colors cursor-pointer font-sans tracking-tight" href="messages.html">Messages</a>
+          <a data-feature="quiz" data-nav-top="quiz" class="transition-colors cursor-pointer font-sans tracking-tight" href="quiz.html">Truth Drill</a>
+        </div>
+        <div class="flex items-center gap-3 border-l border-white/10 pl-4 md:pl-6">
+          <div class="w-8 h-8 rounded-full border border-yellow-500/50 overflow-hidden">
+            <img data-bind="profile-img" alt="" class="w-full h-full object-cover" src="" />
+          </div>
+        </div>
+      </nav>
+    </header>
+    <aside class="fixed left-0 top-0 bottom-0 w-64 hidden lg:flex flex-col bg-slate-950/40 backdrop-blur-2xl my-8 ml-4 rounded-3xl border-r border-white/5 shadow-2xl shadow-yellow-900/20 z-40">
+      <div class="p-8">
+        <p class="font-black text-yellow-500 text-xl font-sans">The Dig Site</p>
+        <p class="font-sans uppercase tracking-widest text-[10px] text-slate-400">Mining Memories</p>
+      </div>
+      <nav class="flex-1 space-y-2 px-2">
+        <a href="index.html" data-nav="home" class="py-3 px-6 flex items-center gap-3 font-sans uppercase tracking-widest text-xs rounded-xl transition-all">
+          <span class="material-symbols-outlined">construction</span> Home
+        </a>
+        <a data-feature="gallery" href="gallery.html" data-nav="gallery" class="py-3 px-6 flex items-center gap-3 font-sans uppercase tracking-widest text-xs rounded-xl transition-all hover:bg-white/5 hover:translate-x-1">
+          <span class="material-symbols-outlined">diamond</span> Gallery
+        </a>
+        <a data-feature="vault" href="vault.html" data-nav="vault" class="py-3 px-6 flex items-center gap-3 font-sans uppercase tracking-widest text-xs rounded-xl transition-all hover:bg-white/5 hover:translate-x-1">
+          <span class="material-symbols-outlined">potted_plant</span> Vault
+        </a>
+        <a data-feature="messages" href="messages.html" data-nav="messages" class="py-3 px-6 flex items-center gap-3 font-sans uppercase tracking-widest text-xs rounded-xl transition-all hover:bg-white/5 hover:translate-x-1">
+          <span class="material-symbols-outlined">push_pin</span> Messages
+        </a>
+        <a data-feature="quiz" href="quiz.html" data-nav="quiz" class="py-3 px-6 flex items-center gap-3 font-sans uppercase tracking-widest text-xs rounded-xl transition-all hover:bg-white/5 hover:translate-x-1">
+          <span class="material-symbols-outlined">quiz</span> Truth Drill
+        </a>
+        <a data-feature="scrapbook" href="scrapbook.html" data-nav="scrapbook" class="py-3 px-6 flex items-center gap-3 font-sans uppercase tracking-widest text-xs rounded-xl transition-all hover:bg-white/5 hover:translate-x-1">
+          <span class="material-symbols-outlined">auto_stories</span> Scrapbook
+        </a>
+      </nav>
+    </aside>
+    <main class="lg:ml-64 min-h-screen pt-24 pb-12 px-margin relative">
+      <section class="relative min-h-[70vh] md:min-h-[80vh] flex items-center justify-center overflow-hidden rounded-[40px] glass-card mb-gutter group">
+        <div class="absolute inset-0 z-0">
+          <img data-bind="hero-img" alt="" class="w-full h-full object-cover opacity-30 grayscale group-hover:scale-105 transition-transform duration-[10s]" src="" />
+          <div class="absolute inset-0 bg-gradient-to-b from-surface/80 via-transparent to-surface"></div>
+        </div>
+        <div class="relative z-20 text-center px-4">
+          <p class="font-handwritten-note text-secondary text-headline-md -rotate-6 mb-4" data-bind="hero-kicker"></p>
+          <h1 class="font-display-lg text-5xl md:text-7xl lg:text-[120px] text-primary tracking-tighter leading-tight drop-shadow-2xl" data-bind="hero-title"></h1>
+          <div class="vein-divider mt-8 max-w-xs mx-auto opacity-80"></div>
+          <div class="mt-8 flex flex-wrap gap-4 justify-center">
+            <a data-feature="vault" href="vault.html" class="px-8 py-3 bg-primary-container text-on-primary-container font-title-lg rounded-full hover:scale-105 active:scale-95 transition-all shadow-lg shadow-primary-container/20">Open the Vault</a>
+            <a data-feature="gallery" href="gallery.html" class="px-8 py-3 border-2 border-secondary text-secondary font-title-lg rounded-full hover:bg-secondary/10 transition-all">View Gallery</a>
+          </div>
+        </div>
+      </section>
+      <section class="grid grid-cols-1 md:grid-cols-12 gap-gutter items-start">
+        <div class="md:col-span-8 glass-card rounded-3xl p-8 relative -mt-12 md:-mt-16 z-30 overflow-hidden">
+          <div class="flex justify-between items-end mb-8">
+            <div>
+              <h2 class="font-headline-md text-primary text-headline-md">Excavated Memories</h2>
+              <p class="font-body-md text-outline">The finest deposits of the past year</p>
+            </div>
+            <span class="material-symbols-outlined text-primary-fixed-dim text-4xl">auto_stories</span>
+          </div>
+          <div id="home-memory-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+        </div>
+        <div class="md:col-span-4 glass-card rounded-3xl p-8 border-t-4 border-t-yellow-500/30">
+          <h2 class="font-title-lg text-primary mb-6">Extraction Metrics</h2>
+          <div class="space-y-6">
+            <div>
+              <div class="flex justify-between text-label-sm text-outline mb-2">
+                <span>SURPRISE PROGRESS</span>
+                <span id="home-progress-label">85%</span>
+              </div>
+              <div class="h-3 w-full bg-surface-container-high rounded-full overflow-hidden">
+                <div id="home-progress-bar" class="h-full bg-gradient-to-r from-yellow-600 to-yellow-400 w-[85%]" style="box-shadow: 0 0 15px #dfc482"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between text-label-sm text-outline mb-2">
+                <span>DOPAMINE LEVELS</span>
+                <span>MAX</span>
+              </div>
+              <div class="h-3 w-full bg-surface-container-high rounded-full overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-pink-600 to-pink-400 w-full" style="box-shadow: 0 0 15px #f6b7b7"></div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-8 pt-6 border-t border-white/5">
+            <p class="font-handwritten-note text-secondary text-title-lg" id="home-quote"></p>
+            <p class="text-label-sm text-outline mt-2 italic" id="home-quote-by"></p>
+          </div>
+        </div>
+        <div data-feature="messages" class="md:col-span-12 glass-card rounded-3xl p-8 flex flex-col md:flex-row gap-gutter items-center relative overflow-hidden">
+          <div class="absolute top-0 left-0 w-32 h-32 bg-secondary/10 rounded-full blur-3xl"></div>
+          <div class="flex-shrink-0 w-24 h-24 rounded-full glass-card flex items-center justify-center">
+            <span class="material-symbols-outlined text-secondary text-5xl">mark_email_unread</span>
+          </div>
+          <div class="flex-1 text-center md:text-left">
+            <h2 class="font-headline-md text-secondary text-headline-md">New Messages on the Corkboard</h2>
+            <p class="font-body-md text-on-surface-variant max-w-2xl">
+              <span id="home-msg-teaser"></span>
+            </p>
+          </div>
+          <a href="messages.html" class="px-8 py-4 bg-surface-container-highest border border-secondary/30 text-secondary rounded-2xl hover:bg-secondary hover:text-on-secondary transition-all font-title-lg">Read Transcripts</a>
+        </div>
+      </section>
+    </main>
+    <footer class="w-full flex flex-col sm:flex-row justify-between items-center gap-4 px-12 mt-16 pb-24 lg:pb-8">
+      <div class="flex items-center gap-2">
+        <span class="text-yellow-500 font-bold font-title-lg" data-bind="site-title">Ore Celebrations</span>
+        <span class="font-mono text-[10px] uppercase text-slate-500">© <span data-bind="footer-year"></span></span>
+      </div>
+    </footer>
+    <div class="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-xl border-t border-white/10 flex justify-around py-3 text-xs">
+      <a class="flex flex-col items-center text-yellow-400" href="index.html"><span class="material-symbols-outlined text-[22px]">construction</span>Home</a>
+      <a data-feature="gallery" class="flex flex-col items-center text-slate-400" href="gallery.html"><span class="material-symbols-outlined text-[22px]">diamond</span>Gallery</a>
+      <a data-feature="messages" class="flex flex-col items-center text-slate-400" href="messages.html"><span class="material-symbols-outlined text-[22px]">push_pin</span>Notes</a>
+      <a data-feature="quiz" class="flex flex-col items-center text-slate-400" href="quiz.html"><span class="material-symbols-outlined text-[22px]">quiz</span>Drill</a>
+    </div>
+    <script src="assets/js/site-data.js"></script>
+    <script src="assets/js/shell.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", async function () {
+        var data = await applySiteShell({ active: "home" });
+        var h = data.home || {};
+        var grid = document.getElementById("home-memory-grid");
+        var media = Array.isArray(h.memoryMedia) && h.memoryMedia.length
+          ? h.memoryMedia
+          : (h.memoryImages || []).map(function (src) { return { type: "image", src: src }; });
+        media.slice(0, 4).forEach(function (item) {
+          var src = item && item.src ? item.src : "";
+          var type = item && item.type ? item.type : inferMediaType(src);
+          var wrap = document.createElement("div");
+          wrap.className = "aspect-video rounded-2xl overflow-hidden glass-card p-2";
+          if (type === "video") {
+            wrap.innerHTML = homeVideoBlock(src);
+          } else {
+            wrap.innerHTML =
+              '<img alt="" class="w-full h-full object-cover rounded-xl grayscale hover:grayscale-0 transition-all duration-500" src="' +
+              escapeAttr(src) +
+              '" />';
+          }
+          grid.appendChild(wrap);
+        });
+        var pct = Math.max(0, Math.min(100, Number(h.surpriseProgress) || 0));
+        document.getElementById("home-progress-label").textContent = pct + "%";
+        var bar = document.getElementById("home-progress-bar");
+        bar.style.width = pct + "%";
+        document.getElementById("home-quote").textContent = h.quote || "";
+        document.getElementById("home-quote-by").textContent = h.quoteAttribution ? "— " + h.quoteAttribution : "";
+        var n = Number(h.messagesTeaserCount);
+        document.getElementById("home-msg-teaser").textContent =
+          "Your crew left notes to discover. " +
+          (n > 0 ? n + " messages" : "Several messages") +
+          " are waiting on the friendship board.";
+      });
+      function inferMediaType(src) {
+        var s = String(src || "").toLowerCase();
+        if (s.indexOf("youtube.com") >= 0 || s.indexOf("youtu.be") >= 0) return "video";
+        if (/^data:video\//.test(s)) return "video";
+        if (/\.(mp4|webm|ogg|mov)(\?|$)/.test(s)) return "video";
+        return "image";
+      }
+      function youtubeId(url) {
+        if (!url) return null;
+        var u = String(url);
+        var m = u.match(/(?:youtu\.be\/|v=)([a-zA-Z0-9_-]{11})/);
+        if (m) return m[1];
+        var m2 = u.match(/youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/);
+        return m2 ? m2[1] : null;
+      }
+      function homeVideoBlock(src) {
+        var yt = youtubeId(src);
+        if (yt) {
+          return (
+            '<iframe class="w-full h-full rounded-xl" src="https://www.youtube.com/embed/' +
+            escapeAttr(yt) +
+            '?autoplay=1&mute=1&loop=1&playlist=' +
+            escapeAttr(yt) +
+            '&controls=0&modestbranding=1&playsinline=1" title="Memory video" allow="autoplay; encrypted-media; picture-in-picture" loading="lazy"></iframe>'
+          );
+        }
+        return (
+          '<video class="w-full h-full object-cover rounded-xl" autoplay muted loop playsinline preload="metadata" src="' +
+          escapeAttr(src) +
+          '"></video>'
+        );
+      }
+      function escapeAttr(s) {
+        return String(s || "")
+          .replace(/&/g, "&amp;")
+          .replace(/"/g, "&quot;")
+          .replace(/</g, "&lt;");
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scrapbook | Ore Celebrations</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="assets/js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Caveat:wght@400;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" />
+    <link rel="stylesheet" href="assets/css/site.css" />
+  </head>
+  <body class="bg-surface text-on-surface font-body-md min-h-screen">
+    <div class="fixed inset-0 z-0 pointer-events-none opacity-60" style="background:radial-gradient(circle at 20% 15%,rgba(250,204,21,.18),transparent 35%),radial-gradient(circle at 80% 85%,rgba(236,72,153,.16),transparent 36%),linear-gradient(180deg,#2f1d10 0%,#1f130b 100%)"></div>
+    <div class="fixed inset-0 grainy-overlay z-0 pointer-events-none"></div>
+    <nav class="fixed top-0 left-0 right-0 z-50 flex items-center justify-center p-4">
+      <div class="bg-slate-900/20 backdrop-blur-xl rounded-full px-6 py-2 border border-white/10 flex items-center gap-6 md:gap-8">
+        <a href="index.html" class="text-2xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent" data-bind="site-title">Ore Celebrations</a>
+        <div class="hidden md:flex gap-6">
+          <a data-feature="scrapbook" data-nav-top="scrapbook" class="font-sans tracking-tight" href="scrapbook.html">Scrapbook</a>
+          <a data-feature="vault" data-nav-top="vault" class="font-sans tracking-tight" href="vault.html">Vault</a>
+          <a data-feature="gallery" data-nav-top="gallery" class="font-sans tracking-tight" href="gallery.html">Gallery</a>
+          <a data-feature="messages" data-nav-top="messages" class="font-sans tracking-tight" href="messages.html">Messages</a>
+        </div>
+        <div class="pl-4 border-l border-white/10">
+          <img data-bind="profile-img" alt="" class="w-8 h-8 rounded-full border border-yellow-500/50 object-cover" src="" />
+        </div>
+      </div>
+    </nav>
+    <aside class="fixed left-0 top-0 bottom-0 w-64 hidden lg:flex flex-col bg-slate-950/40 backdrop-blur-2xl my-8 ml-4 rounded-3xl border-r border-white/5 z-40">
+      <div class="p-8">
+        <p class="font-black text-yellow-500 text-xl">The Dig Site</p>
+        <p class="text-[10px] uppercase tracking-widest text-slate-400">Mining Memories</p>
+      </div>
+      <nav class="flex-1 space-y-2 px-2">
+        <a href="index.html" data-nav="home" class="py-3 px-6 flex items-center gap-3 text-xs uppercase tracking-widest rounded-xl"><span class="material-symbols-outlined">construction</span> Home</a>
+        <a data-feature="gallery" href="gallery.html" data-nav="gallery" class="py-3 px-6 flex items-center gap-3 text-xs uppercase tracking-widest rounded-xl"><span class="material-symbols-outlined">diamond</span> Gallery</a>
+        <a data-feature="vault" href="vault.html" data-nav="vault" class="py-3 px-6 flex items-center gap-3 text-xs uppercase tracking-widest rounded-xl"><span class="material-symbols-outlined">potted_plant</span> Vault</a>
+        <a data-feature="messages" href="messages.html" data-nav="messages" class="py-3 px-6 flex items-center gap-3 text-xs uppercase tracking-widest rounded-xl"><span class="material-symbols-outlined">push_pin</span> Messages</a>
+        <a data-feature="quiz" href="quiz.html" data-nav="quiz" class="py-3 px-6 flex items-center gap-3 text-xs uppercase tracking-widest rounded-xl"><span class="material-symbols-outlined">quiz</span> Truth Drill</a>
+        <a data-feature="scrapbook" href="scrapbook.html" data-nav="scrapbook" class="py-3 px-6 flex items-center gap-3 text-xs uppercase tracking-widest rounded-xl"><span class="material-symbols-outlined">auto_stories</span> Scrapbook</a>
+      </nav>
+    </aside>
+    <main class="lg:ml-72 pt-28 px-margin pb-24 lg:pb-16 relative z-10">
+      <header class="mb-10">
+        <h1 class="font-display-lg text-display-lg text-primary">Birthday Scrapbook</h1>
+        <p class="text-yellow-100/80 max-w-2xl">A pin-board diary: taped photos, mini clips, and handwritten crumbs of the day.</p>
+      </header>
+      <div class="rounded-[28px] border border-yellow-200/20 bg-[#4a2c19]/60 shadow-[0_24px_80px_rgba(0,0,0,.45)] p-4 sm:p-6 backdrop-blur-sm">
+        <div id="sb-strip" class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 auto-rows-[120px]"></div>
+      </div>
+    </main>
+    <footer class="px-12 pb-24 lg:pb-8 flex justify-between">
+      <span class="text-yellow-500 font-bold text-sm" data-bind="site-title">Ore Celebrations</span>
+    </footer>
+    <div class="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-slate-900/90 backdrop-blur border-t border-white/10 flex justify-around py-3 text-[10px]">
+      <a class="flex flex-col items-center text-slate-400" href="index.html"><span class="material-symbols-outlined">construction</span>Home</a>
+      <a data-feature="scrapbook" class="flex flex-col items-center text-yellow-400" href="scrapbook.html"><span class="material-symbols-outlined">auto_stories</span>Book</a>
+      <a data-feature="vault" class="flex flex-col items-center text-slate-400" href="vault.html"><span class="material-symbols-outlined">potted_plant</span>Vault</a>
+      <a data-feature="messages" class="flex flex-col items-center text-slate-400" href="messages.html"><span class="material-symbols-outlined">push_pin</span>Notes</a>
+    </div>
+    <script src="assets/js/site-data.js"></script>
+    <script src="assets/js/shell.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", async function () {
+        var data = await applySiteShell({ active: "scrapbook" });
+        var root = document.getElementById("sb-strip");
+        (data.scrapbook && data.scrapbook.pages ? data.scrapbook.pages : []).forEach(function (p, i) {
+          var card = document.createElement("article");
+          var span = (i % 7 === 0 || i % 7 === 3) ? "row-span-2 col-span-2" : i % 5 === 0 ? "row-span-2" : "row-span-1";
+          card.className =
+            span +
+            " group relative rounded-2xl overflow-hidden border border-amber-900/30 shadow-[0_14px_28px_rgba(0,0,0,.38)] bg-[#fff7e8] text-slate-900 transition-transform hover:-translate-y-1";
+          card.style.transform = "rotate(" + ((i % 2 === 0 ? -1 : 1) * (1 + (i % 3))) + "deg)";
+          card.innerHTML =
+            mediaBlock(p) +
+            '<div class="p-3 sm:p-4 space-y-1.5">' +
+            '<h2 class="font-headline-md text-slate-800 text-lg sm:text-xl">' +
+            escapeHtml(p.title) +
+            "</h2>" +
+            '<p class="font-handwritten-note text-lg text-slate-700">' +
+            escapeHtml(p.note) +
+            "</p></div>" +
+            '<span class="absolute -top-1 left-1/2 -translate-x-1/2 w-12 h-3 rounded-sm bg-yellow-200/90 shadow"></span>';
+          root.appendChild(card);
+        });
+      });
+      function escapeHtml(s) {
+        return String(s || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+      }
+      function escapeAttr(s) {
+        return String(s || "")
+          .replace(/&/g, "&amp;")
+          .replace(/"/g, "&quot;")
+          .replace(/</g, "&lt;");
+      }
+      function youtubeId(url) {
+        if (!url) return null;
+        var u = String(url);
+        var m = u.match(/(?:youtu\.be\/|v=)([a-zA-Z0-9_-]{11})/);
+        if (m) return m[1];
+        var m2 = u.match(/youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/);
+        return m2 ? m2[1] : null;
+      }
+      function mediaBlock(p) {
+        var vid = String(p.video || "").trim();
+        var img = String(p.image || "").trim();
+        var yt = youtubeId(vid);
+        if (yt) {
+          return (
+            '<div class="h-full min-h-[120px] bg-black">' +
+            '<iframe class="w-full h-full" src="https://www.youtube.com/embed/' +
+            escapeAttr(yt) +
+            '?autoplay=1&mute=1&loop=1&playlist=' +
+            escapeAttr(yt) +
+            '&controls=1&playsinline=1&modestbranding=1&rel=0" title="Video" allow="autoplay; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>'
+          );
+        }
+        if (vid) {
+          var poster = img ? ' poster="' + escapeAttr(img) + '"' : "";
+          return (
+            '<div class="h-full min-h-[120px] bg-black"><video class="w-full h-full object-cover" controls controlsList="nodownload noplaybackrate" disablePictureInPicture disableRemotePlayback autoplay muted loop playsinline preload="metadata"' +
+            poster +
+            ' src="' +
+            escapeAttr(vid) +
+            '"></video></div>'
+          );
+        }
+        return (
+          '<div class="h-full min-h-[120px] bg-amber-100">' +
+          '<img alt="" class="w-full h-full object-cover" src="' +
+          escapeAttr(img) +
+          '" /></div>'
+        );
+      }
+    </script>
+  </body>
+</html>

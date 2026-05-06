@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin · Overview</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="../assets/js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Caveat:wght@400;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" />
+    <link rel="stylesheet" href="../assets/css/site.css" />
+  </head>
+  <body class="bg-surface-dim text-on-surface font-body-md min-h-screen overflow-x-hidden">
+    <div id="admin-lock" class="fixed inset-0 z-[300] hidden bg-slate-950/80 backdrop-blur-xl">
+      <div class="min-h-full flex items-center justify-center px-4 py-8">
+        <div class="glass-card max-w-md w-full rounded-3xl p-8 border border-white/10 space-y-4">
+          <h1 class="font-display-lg text-primary text-3xl">Admin access</h1>
+          <p class="text-on-surface-variant text-sm">Enter the passphrase you set under <strong class="text-yellow-200/90">Overview → Admin access</strong> (leave blank there for an open admin).</p>
+          <input id="admin-lock-input" type="password" class="w-full rounded-xl bg-surface-container-high/40 border border-white/10 px-4 py-3 outline-none focus:ring-1 focus:ring-primary" placeholder="Passphrase" />
+          <p id="admin-lock-err" class="text-error text-sm hidden">Incorrect passphrase.</p>
+          <button type="button" id="admin-lock-submit" class="w-full py-3 rounded-full bg-primary-container text-on-primary-container font-bold">Unlock</button>
+          <a class="block text-center text-xs text-slate-500 hover:text-yellow-200" href="../index.html">← Back to site</a>
+        </div>
+      </div>
+    </div>
+    <div class="fixed inset-0 pointer-events-none z-0">
+      <div class="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-primary-container/10 blur-[120px] rounded-full"></div>
+      <div class="absolute bottom-[-10%] left-[-5%] w-[600px] h-[600px] bg-secondary-container/10 blur-[120px] rounded-full"></div>
+    </div>
+    <div class="relative min-h-screen md:pl-[17rem]">
+      <aside class="hidden md:flex flex-col fixed left-4 top-4 bottom-4 w-60 z-[200] bg-slate-950/90 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-2xl overflow-hidden">
+        <div class="p-6 border-b border-white/5 shrink-0">
+          <p class="font-black text-yellow-500 text-lg">The Dig Site</p>
+          <p class="text-[10px] uppercase tracking-widest text-slate-400">Admin</p>
+        </div>
+        <nav class="flex-1 p-2 space-y-1 overflow-y-auto min-h-0">
+          <a href="/admin/index.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-xs uppercase tracking-widest bg-yellow-500/20 text-yellow-200 border-l-4 border-yellow-500"><span class="material-symbols-outlined text-lg shrink-0">dashboard</span> Overview</a>
+          <a href="/admin/gallery.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-xs uppercase tracking-widest text-slate-400 hover:bg-white/5 border-l-4 border-transparent"><span class="material-symbols-outlined text-lg shrink-0">diamond</span> Gallery</a>
+          <a href="/admin/vault.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-xs uppercase tracking-widest text-slate-400 hover:bg-white/5 border-l-4 border-transparent"><span class="material-symbols-outlined text-lg shrink-0">potted_plant</span> Vault</a>
+          <a href="/admin/messages.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-xs uppercase tracking-widest text-slate-400 hover:bg-white/5 border-l-4 border-transparent"><span class="material-symbols-outlined text-lg shrink-0">push_pin</span> Messages</a>
+          <a href="/admin/questions.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-xs uppercase tracking-widest text-slate-400 hover:bg-white/5 border-l-4 border-transparent"><span class="material-symbols-outlined text-lg shrink-0">quiz</span> Truth Drill</a>
+          <a href="/admin/scrapbook.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-xs uppercase tracking-widest text-slate-400 hover:bg-white/5 border-l-4 border-transparent"><span class="material-symbols-outlined text-lg shrink-0">auto_stories</span> Scrapbook</a>
+        </nav>
+        <div class="p-4 border-t border-white/5 shrink-0">
+          <a href="../index.html" class="block text-center py-2 text-xs uppercase tracking-widest text-slate-400 hover:text-yellow-200">View live site</a>
+        </div>
+      </aside>
+      <div class="relative z-[90] p-4 md:p-8 max-w-5xl mx-auto md:mx-0">
+        <header class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 border-b border-white/10 pb-6">
+          <div>
+            <p class="text-[10px] uppercase tracking-[0.25em] text-yellow-500/80 mb-1">Command</p>
+            <h1 class="font-display-lg text-display-lg text-primary leading-none">Overview</h1>
+            <p class="text-on-surface-variant text-sm mt-2">Site-wide switches, branding, and backup. The links in the sidebar use the <strong class="text-on-surface/90">same names as the public site</strong> (Gallery, Vault, Messages, etc.) and open the editor for that page.</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <span id="toast" class="text-xs text-tertiary hidden">Saved</span>
+            <button type="button" id="btn-save-all" class="px-5 py-2 rounded-full bg-primary-container text-on-primary-container font-bold text-sm shadow-lg">Save everything</button>
+          </div>
+        </header>
+        <div class="md:hidden mb-6">
+          <label class="text-label-sm text-outline uppercase text-[10px]">Jump to</label>
+          <select class="mt-1 w-full bg-surface-container-high border border-white/10 rounded-xl px-3 py-2 text-sm" onchange="if(this.value)location.href=this.value">
+            <option value="">Jump to page editor…</option>
+            <option value="/admin/index.html" selected>Overview</option>
+            <option value="/admin/gallery.html">Gallery</option>
+            <option value="/admin/vault.html">Vault</option>
+            <option value="/admin/messages.html">Messages</option>
+            <option value="/admin/questions.html">Truth Drill</option>
+            <option value="/admin/scrapbook.html">Scrapbook</option>
+          </select>
+        </div>
+        <section class="space-y-6">
+          <div class="glass-card rounded-3xl p-6 border border-white/5">
+            <h2 class="text-title-lg font-title-lg text-primary mb-4">Visible areas</h2>
+            <p class="text-sm text-on-surface-variant mb-4">Turn sections off to hide them from the visitor nav (home always stays).</p>
+            <div id="feature-toggles" class="grid sm:grid-cols-2 gap-3"></div>
+          </div>
+          <div class="glass-card rounded-3xl p-6 border border-white/5">
+            <h2 class="text-title-lg font-title-lg text-primary mb-2">Quick counts</h2>
+            <p class="text-sm text-on-surface-variant" id="overview-stats"></p>
+          </div>
+
+          <div class="glass-card rounded-3xl p-6 border border-white/5 space-y-4">
+            <h2 class="text-title-lg font-title-lg text-primary">Branding &amp; hero</h2>
+            <p class="text-xs text-on-surface-variant">These images appear across the public site (nav avatar, hero, etc.). Use a URL or embed with the upload buttons.</p>
+            <label class="text-label-sm uppercase text-outline">Site title</label>
+            <input id="fld-meta-site" class="w-full bg-surface-container-high/40 border border-white/10 rounded-xl px-3 py-2" />
+            <label class="text-label-sm uppercase text-outline">Celebrant name</label>
+            <input id="fld-meta-name" class="w-full bg-surface-container-high/40 border border-white/10 rounded-xl px-3 py-2" />
+            <label class="text-label-sm uppercase text-outline">Hero kicker</label>
+            <input id="fld-meta-kicker" class="w-full bg-surface-container-high/40 border border-white/10 rounded-xl px-3 py-2" />
+            <label class="text-label-sm uppercase text-outline">Hero headline</label>
+            <input id="fld-meta-hero" class="w-full bg-surface-container-high/40 border border-white/10 rounded-xl px-3 py-2" />
+            <label class="text-label-sm uppercase text-outline">Profile image</label>
+            <div class="flex gap-2">
+              <input id="fld-meta-prof" class="flex-1 min-w-0 bg-surface-container-high/40 border border-white/10 rounded-xl px-3 py-2 text-sm font-mono" />
+              <label class="shrink-0 inline-flex items-center justify-center w-11 h-11 rounded-xl border border-white/15 bg-white/5 cursor-pointer hover:bg-white/10" title="Upload image">
+                <span class="material-symbols-outlined text-xl text-yellow-200/90">upload</span>
+                <input type="file" accept="image/*" class="hidden js-admin-img-file" data-target="fld-meta-prof" />
+              </label>
+            </div>
+            <label class="text-label-sm uppercase text-outline">Hero background image</label>
+            <div class="flex gap-2">
+              <input id="fld-meta-heroimg" class="flex-1 min-w-0 bg-surface-container-high/40 border border-white/10 rounded-xl px-3 py-2 text-sm font-mono" />
+              <label class="shrink-0 inline-flex items-center justify-center w-11 h-11 rounded-xl border border-white/15 bg-white/5 cursor-pointer hover:bg-white/10" title="Upload image">
+                <span class="material-symbols-outlined text-xl text-yellow-200/90">upload</span>
+                <input type="file" accept="image/*" class="hidden js-admin-img-file" data-target="fld-meta-heroimg" />
+              </label>
+            </div>
+            <label class="text-label-sm uppercase text-outline">Footer year</label>
+            <input id="fld-meta-year" type="number" class="w-full max-w-[12rem] bg-surface-container-high/40 border border-white/10 rounded-xl px-3 py-2" />
+          </div>
+
+          <div class="glass-card rounded-3xl p-6 border border-white/5 space-y-4">
+            <h2 class="text-title-lg font-title-lg text-primary">Home teaser</h2>
+            <label class="text-label-sm uppercase text-outline">Surprise progress (0–100)</label>
+            <input id="fld-home-prog" type="number" min="0" max="100" class="w-full max-w-[12rem] bg-surface-container-high/40 border border-white/10 rounded-xl px-3 py-2" />
+            <label class="text-label-sm uppercase text-outline">Home quote</label>
+            <textarea id="fld-home-quote" rows="2" class="w-full bg-surface-container-high/40 border border-white/10 rounded-xl px-3 py-2"></textarea>
+            <label class="text-label-sm uppercase text-outline">Quote attribution</label>
+            <input id="fld-home-by" class="w-full bg-surface-container-high/40 border border-white/10 rounded-xl px-3 py-2" />
+            <label class="text-label-sm uppercase text-outline">Excavated memories media</label>
+            <div class="rounded-2xl border border-white/10 bg-surface-container-high/20 p-4 space-y-3">
+              <div class="flex flex-wrap gap-2 items-center">
+                <input id="new-home-media" class="flex-1 min-w-[14rem] bg-surface-container-high/40 border border-white/10 rounded-xl px-3 py-2 text-xs font-mono" placeholder="Image/video URL (YouTube or direct media URL)" />
+                <button type="button" id="btn-add-home-media" class="px-4 py-2 rounded-full bg-primary-container text-on-primary-container font-bold text-xs uppercase">Add media</button>
+              </div>
+              <div class="flex flex-wrap gap-2 items-center">
+                <label class="inline-flex items-center gap-1 text-xs uppercase tracking-wider cursor-pointer rounded-lg border border-white/20 px-3 py-2 hover:bg-white/5">
+                  <span class="material-symbols-outlined text-sm">upload</span> Upload image(s)
+                  <input id="inp-home-img-files" type="file" accept="image/*" multiple class="hidden" />
+                </label>
+                <label class="inline-flex items-center gap-1 text-xs uppercase tracking-wider cursor-pointer rounded-lg border border-white/20 px-3 py-2 hover:bg-white/5">
+                  <span class="material-symbols-outlined text-sm">movie</span> Upload video
+                  <input id="inp-home-video-files" type="file" accept="video/*" multiple class="hidden" />
+                </label>
+              </div>
+              <div id="list-home-media" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+              <textarea id="fld-home-imgs" rows="2" class="hidden"></textarea>
+            </div>
+            <label class="text-label-sm uppercase text-outline">Messages teaser count</label>
+            <input id="fld-home-n" type="number" min="0" class="w-full max-w-[12rem] bg-surface-container-high/40 border border-white/10 rounded-xl px-3 py-2" />
+          </div>
+
+          <div class="glass-card rounded-3xl p-6 border border-white/5 space-y-4">
+            <h2 class="text-title-lg font-title-lg text-primary">Birthday lockdown screen</h2>
+            <p class="text-sm text-on-surface-variant">Lock the whole public site behind a countdown. When enabled, visitors only see countdown + chaotic photo collage + confetti.</p>
+            <label class="flex items-center gap-2 text-sm text-on-surface">
+              <input id="fld-lock-enabled" type="checkbox" class="rounded border-white/20" />
+              Enable lockdown
+            </label>
+            <label class="text-label-sm uppercase text-outline">Target date/time</label>
+            <input id="fld-lock-target" type="datetime-local" class="w-full max-w-[20rem] bg-surface-container-high/40 border border-white/10 rounded-xl px-3 py-2" />
+            <div class="rounded-2xl border border-white/10 bg-surface-container-high/20 p-4 space-y-3">
+              <p class="text-label-sm uppercase text-outline">Collage images</p>
+              <div class="flex flex-wrap gap-2 items-center">
+                <input id="new-lock-img" class="flex-1 min-w-[14rem] bg-surface-container-high/40 border border-white/10 rounded-xl px-3 py-2 text-xs font-mono" placeholder="https://image-url..." />
+                <button type="button" id="btn-add-lock-img" class="px-4 py-2 rounded-full bg-primary-container text-on-primary-container font-bold text-xs uppercase">Add image</button>
+                <label class="inline-flex items-center gap-1 text-xs uppercase tracking-wider cursor-pointer rounded-lg border border-white/20 px-3 py-2 hover:bg-white/5">
+                  <span class="material-symbols-outlined text-sm">upload</span> Upload
+                  <input id="inp-lock-img-files" type="file" accept="image/*" multiple class="hidden" />
+                </label>
+              </div>
+              <div id="list-lock-images" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+              <textarea id="fld-lock-images" rows="2" class="hidden"></textarea>
+            </div>
+            <div class="flex flex-wrap gap-2 items-center">
+              <button type="button" id="btn-lock-now" class="px-4 py-2 rounded-full bg-yellow-500/90 text-slate-900 font-bold text-xs uppercase">Lock now</button>
+              <button type="button" id="btn-unlock-now" class="px-4 py-2 rounded-full border border-white/20 text-xs uppercase">Unlock now</button>
+            </div>
+          </div>
+
+          <div class="glass-card rounded-3xl p-6 border border-white/5 space-y-4">
+            <h2 class="text-title-lg font-title-lg text-primary">Admin access</h2>
+            <p class="text-sm text-on-surface-variant">Optional passphrase for every admin page (stored in browser with your site JSON). Not for high-security secrets.</p>
+            <input id="fld-meta-adminpass" type="password" class="w-full bg-surface-container-high/40 border border-white/10 rounded-xl px-3 py-2" placeholder="Leave blank for open admin" />
+          </div>
+
+          <div class="glass-card rounded-3xl p-6 border border-white/5 space-y-4">
+            <h2 class="text-title-lg font-title-lg text-primary">Backup &amp; restore</h2>
+            <p class="text-sm text-on-surface-variant">Download JSON before big edits. Import replaces the in-memory editor state — use a full export file to restore everything.</p>
+            <button type="button" id="btn-export" class="px-6 py-2 rounded-full bg-primary-container text-on-primary-container font-bold text-sm">Download JSON</button>
+            <div>
+              <label class="text-label-sm uppercase text-outline">Import JSON file</label>
+              <input id="inp-import" type="file" accept="application/json" class="mt-2 block w-full text-sm text-on-surface-variant" />
+            </div>
+            <button type="button" id="btn-reset" class="text-sm text-error underline">Reset browser data to shipped defaults</button>
+          </div>
+        </section>
+      </div>
+    </div>
+    <script>window.__SITE_DATA_PREFIX__ = "../";</script>
+    <script src="../assets/js/site-data.js"></script>
+    <script src="../assets/js/admin-core.js"></script>
+  </body>
+</html>

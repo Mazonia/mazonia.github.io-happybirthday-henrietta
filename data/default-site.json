@@ -1,0 +1,279 @@
+{
+  "meta": {
+    "siteTitle": "Birthday Celebration",
+    "celebrantName": "Henrietta",
+    "heroKicker": "Happy 20th!",
+    "heroTitle": "Happy Birthday Henrietta!",
+    "profileImage": "https://lh3.googleusercontent.com/aida-public/AB6AXuADPoreysbgfGG6OMaPNI704N5Pvfom77R8aNVYfSwT3b-qqDPaM7I-C0z5E1XArKJRtiZ7zBD_fEIqjwJ_jc09CoNnV11TZjGdUHnQUHzRoBj6an09spDTrTlHqucUZfZqQTaa7rwTOtl1wtZX5KcxNU_RNPwmJMQ-wcbnjssV32Fjmo2NEeWTpyF6Tqrk9MgSo2EYyT8LYGPx0GR9eUxL2cN5yuRC2IZJy2y03ghB8EYB_X2BVJECZVc8m7auX9ttHRtugRMRbco",
+    "heroImage": "https://lh3.googleusercontent.com/aida-public/AB6AXuACscApqk0V8ek1SiVOedokIxRkUIB31gfzXWkf0IQntHBGi4ZSSD4V4NK6OVy3uppIDFCbiatGkiwr9caPfLN5HhGJloKtIRlxlRHwSzR8jKtkuoD2UslXVzuxxf2kvVaIyhZL7_nxRd2JIQRVXX6Q8q7th-pTBFUzrVtXOyxYB04l9WlFC6KdDXfIYhYQWSdYdSLzqCJmnsL3SpBrKf59Eg8byY0uzgXRGAnIlgglWhVDGTGjLgYAGk3ruPX9KmZw9kC96QFIpF8",
+    "footerYear": 2026,
+    "adminPassphrase": "",
+    "lockdown": {
+      "enabled": false,
+      "targetDate": "2026-05-29T00:00:00",
+      "images": []
+    }
+  },
+  "features": {
+    "home": true,
+    "gallery": true,
+    "messages": true,
+    "quiz": true,
+    "vault": true,
+    "scrapbook": true
+  },
+  "home": {
+    "memoryImages": [
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuAC0RqBwtR1HfB9nIStU75hxEOoDDQAxJ4c_OO0XhcDHGZvhrrGUs_u1kuDEzdvhXV3Ssn_gfqyaOS5KydNnUQP1_VxE2jg0xod54bKi3oNGtDli1Vmt1p1txDIPl-AqJaA-mYo8kc2JNwCT5K_vTU86kJ54itNDNjjhoH6Y-4vNET9JjVs9rliDs4r6oZPYQ50d8VqIRHo4M328gOnhP2PQZ8VmjooaDa72og0dbaeaazRceRfZebr_8NL6a4dtlC4DiqCKKfujec",
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuC2f3pCb95GcvBcVD0e8tXgxY0TRczSZfRVXLA0v_I4dEAg0geTDXNC-InpzKbBjv4D5TzR0sD13k9gSy8fqS2EgzqHlBl3A_YPNMERT2iSLjPT5ZLFI1CG2Z-9y5dPk0ShtIgM6r7BViYTAF7Oa4aiOQUePrUMHExc3ncVtJ-4wiUCdDNwHfoOhTh-ctN0UHUdWwwSrqF74mjpOG9SzIGbuhExXBPN0fn0XHI4vXgs-RRAwMrTo2HUmN5ZR5ECqMsxsyMmvKqK7qM"
+    ],
+    "surpriseProgress": 85,
+    "quote": "\"Calculated probability of an amazing night: 99.9%\"",
+    "quoteAttribution": "The Dig Team",
+    "messagesTeaserCount": 12
+  },
+  "messagesPage": {
+    "title": "The Friendship Board",
+    "subtitle": "A virtual corkboard of birthday wishes, mining puns, and heartfelt sticky notes from the crew."
+  },
+  "quizPage": {
+    "kicker": "Deep excavation in progress...",
+    "title": "The Truth Drill",
+    "subtitle": "One face, one question, one honest answer."
+  },
+  "galleryPage": {
+    "title": "Memory Scape",
+    "subtitle": "Excavated stills from the field — rotate, hover, and remember."
+  },
+  "messages": [
+    {
+      "id": "m1",
+      "author": "Sam P.",
+      "body": "Happy Birthday to our favorite rockstar! May your day be as precious as a 24-carat find.",
+      "shape": "gem",
+      "tint": "rose",
+      "tag": "Urgent Love",
+      "image": ""
+    },
+    {
+      "id": "m2",
+      "author": "Elena M.",
+      "body": "Don't work too hard at the site today. Remember to actually celebrate the milestone!",
+      "shape": "square",
+      "tint": "teal",
+      "tag": "",
+      "image": ""
+    },
+    {
+      "id": "m3",
+      "author": "Dad & Mom",
+      "body": "\"Life is like mining; you have to go through a lot of dirt to find the gold. You're definitely the gold!\"",
+      "shape": "gem",
+      "tint": "gold",
+      "tag": "",
+      "image": ""
+    },
+    {
+      "id": "m4",
+      "author": "Jordan K.",
+      "body": "Drinks on me tonight! We're celebrating the best future engineer in the industry.",
+      "shape": "square",
+      "tint": "rose",
+      "tag": "",
+      "image": ""
+    },
+    {
+      "id": "m5",
+      "author": "Crew",
+      "body": "Keep digging deep, the best is yet to come!",
+      "shape": "gem",
+      "tint": "teal",
+      "tag": "",
+      "image": ""
+    },
+    {
+      "id": "m6",
+      "author": "Mark T.",
+      "body": "I found this old photo of our first site visit. We look so young! Happy Birthday, partner.",
+      "shape": "square",
+      "tint": "slate",
+      "tag": "",
+      "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuDKuBhM4z6LofZVDkZ3isOG5raX7pjZ2sSKvuCEWGb7fbpKrJa4Byudg79DWXdnl02fvdkA_A_jpUuI1sEyj9cYFQZOOd7_mBzePpDlJdRRUfq18ibp98FJ4b8WlBCDgy_y6f7GufgmPQgmQ00EXO-Dv88MNfZm9WjtKhQM4BAdkj05-_DPoYXYu7abPRwTk8Ce6gFVG2mIKWisJiUNvNJODREyc6h0KXzxt6QNI2432RsJ-AQFl7rzGcxb9lTXSGe3XZbIK5hs2_g"
+    },
+    {
+      "id": "m7",
+      "author": "Professor Vance",
+      "body": "Another year, another layer of brilliance! Shine on.",
+      "shape": "gem",
+      "tint": "gold",
+      "tag": "",
+      "image": ""
+    }
+  ],
+  "questions": [
+    {
+      "id": "q1",
+      "moodEmoji": "✨",
+      "askedBy": "Sam",
+      "icon": "explosion",
+      "title": "The Catalyst",
+      "prompt": "What event sparked your passion for engineering?",
+      "locked": false,
+      "lockedNote": ""
+    },
+    {
+      "id": "q2",
+      "moodEmoji": "💪",
+      "askedBy": "Elena",
+      "icon": "shopping_cart",
+      "title": "Heavy Lifting",
+      "prompt": "What was the hardest project you ever finished?",
+      "locked": false,
+      "lockedNote": ""
+    },
+    {
+      "id": "q3",
+      "moodEmoji": "🙂",
+      "askedBy": "Jordan",
+      "icon": "hard_hat",
+      "title": "Safety Check",
+      "prompt": "What's your ritual before a big exam or deadline?",
+      "locked": false,
+      "lockedNote": ""
+    },
+    {
+      "id": "q4",
+      "moodEmoji": "🤔",
+      "askedBy": "Mom",
+      "icon": "construction",
+      "title": "The Pickaxe",
+      "prompt": "What truth about yourself did you unearth this year?",
+      "locked": false,
+      "lockedNote": ""
+    },
+    {
+      "id": "q5",
+      "moodEmoji": "💡",
+      "askedBy": "Professor Vance",
+      "icon": "lightbulb",
+      "title": "Guiding Light",
+      "prompt": "Who is the mentor that keeps your shaft illuminated?",
+      "locked": false,
+      "lockedNote": ""
+    },
+    {
+      "id": "q6",
+      "moodEmoji": "🌙",
+      "askedBy": "Dad",
+      "icon": "precision_manufacturing",
+      "title": "The Core",
+      "prompt": "What keeps you grounded when everything moves too fast?",
+      "locked": false,
+      "lockedNote": ""
+    },
+    {
+      "id": "q7",
+      "moodEmoji": "💛",
+      "askedBy": "Mark",
+      "icon": "diamond",
+      "title": "The Find",
+      "prompt": "What's your most precious memory from this semester?",
+      "locked": false,
+      "lockedNote": ""
+    },
+    {
+      "id": "q8",
+      "moodEmoji": "🗺️",
+      "askedBy": "The crew",
+      "icon": "map",
+      "title": "The Blueprint",
+      "prompt": "Where do you see your career shaft leading next?",
+      "locked": false,
+      "lockedNote": ""
+    }
+  ],
+  "gallery": [
+    {
+      "id": "g1",
+      "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuAC0RqBwtR1HfB9nIStU75hxEOoDDQAxJ4c_OO0XhcDHGZvhrrGUs_u1kuDEzdvhXV3Ssn_gfqyaOS5KydNnUQP1_VxE2jg0xod54bKi3oNGtDli1Vmt1p1txDIPl-AqJaA-mYo8kc2JNwCT5K_vTU86kJ54itNDNjjhoH6Y-4vNET9JjVs9rliDs4r6oZPYQ50d8VqIRHo4M328gOnhP2PQZ8VmjooaDa72og0dbaeaazRceRfZebr_8NL6a4dtlC4DiqCKKfujec",
+      "video": "",
+      "caption": "Golden hour at the quarry",
+      "date": "2024-06-12"
+    },
+    {
+      "id": "g2",
+      "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuC2f3pCb95GcvBcVD0e8tXgxY0TRczSZfRVXLA0v_I4dEAg0geTDXNC-InpzKbBjv4D5TzR0sD13k9gSy8fqS2EgzqHlBl3A_YPNMERT2iSLjPT5ZLFI1CG2Z-9y5dPk0ShtIgM6r7BViYTAF7Oa4aiOQUePrUMHExc3ncVtJ-4wiUCdDNwHfoOhTh-ctN0UHUdWwwSrqF74mjpOG9SzIGbuhExXBPN0fn0XHI4vXgs-RRAwMrTo2HUmN5ZR5ECqMsxsyMmvKqK7qM",
+      "video": "",
+      "caption": "Confetti and slate",
+      "date": "2024-11-02"
+    }
+  ],
+  "vault": {
+    "passphrase": "I ADMIRE YOU",
+    "letterTitle": "A Note from the Excavator",
+    "letterSubtitle": "Confidential / Heartfelt",
+    "letterParagraphs": [
+      "To my favorite mining partner,",
+      "Building this digital space for you felt like excavating a mountain of gold. Every photo, every memory we've shared over these years is a testament to the person you are—steadfast, brilliant, and absolutely unique.",
+      "This vault is yours. It's a reminder that even when the work is hard and the engineering problems feel impossible, you have a foundation of love that's deeper than any mine on earth.",
+      "I'm so proud of you."
+    ],
+    "letters": [
+      {
+        "id": "vault_l1",
+        "title": "A Note from the Excavator",
+        "subtitle": "Confidential / Heartfelt",
+        "paragraphs": [
+          "To my favorite mining partner,",
+          "Building this digital space for you felt like excavating a mountain of gold. Every photo, every memory we've shared over these years is a testament to the person you are—steadfast, brilliant, and absolutely unique.",
+          "This vault is yours. It's a reminder that even when the work is hard and the engineering problems feel impossible, you have a foundation of love that's deeper than any mine on earth.",
+          "I'm so proud of you."
+        ]
+      }
+    ],
+    "timeline": [
+      {
+        "id": "t1",
+        "badge": "EARLY DEPOSITS",
+        "title": "2nd Grade",
+        "body": "The first playground encounter. A shared box of crayons and the mining of a lifelong bond.",
+        "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuAxI7lJKLmoxmJPmbFju0-b8w3Bsf2iw56tinpOKtitCv4sL6ei1t_Md2xagI3PAAJOomvFGHoID4Ryo6t4TfxH6CMTn3IGXUU0Lo4trAW89wXqZjUbWaGvbbHcuuq29CqHFSXQ9V8SNtoK8p-b5QTebOpx17-Qhu9T0v_pBgYJtoPgBgtvjfDko8bYai2nVUQX5uO2gmmmCi6OUdDxzcS0hoah1yH7qoUYo6g4kGBA-3H7epqbNrvCraD4N91G1o4ZYXUvL6t8OZg",
+        "accent": "gold"
+      },
+      {
+        "id": "t2",
+        "badge": "STRUCTURAL REINFORCEMENT",
+        "title": "Senior Year",
+        "body": "Nights spent studying for finals, finding support in the quiet of the library's engineering wing.",
+        "image": "",
+        "accent": "rose"
+      },
+      {
+        "id": "t3",
+        "badge": "PURE ORE",
+        "title": "3rd Year (Now)",
+        "body": "Professional breakthroughs and personal milestones. The most precious era yet.",
+        "image": "",
+        "accent": "teal"
+      }
+    ]
+  },
+  "scrapbook": {
+    "pages": [
+      {
+        "id": "s1",
+        "title": "Layer 01",
+        "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuAC0RqBwtR1HfB9nIStU75hxEOoDDQAxJ4c_OO0XhcDHGZvhrrGUs_u1kuDEzdvhXV3Ssn_gfqyaOS5KydNnUQP1_VxE2jg0xod54bKi3oNGtDli1Vmt1p1txDIPl-AqJaA-mYo8kc2JNwCT5K_vTU86kJ54itNDNjjhoH6Y-4vNET9JjVs9rliDs4r6oZPYQ50d8VqIRHo4M328gOnhP2PQZ8VmjooaDa72og0dbaeaazRceRfZebr_8NL6a4dtlC4DiqCKKfujec",
+        "video": "",
+        "note": "First strike of the pick — soft light, loud laughter."
+      },
+      {
+        "id": "s2",
+        "title": "Layer 02",
+        "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuC2f3pCb95GcvBcVD0e8tXgxY0TRczSZfRVXLA0v_I4dEAg0geTDXNC-InpzKbBjv4D5TzR0sD13k9gSy8fqS2EgzqHlBl3A_YPNMERT2iSLjPT5ZLFI1CG2Z-9y5dPk0ShtIgM6r7BViYTAF7Oa4aiOQUePrUMHExc3ncVtJ-4wiUCdDNwHfoOhTh-ctN0UHUdWwwSrqF74mjpOG9SzIGbuhExXBPN0fn0XHI4vXgs-RRAwMrTo2HUmN5ZR5ECqMsxsyMmvKqK7qM",
+        "video": "",
+        "note": "Rosé on slate — the quiet after the blast."
+      }
+    ]
+  }
+}

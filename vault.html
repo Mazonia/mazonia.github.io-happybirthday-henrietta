@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Ore Vault | Ore Celebrations</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="assets/js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Caveat:wght@400;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" />
+    <link rel="stylesheet" href="assets/css/site.css" />
+  </head>
+  <body class="bg-background text-on-background font-body-md min-h-screen overflow-x-hidden overflow-y-auto selection:bg-primary-container selection:text-on-primary-container">
+    <div class="vault-starfield" aria-hidden="true"></div>
+
+    <div id="vault-gate" class="fixed inset-0 z-[100] hidden bg-slate-950/40 backdrop-blur-3xl px-margin">
+      <div class="min-h-full flex items-center justify-center py-10">
+      <div class="glass-card max-w-md w-full p-8 rounded-3xl text-center flex flex-col items-center gap-6 shadow-2xl border border-white/10">
+        <div class="w-16 h-16 rounded-full bg-primary-container/20 flex items-center justify-center border border-primary-container/30">
+          <span class="material-symbols-outlined text-primary-fixed-dim text-4xl">lock</span>
+        </div>
+        <div class="space-y-2">
+          <h2 class="font-headline-md text-headline-md text-primary">The Ore Vault</h2>
+          <p class="font-body-md text-on-surface-variant opacity-80">A secret place for the deepest memories.</p>
+        </div>
+        <div class="w-full space-y-4">
+          <input id="vault-pass-input" class="w-full bg-surface-container-low border-b-2 border-primary-fixed-dim text-center font-display-lg text-primary focus:ring-0 focus:border-primary-fixed transition-all placeholder:opacity-20 py-4 uppercase" placeholder="I ADMIRE YOU" type="text" />
+          <p id="vault-pass-err" class="text-error text-sm hidden">That did not match — try again.</p>
+          <button type="button" id="vault-unlock" class="w-full py-4 bg-gradient-to-r from-primary-fixed-dim to-primary-container text-on-primary-fixed font-title-lg rounded-full shadow-lg shadow-primary-fixed-dim/20 hover:scale-[1.02] active:scale-95 transition-transform">Unlock Memories</button>
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <nav class="fixed top-0 left-0 right-0 z-[70] flex items-center justify-center">
+      <div class="bg-slate-900/20 backdrop-blur-xl rounded-full mt-4 mx-auto max-w-fit px-6 py-2 border border-white/10 shadow-[0_8px_32px_0_rgba(241,213,146,0.1)] flex items-center gap-6 md:gap-8">
+        <a href="index.html" class="text-2xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent tracking-tight" data-bind="site-title">Ore Celebrations</a>
+        <div class="hidden md:flex items-center gap-6">
+          <a data-feature="scrapbook" data-nav-top="scrapbook" class="font-sans tracking-tight" href="scrapbook.html">Scrapbook</a>
+          <a data-feature="vault" data-nav-top="vault" class="font-sans tracking-tight" href="vault.html">Vault</a>
+          <a data-feature="gallery" data-nav-top="gallery" class="font-sans tracking-tight" href="gallery.html">Gallery</a>
+          <a data-feature="messages" data-nav-top="messages" class="font-sans tracking-tight" href="messages.html">Messages</a>
+        </div>
+        <div class="flex items-center gap-3 border-l border-white/10 pl-4">
+          <div class="w-8 h-8 rounded-full overflow-hidden border border-white/20">
+            <img data-bind="profile-img" alt="" class="w-full h-full object-cover" src="" />
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <aside class="fixed left-0 top-0 bottom-0 w-64 hidden lg:flex flex-col bg-slate-950/40 backdrop-blur-2xl my-8 ml-4 rounded-3xl border border-white/5 shadow-2xl shadow-yellow-900/20 z-[70]">
+      <div class="p-8">
+        <p class="font-black text-yellow-500 font-sans uppercase tracking-widest text-xs">The Dig Site</p>
+        <p class="text-slate-400 text-[10px] mt-1">Mining Memories</p>
+      </div>
+      <nav class="flex-1 px-4 space-y-2 min-h-0 overflow-y-auto">
+        <a href="index.html" data-nav="home" class="py-3 px-6 flex items-center gap-4 rounded-xl transition-all"><span class="material-symbols-outlined">construction</span><span class="font-sans uppercase tracking-widest text-xs">Home</span></a>
+        <a data-feature="gallery" href="gallery.html" data-nav="gallery" class="py-3 px-6 flex items-center gap-4 rounded-xl transition-all"><span class="material-symbols-outlined">diamond</span><span class="font-sans uppercase tracking-widest text-xs">Gallery</span></a>
+        <a data-feature="vault" href="vault.html" data-nav="vault" class="py-3 px-6 flex items-center gap-4 rounded-xl transition-all"><span class="material-symbols-outlined">potted_plant</span><span class="font-sans uppercase tracking-widest text-xs">Vault</span></a>
+        <a data-feature="messages" href="messages.html" data-nav="messages" class="py-3 px-6 flex items-center gap-4 rounded-xl transition-all"><span class="material-symbols-outlined">push_pin</span><span class="font-sans uppercase tracking-widest text-xs">Messages</span></a>
+        <a data-feature="quiz" href="quiz.html" data-nav="quiz" class="py-3 px-6 flex items-center gap-4 rounded-xl transition-all"><span class="material-symbols-outlined">quiz</span><span class="font-sans uppercase tracking-widest text-xs">Truth Drill</span></a>
+        <a data-feature="scrapbook" href="scrapbook.html" data-nav="scrapbook" class="py-3 px-6 flex items-center gap-4 rounded-xl transition-all"><span class="material-symbols-outlined">auto_stories</span><span class="font-sans uppercase tracking-widest text-xs">Scrapbook</span></a>
+      </nav>
+    </aside>
+
+    <main class="relative z-10 pt-32 pb-28 px-margin max-w-6xl mx-auto lg:ml-[280px]">
+      <header class="mb-12 md:mb-16 relative">
+        <div class="absolute right-0 top-2 z-20">
+          <button type="button" id="vault-relock" class="hidden px-4 py-2 rounded-full bg-slate-900/60 border border-white/20 text-xs uppercase tracking-widest hover:bg-slate-900/80">
+            Lock vault
+          </button>
+        </div>
+        <span class="font-handwritten-note text-secondary text-3xl md:text-display-lg absolute -top-8 md:-top-12 left-0 md:-left-2 -rotate-12 opacity-80 pointer-events-none">deep within...</span>
+        <h1 class="font-headline-md text-4xl sm:text-5xl md:text-6xl text-primary-fixed mb-4 pt-6">The Ore Vault</h1>
+        <p class="font-body-md text-on-surface-variant max-w-2xl text-base md:text-lg leading-relaxed">Rough cuts to diamonds — a chronological excavation of what brought us here.</p>
+      </header>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
+        <section class="lg:col-span-4 relative min-w-0" id="vault-timeline-wrap">
+          <div class="absolute left-[1.15rem] top-3 bottom-3 w-px bg-gradient-to-b from-primary-fixed/50 via-secondary/30 to-transparent opacity-40 hidden sm:block" aria-hidden="true"></div>
+          <div class="space-y-10 relative" id="vault-timeline"></div>
+        </section>
+        <section class="lg:col-span-8 space-y-8 min-w-0" id="vault-letters-wrap">
+          <div id="vault-letters" class="space-y-8"></div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="relative z-10 w-full flex justify-between items-center px-12 mt-12 pb-24 lg:pb-10">
+      <span class="text-yellow-500 font-bold font-mono text-[10px] uppercase">Ore Vault</span>
+    </footer>
+
+    <div class="lg:hidden fixed bottom-0 left-0 right-0 z-[70] bg-slate-900/80 backdrop-blur-xl border-t border-white/10 flex justify-around py-3 text-[10px]">
+      <a class="flex flex-col items-center text-slate-400" href="index.html"><span class="material-symbols-outlined">construction</span>Home</a>
+      <a data-feature="gallery" class="flex flex-col items-center text-slate-400" href="gallery.html"><span class="material-symbols-outlined">diamond</span>Gallery</a>
+      <a data-feature="vault" class="flex flex-col items-center text-yellow-400" href="vault.html"><span class="material-symbols-outlined">potted_plant</span>Vault</a>
+      <a data-feature="messages" class="flex flex-col items-center text-slate-400" href="messages.html"><span class="material-symbols-outlined">push_pin</span>Notes</a>
+    </div>
+
+    <script src="assets/js/site-data.js"></script>
+    <script src="assets/js/shell.js"></script>
+    <script>
+      var UNLOCK_KEY = "oreCelebrations.vaultUnlocked.v1";
+      document.addEventListener("DOMContentLoaded", async function () {
+        var data = await applySiteShell({ active: "vault" });
+        var v = data.vault || {};
+        var letters = Array.isArray(v.letters) && v.letters.length
+          ? v.letters
+          : [
+              {
+                title: v.letterTitle || "",
+                subtitle: v.letterSubtitle || "",
+                paragraphs: v.letterParagraphs || [],
+              },
+            ];
+        var lettersRoot = document.getElementById("vault-letters");
+        letters.forEach(function (lt) {
+          var card = document.createElement("article");
+          card.className = "glass-card p-6 sm:p-10 rounded-3xl relative overflow-hidden";
+          var inner = document.createElement("div");
+          inner.className = "relative z-10";
+          var head = document.createElement("div");
+          head.className = "flex flex-wrap items-center gap-4 mb-8";
+          head.innerHTML =
+            '<span class="material-symbols-outlined text-primary-fixed text-4xl shrink-0">description</span>' +
+            '<div class="min-w-0">' +
+            '<h2 class="font-headline-md text-primary break-words">' +
+            escapeHtml(lt.title) +
+            "</h2>" +
+            '<p class="font-label-sm text-on-surface-variant uppercase tracking-widest">' +
+            escapeHtml(lt.subtitle) +
+            "</p>" +
+            "</div>";
+          inner.appendChild(head);
+          var body = document.createElement("div");
+          body.className = "space-y-6 font-body-md text-on-surface text-base sm:text-lg leading-relaxed opacity-90";
+          var paras = Array.isArray(lt.paragraphs) ? lt.paragraphs : [];
+          paras.forEach(function (p, idx) {
+            var el = document.createElement("p");
+            el.className = idx === paras.length - 1 ? "font-handwritten-note text-2xl sm:text-3xl text-secondary pt-4" : "";
+            el.textContent = p;
+            body.appendChild(el);
+          });
+          inner.appendChild(body);
+          card.appendChild(inner);
+          lettersRoot.appendChild(card);
+        });
+        var tl = document.getElementById("vault-timeline");
+        var dot = { gold: "bg-primary-fixed", rose: "bg-secondary", teal: "bg-tertiary" };
+        (v.timeline || []).forEach(function (t) {
+          var ac = dot[t.accent] || dot.gold;
+          var d = document.createElement("div");
+          d.className = "relative pl-14 sm:pl-16";
+          d.innerHTML =
+            '<div class="absolute left-2 sm:left-3 top-2 w-4 h-4 sm:w-5 sm:h-5 rounded-full ' +
+            ac +
+            ' border-4 border-background shadow-[0_0_12px_rgba(223,196,130,0.45)] z-10"></div>' +
+            '<div class="glass-card p-5 sm:p-6 rounded-2xl">' +
+            '<span class="font-label-sm text-primary-fixed-dim">' +
+            escapeHtml(t.badge) +
+            "</span>" +
+            '<h3 class="font-title-lg text-primary mt-1 break-words">' +
+            escapeHtml(t.title) +
+            "</h3>" +
+            '<p class="font-body-md text-on-surface-variant text-sm mt-2 leading-relaxed">' +
+            escapeHtml(t.body) +
+            "</p>" +
+            (t.image
+              ? '<div class="mt-4 rounded-lg overflow-hidden h-36 sm:h-40"><img alt="" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all" src="' +
+                String(t.image).replace(/"/g, "") +
+                '" /></div>'
+              : "") +
+            "</div>";
+          tl.appendChild(d);
+        });
+
+        var gate = document.getElementById("vault-gate");
+        var phrase = (v.passphrase || "").trim();
+        function norm(s) {
+          return String(s || "")
+            .trim()
+            .toUpperCase();
+        }
+        function showGate(show) {
+          var relock = document.getElementById("vault-relock");
+          if (show) {
+            gate.classList.remove("hidden");
+            document.body.style.overflow = "hidden";
+            if (relock) relock.classList.add("hidden");
+          } else {
+            gate.classList.add("hidden");
+            document.body.style.overflow = "";
+            if (relock && phrase) relock.classList.remove("hidden");
+          }
+        }
+        if (phrase && localStorage.getItem(UNLOCK_KEY) !== "1") showGate(true);
+        else showGate(false);
+
+        document.getElementById("vault-unlock").addEventListener("click", function () {
+          var val = norm(document.getElementById("vault-pass-input").value);
+          if (val === norm(phrase)) {
+            localStorage.setItem(UNLOCK_KEY, "1");
+            document.getElementById("vault-pass-err").classList.add("hidden");
+            showGate(false);
+          } else {
+            document.getElementById("vault-pass-err").classList.remove("hidden");
+          }
+        });
+        var relockBtn = document.getElementById("vault-relock");
+        if (relockBtn) {
+          relockBtn.addEventListener("click", function () {
+            localStorage.removeItem(UNLOCK_KEY);
+            document.getElementById("vault-pass-input").value = "";
+            showGate(true);
+          });
+        }
+      });
+      function escapeHtml(s) {
+        return String(s || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+      }
+    </script>
+  </body>
+</html>

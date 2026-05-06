@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gallery | Ore Celebrations</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="assets/js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Caveat:wght@400;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" />
+    <link rel="stylesheet" href="assets/css/site.css" />
+  </head>
+  <body class="bg-surface text-on-surface font-body-md overflow-x-hidden">
+    <div class="fixed inset-0 grainy-overlay z-50 pointer-events-none"></div>
+    <nav class="fixed top-0 left-0 right-0 z-50 flex items-center justify-center p-4">
+      <div class="bg-slate-900/20 backdrop-blur-xl rounded-full px-6 py-2 border border-white/10 shadow-[0_8px_32px_0_rgba(241,213,146,0.1)] flex items-center gap-6 md:gap-8">
+        <a href="index.html" class="text-2xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent tracking-tight" data-bind="site-title">Ore Celebrations</a>
+        <div class="hidden md:flex items-center gap-6">
+          <a data-feature="scrapbook" data-nav-top="scrapbook" class="font-sans tracking-tight" href="scrapbook.html">Scrapbook</a>
+          <a data-feature="vault" data-nav-top="vault" class="font-sans tracking-tight" href="vault.html">Vault</a>
+          <a data-feature="gallery" data-nav-top="gallery" class="font-sans tracking-tight" href="gallery.html">Gallery</a>
+          <a data-feature="messages" data-nav-top="messages" class="font-sans tracking-tight" href="messages.html">Messages</a>
+        </div>
+        <div class="flex items-center gap-3 border-l border-white/10 pl-4">
+          <div class="w-8 h-8 rounded-full border border-yellow-500/50 overflow-hidden">
+            <img data-bind="profile-img" alt="" class="w-full h-full object-cover" src="" />
+          </div>
+        </div>
+      </div>
+    </nav>
+    <aside class="fixed left-0 top-0 bottom-0 w-64 hidden lg:flex flex-col bg-slate-950/40 backdrop-blur-2xl my-8 ml-4 rounded-3xl border-r border-white/5 shadow-2xl shadow-yellow-900/20 z-40">
+      <div class="p-8">
+        <p class="font-black text-yellow-500 text-xl">The Dig Site</p>
+        <p class="font-sans uppercase tracking-widest text-[10px] text-slate-400">Mining Memories</p>
+      </div>
+      <nav class="flex-1 space-y-2 px-2">
+        <a href="index.html" data-nav="home" class="py-3 px-6 flex items-center gap-3 font-sans uppercase tracking-widest text-xs rounded-xl transition-all"><span class="material-symbols-outlined">construction</span> Home</a>
+        <a data-feature="gallery" href="gallery.html" data-nav="gallery" class="py-3 px-6 flex items-center gap-3 font-sans uppercase tracking-widest text-xs rounded-xl transition-all"><span class="material-symbols-outlined">diamond</span> Gallery</a>
+        <a data-feature="vault" href="vault.html" data-nav="vault" class="py-3 px-6 flex items-center gap-3 font-sans uppercase tracking-widest text-xs rounded-xl transition-all"><span class="material-symbols-outlined">potted_plant</span> Vault</a>
+        <a data-feature="messages" href="messages.html" data-nav="messages" class="py-3 px-6 flex items-center gap-3 font-sans uppercase tracking-widest text-xs rounded-xl transition-all"><span class="material-symbols-outlined">push_pin</span> Messages</a>
+        <a data-feature="quiz" href="quiz.html" data-nav="quiz" class="py-3 px-6 flex items-center gap-3 font-sans uppercase tracking-widest text-xs rounded-xl transition-all"><span class="material-symbols-outlined">quiz</span> Truth Drill</a>
+        <a data-feature="scrapbook" href="scrapbook.html" data-nav="scrapbook" class="py-3 px-6 flex items-center gap-3 font-sans uppercase tracking-widest text-xs rounded-xl transition-all"><span class="material-symbols-outlined">auto_stories</span> Scrapbook</a>
+      </nav>
+    </aside>
+    <main class="lg:ml-72 pt-32 px-margin pb-24 lg:pb-20">
+      <header class="mb-12 max-w-3xl">
+        <h1 class="font-display-lg text-display-lg text-primary mb-2" id="gal-title">Memory Scape</h1>
+        <p class="text-on-surface-variant font-body-md" id="gal-subtitle"></p>
+      </header>
+      <div id="gal-grid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-gutter memory-scatter"></div>
+    </main>
+    <div id="gal-modal" class="fixed inset-0 z-[200] hidden bg-slate-950/85 backdrop-blur-md">
+      <div class="min-h-full flex items-center justify-center p-4">
+        <div class="w-full max-w-5xl glass-card rounded-3xl border border-white/15 overflow-hidden">
+          <div class="flex justify-between items-center px-4 py-3 border-b border-white/10">
+            <p id="gal-modal-caption" class="font-handwritten-note text-2xl text-primary"></p>
+            <button id="gal-modal-close" type="button" class="material-symbols-outlined text-slate-300 hover:text-white">close</button>
+          </div>
+          <div id="gal-modal-media" class="bg-black max-h-[75vh] h-[75vh] flex items-center justify-center"></div>
+          <div class="px-4 py-3 border-t border-white/10">
+            <p id="gal-modal-date" class="text-label-sm text-outline uppercase"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer class="w-full flex justify-between items-center px-12 mt-16 pb-24 lg:pb-8">
+      <span class="text-yellow-500 font-bold text-sm" data-bind="site-title">Ore Celebrations</span>
+    </footer>
+    <div class="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-xl border-t border-white/10 flex justify-around py-3 text-[10px]">
+      <a class="flex flex-col items-center text-slate-400" href="index.html"><span class="material-symbols-outlined">construction</span>Home</a>
+      <a data-feature="gallery" class="flex flex-col items-center text-yellow-400" href="gallery.html"><span class="material-symbols-outlined">diamond</span>Gallery</a>
+      <a data-feature="messages" class="flex flex-col items-center text-slate-400" href="messages.html"><span class="material-symbols-outlined">push_pin</span>Notes</a>
+      <a data-feature="quiz" class="flex flex-col items-center text-slate-400" href="quiz.html"><span class="material-symbols-outlined">quiz</span>Drill</a>
+    </div>
+    <script src="assets/js/site-data.js"></script>
+    <script src="assets/js/shell.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", async function () {
+        var data = await applySiteShell({ active: "gallery" });
+        var gp = data.galleryPage || {};
+        if (gp.title) document.getElementById("gal-title").textContent = gp.title;
+        document.getElementById("gal-subtitle").textContent = gp.subtitle || "";
+        var root = document.getElementById("gal-grid");
+        var modal = document.getElementById("gal-modal");
+        var modalMedia = document.getElementById("gal-modal-media");
+        var modalCap = document.getElementById("gal-modal-caption");
+        var modalDate = document.getElementById("gal-modal-date");
+        function openModal(g) {
+          modal.classList.remove("hidden");
+          document.body.style.overflow = "hidden";
+          modalCap.textContent = g.caption || "";
+          modalDate.textContent = g.date || "";
+          modalMedia.innerHTML = galleryMediaBlock(g, true);
+        }
+        function closeModal() {
+          modal.classList.add("hidden");
+          document.body.style.overflow = "";
+          modalMedia.innerHTML = "";
+        }
+        document.getElementById("gal-modal-close").addEventListener("click", closeModal);
+        modal.addEventListener("click", function (e) {
+          if (e.target === modal) closeModal();
+        });
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape" && !modal.classList.contains("hidden")) closeModal();
+        });
+        (data.gallery || []).forEach(function (g) {
+          var el = document.createElement("div");
+          el.className = "glass-card rounded-3xl overflow-hidden border border-white/10 shadow-xl cursor-zoom-in";
+          el.innerHTML =
+            galleryMediaBlock(g, false) +
+            '<div class="p-5 space-y-1">' +
+            '<p class="font-handwritten-note text-2xl text-primary">' +
+            escapeHtml(g.caption) +
+            "</p>" +
+            (g.date ? '<p class="text-label-sm text-outline uppercase">' + escapeHtml(g.date) + "</p>" : "") +
+            "</div>";
+          el.addEventListener("click", function () {
+            openModal(g);
+          });
+          root.appendChild(el);
+        });
+      });
+      function escapeHtml(s) {
+        return String(s || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+      }
+      function escapeAttr(s) {
+        return String(s || "")
+          .replace(/&/g, "&amp;")
+          .replace(/"/g, "&quot;")
+          .replace(/</g, "&lt;");
+      }
+      function youtubeId(url) {
+        if (!url) return null;
+        var u = String(url);
+        var m = u.match(/(?:youtu\.be\/|v=)([a-zA-Z0-9_-]{11})/);
+        if (m) return m[1];
+        var m2 = u.match(/youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/);
+        return m2 ? m2[1] : null;
+      }
+      function galleryMediaBlock(g, large) {
+        var vid = String(g.video || "").trim();
+        var img = String(g.image || "").trim();
+        var yt = youtubeId(vid);
+        var frame = large ? "aspect-auto h-full max-h-[75vh]" : "aspect-[4/3]";
+        if (yt) {
+          return (
+            '<div class="' + frame + ' overflow-hidden bg-black w-full">' +
+            '<iframe class="w-full h-full min-h-[200px]" src="https://www.youtube.com/embed/' +
+            escapeAttr(yt) +
+            '?autoplay=1&mute=1&loop=1&playlist=' +
+            escapeAttr(yt) +
+            '&controls=1&playsinline=1" title="Video" allow="autoplay; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>'
+          );
+        }
+        if (vid) {
+          var poster = img ? ' poster="' + escapeAttr(img) + '"' : "";
+          return (
+            '<div class="' + frame + ' overflow-hidden bg-black w-full">' +
+            '<video class="w-full h-full object-cover" controls autoplay muted loop playsinline preload="metadata"' +
+            poster +
+            ' src="' +
+            escapeAttr(vid) +
+            '"></video></div>'
+          );
+        }
+        if (img) {
+          return (
+            '<div class="' + frame + ' overflow-hidden">' +
+            '<img alt="" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" src="' +
+            escapeAttr(img) +
+            '" /></div>'
+          );
+        }
+        return '<div class="aspect-[4/3] bg-slate-800/80 flex items-center justify-center text-on-surface-variant text-sm px-4 text-center">No image or video</div>';
+      }
+    </script>
+  </body>
+</html>

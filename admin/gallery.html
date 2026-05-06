@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin · Gallery</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="../assets/js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Caveat:wght@400;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" />
+    <link rel="stylesheet" href="../assets/css/site.css" />
+  </head>
+  <body class="min-h-screen overflow-x-hidden bg-[#0a0512] text-fuchsia-50 font-body-md">
+    <div id="admin-lock" class="fixed inset-0 z-[300] hidden bg-slate-950/80 backdrop-blur-xl">
+      <div class="min-h-full flex items-center justify-center px-4 py-8">
+        <div class="glass-card max-w-md w-full rounded-3xl p-8 border border-white/10 space-y-4">
+          <h1 class="font-display-lg text-primary text-3xl">Admin access</h1>
+          <p class="text-on-surface-variant text-sm">Passphrase on <strong class="text-yellow-200/90">Overview</strong> → Admin access.</p>
+          <input id="admin-lock-input" type="password" class="w-full rounded-xl bg-surface-container-high/40 border border-white/10 px-4 py-3 outline-none focus:ring-1 focus:ring-primary" placeholder="Passphrase" />
+          <p id="admin-lock-err" class="text-error text-sm hidden">Incorrect passphrase.</p>
+          <button type="button" id="admin-lock-submit" class="w-full py-3 rounded-full bg-primary-container text-on-primary-container font-bold">Unlock</button>
+          <a class="block text-center text-xs text-slate-500 hover:text-yellow-200" href="../index.html">← Back to site</a>
+        </div>
+      </div>
+    </div>
+    <div class="fixed inset-0 pointer-events-none z-0 bg-[radial-gradient(circle_at_30%_20%,rgba(217,70,239,0.12),transparent_45%),radial-gradient(circle_at_70%_80%,rgba(168,85,247,0.1),transparent_40%)]"></div>
+    <div class="relative min-h-screen md:pl-[17rem]">
+      <aside class="hidden md:flex flex-col fixed left-4 top-4 bottom-4 w-60 z-[200] bg-slate-950/95 backdrop-blur-2xl border border-fuchsia-900/35 rounded-3xl shadow-2xl overflow-hidden">
+        <div class="p-6 border-b border-fuchsia-900/30 shrink-0">
+          <p class="font-black text-fuchsia-300 text-lg tracking-tight">Gallery</p>
+          <p class="text-[10px] uppercase tracking-widest text-fuchsia-200/35">Edit public page</p>
+        </div>
+        <nav class="flex-1 p-2 space-y-1 overflow-y-auto min-h-0">
+          <a href="/admin/index.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-xs uppercase tracking-widest text-fuchsia-100/45 hover:bg-fuchsia-950/30 border-l-4 border-transparent"><span class="material-symbols-outlined text-lg shrink-0">dashboard</span> Overview</a>
+          <a href="/admin/gallery.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-xs uppercase tracking-widest bg-fuchsia-600/15 text-fuchsia-100 border-l-4 border-fuchsia-500"><span class="material-symbols-outlined text-lg shrink-0">diamond</span> Gallery</a>
+          <a href="/admin/vault.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-xs uppercase tracking-widest text-fuchsia-100/45 hover:bg-fuchsia-950/30 border-l-4 border-transparent"><span class="material-symbols-outlined text-lg shrink-0">potted_plant</span> Vault</a>
+          <a href="/admin/messages.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-xs uppercase tracking-widest text-fuchsia-100/45 hover:bg-fuchsia-950/30 border-l-4 border-transparent"><span class="material-symbols-outlined text-lg shrink-0">push_pin</span> Messages</a>
+          <a href="/admin/questions.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-xs uppercase tracking-widest text-fuchsia-100/45 hover:bg-fuchsia-950/30 border-l-4 border-transparent"><span class="material-symbols-outlined text-lg shrink-0">quiz</span> Truth Drill</a>
+          <a href="/admin/scrapbook.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-xs uppercase tracking-widest text-fuchsia-100/45 hover:bg-fuchsia-950/30 border-l-4 border-transparent"><span class="material-symbols-outlined text-lg shrink-0">auto_stories</span> Scrapbook</a>
+        </nav>
+        <div class="p-4 border-t border-fuchsia-900/30 shrink-0">
+          <a href="../index.html" class="block text-center py-2 text-xs uppercase tracking-widest text-fuchsia-200/40 hover:text-fuchsia-100">View live site</a>
+        </div>
+      </aside>
+      <div class="relative z-[90] p-4 md:p-8 max-w-6xl mx-auto md:mx-0">
+        <header class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+          <div>
+            <p class="text-[10px] uppercase tracking-[0.25em] text-fuchsia-400/60 mb-1">Same name as the live site</p>
+            <h1 class="font-display-lg text-4xl text-fuchsia-100">Gallery</h1>
+            <p class="text-fuchsia-200/45 text-sm mt-2 max-w-2xl">This is the admin view for <strong class="text-fuchsia-200/80">gallery.html</strong>. Add or remove tiles, edit captions and dates, attach photos or upload images, and optionally set a YouTube or direct video URL per tile.</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <span id="toast" class="text-xs text-fuchsia-300/70 hidden">Saved</span>
+            <button type="button" id="btn-save-all" class="px-5 py-2 rounded-full bg-fuchsia-600 text-white font-bold text-sm shadow-lg shadow-fuchsia-900/40">Save everything</button>
+          </div>
+        </header>
+        <div class="md:hidden mb-6">
+          <select class="w-full bg-black/40 border border-fuchsia-900/40 rounded-xl px-3 py-2 text-sm" onchange="if(this.value)location.href=this.value">
+            <option value="">Jump to page editor…</option>
+            <option value="/admin/index.html">Overview</option>
+            <option value="/admin/gallery.html" selected>Gallery</option>
+            <option value="/admin/vault.html">Vault</option>
+            <option value="/admin/messages.html">Messages</option>
+            <option value="/admin/questions.html">Truth Drill</option>
+            <option value="/admin/scrapbook.html">Scrapbook</option>
+          </select>
+        </div>
+        <div class="space-y-6">
+          <div class="rounded-3xl p-6 border border-fuchsia-800/25 bg-fuchsia-950/15 space-y-3">
+            <h2 class="text-sm font-bold text-fuchsia-200/80 uppercase tracking-widest">Public page copy</h2>
+            <input id="fld-gal-title" class="w-full bg-black/35 border border-fuchsia-900/40 rounded-xl px-4 py-2" placeholder="Title" />
+            <textarea id="fld-gal-sub" rows="2" class="w-full bg-black/35 border border-fuchsia-900/40 rounded-xl px-4 py-2" placeholder="Subtitle"></textarea>
+          </div>
+          <div class="rounded-3xl p-6 border border-dashed border-fuchsia-500/30 bg-black/20 space-y-4">
+            <h2 class="text-sm font-bold text-fuchsia-200/90 uppercase tracking-widest">Add to the public gallery</h2>
+            <div class="grid sm:grid-cols-2 gap-3">
+              <div class="sm:col-span-2">
+                <label class="text-[10px] uppercase text-fuchsia-200/50">Still image — URL or file</label>
+                <div class="flex gap-2 mt-1">
+                  <input id="new-gal-img" class="flex-1 min-w-0 bg-black/35 border border-fuchsia-900/40 rounded-xl px-3 py-2 text-xs font-mono" placeholder="https://… or leave empty if video-only" />
+                  <label class="shrink-0 inline-flex items-center px-3 rounded-xl border border-fuchsia-700/50 bg-fuchsia-950/40 cursor-pointer text-[10px] uppercase text-fuchsia-200/80 hover:bg-fuchsia-900/30">
+                    File
+                    <input id="new-gal-img-file" type="file" accept="image/*" class="hidden" />
+                  </label>
+                </div>
+              </div>
+              <div class="sm:col-span-2">
+                <label class="text-[10px] uppercase text-fuchsia-200/50">Video — YouTube or direct file URL</label>
+                <div class="flex gap-2 mt-1">
+                  <input id="new-gal-video" class="flex-1 min-w-0 bg-black/35 border border-fuchsia-900/40 rounded-xl px-3 py-2 text-xs font-mono" placeholder="https://www.youtube.com/watch?v=… or https://…mp4" />
+                  <label class="shrink-0 inline-flex items-center px-3 rounded-xl border border-fuchsia-700/50 bg-fuchsia-950/40 cursor-pointer text-[10px] uppercase text-fuchsia-200/80 hover:bg-fuchsia-900/30">
+                    Video file
+                    <input id="new-gal-video-file" type="file" accept="video/*" class="hidden" />
+                  </label>
+                </div>
+              </div>
+              <div>
+                <label class="text-[10px] uppercase text-fuchsia-200/50">Caption</label>
+                <input id="new-gal-cap" class="w-full mt-1 bg-black/35 border border-fuchsia-900/40 rounded-xl px-3 py-2" />
+              </div>
+              <div>
+                <label class="text-[10px] uppercase text-fuchsia-200/50">Date</label>
+                <input id="new-gal-date" class="w-full mt-1 bg-black/35 border border-fuchsia-900/40 rounded-xl px-3 py-2" />
+              </div>
+            </div>
+            <button type="button" id="btn-add-gal" class="px-6 py-2 rounded-full bg-fuchsia-700 text-white font-bold text-sm">Add to wall</button>
+          </div>
+          <div>
+            <h2 class="text-xs uppercase tracking-widest text-fuchsia-400/60 mb-3">Items visitors see (edit or remove)</h2>
+            <div id="list-gallery"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>window.__SITE_DATA_PREFIX__ = "../";</script>
+    <script src="../assets/js/site-data.js"></script>
+    <script src="../assets/js/admin-core.js"></script>
+  </body>
+</html>

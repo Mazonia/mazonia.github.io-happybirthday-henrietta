@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin · Truth Drill</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="../assets/js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Caveat:wght@400;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" />
+    <link rel="stylesheet" href="../assets/css/site.css" />
+  </head>
+  <body class="min-h-screen overflow-x-hidden bg-[#050c0f] text-cyan-50 font-body-md">
+    <div id="admin-lock" class="fixed inset-0 z-[300] hidden bg-slate-950/80 backdrop-blur-xl">
+      <div class="min-h-full flex items-center justify-center px-4 py-8">
+        <div class="glass-card max-w-md w-full rounded-3xl p-8 border border-white/10 space-y-4">
+          <h1 class="font-display-lg text-primary text-3xl">Admin access</h1>
+          <p class="text-on-surface-variant text-sm">Passphrase on <strong class="text-yellow-200/90">Overview</strong> → Admin access.</p>
+          <input id="admin-lock-input" type="password" class="w-full rounded-xl bg-surface-container-high/40 border border-white/10 px-4 py-3 outline-none focus:ring-1 focus:ring-primary" placeholder="Passphrase" />
+          <p id="admin-lock-err" class="text-error text-sm hidden">Incorrect passphrase.</p>
+          <button type="button" id="admin-lock-submit" class="w-full py-3 rounded-full bg-primary-container text-on-primary-container font-bold">Unlock</button>
+          <a class="block text-center text-xs text-slate-500 hover:text-yellow-200" href="../index.html">← Back to site</a>
+        </div>
+      </div>
+    </div>
+    <div class="fixed inset-0 pointer-events-none z-0 bg-[radial-gradient(ellipse_at_top,_rgba(6,182,212,0.12),_transparent_50%)]"></div>
+    <div class="relative min-h-screen md:pl-[17rem]">
+      <aside class="hidden md:flex flex-col fixed left-4 top-4 bottom-4 w-60 z-[200] bg-slate-950/95 backdrop-blur-2xl border border-cyan-900/40 rounded-3xl shadow-[0_0_40px_rgba(6,182,212,0.08)] overflow-hidden">
+        <div class="p-6 border-b border-cyan-900/30 shrink-0">
+          <p class="font-mono text-cyan-300 text-sm font-bold tracking-tight">Truth Drill</p>
+          <p class="text-[10px] uppercase tracking-widest text-cyan-200/40 mt-1">Edit public page</p>
+        </div>
+        <nav class="flex-1 p-2 space-y-1 overflow-y-auto min-h-0">
+          <a href="/admin/index.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-xs uppercase tracking-widest text-cyan-100/50 hover:bg-cyan-950/40 border-l-4 border-transparent"><span class="material-symbols-outlined text-lg shrink-0">dashboard</span> Overview</a>
+          <a href="/admin/gallery.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-xs uppercase tracking-widest text-cyan-100/50 hover:bg-cyan-950/40 border-l-4 border-transparent"><span class="material-symbols-outlined text-lg shrink-0">diamond</span> Gallery</a>
+          <a href="/admin/vault.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-xs uppercase tracking-widest text-cyan-100/50 hover:bg-cyan-950/40 border-l-4 border-transparent"><span class="material-symbols-outlined text-lg shrink-0">potted_plant</span> Vault</a>
+          <a href="/admin/messages.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-xs uppercase tracking-widest text-cyan-100/50 hover:bg-cyan-950/40 border-l-4 border-transparent"><span class="material-symbols-outlined text-lg shrink-0">push_pin</span> Messages</a>
+          <a href="/admin/questions.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-xs uppercase tracking-widest bg-cyan-500/10 text-cyan-200 border-l-4 border-cyan-400"><span class="material-symbols-outlined text-lg shrink-0">quiz</span> Truth Drill</a>
+          <a href="/admin/scrapbook.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-xs uppercase tracking-widest text-cyan-100/50 hover:bg-cyan-950/40 border-l-4 border-transparent"><span class="material-symbols-outlined text-lg shrink-0">auto_stories</span> Scrapbook</a>
+        </nav>
+        <div class="p-4 border-t border-cyan-900/30 shrink-0">
+          <a href="../index.html" class="block text-center py-2 text-xs uppercase tracking-widest text-cyan-200/40 hover:text-cyan-200">View live site</a>
+        </div>
+      </aside>
+      <div class="relative z-[90] p-4 md:p-8 max-w-4xl mx-auto md:mx-0">
+        <header class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 border-b border-cyan-900/40 pb-6">
+          <div>
+            <p class="font-mono text-[10px] text-cyan-500/80 mb-2">quiz.html → same nav label</p>
+            <h1 class="text-3xl sm:text-4xl font-bold text-cyan-100 tracking-tight">Truth Drill</h1>
+            <p class="text-cyan-200/45 text-sm mt-2 max-w-lg">Admin for <strong class="text-cyan-200/70">quiz.html</strong>. Each block is one question card — edit prompt, labels, lock/remove.</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <span id="toast" class="text-xs text-cyan-300/70 hidden">Saved</span>
+            <button type="button" id="btn-save-all" class="px-5 py-2 rounded-lg bg-cyan-600 text-slate-950 font-bold text-sm font-mono">SAVE_ALL</button>
+          </div>
+        </header>
+        <div class="md:hidden mb-6">
+          <select class="w-full bg-black/40 border border-cyan-900/50 rounded-xl px-3 py-2 text-sm" onchange="if(this.value)location.href=this.value">
+            <option value="">Jump to page editor…</option>
+            <option value="/admin/index.html">Overview</option>
+            <option value="/admin/gallery.html">Gallery</option>
+            <option value="/admin/vault.html">Vault</option>
+            <option value="/admin/messages.html">Messages</option>
+            <option value="/admin/questions.html" selected>Truth Drill</option>
+            <option value="/admin/scrapbook.html">Scrapbook</option>
+          </select>
+        </div>
+        <div class="space-y-6">
+          <div class="rounded-2xl border border-cyan-800/30 bg-slate-950/60 p-6 space-y-4 font-mono text-sm">
+            <h2 class="text-cyan-400/90 text-xs uppercase tracking-widest">Page_copy</h2>
+            <label class="block text-[10px] uppercase text-cyan-200/40">kicker</label>
+            <input id="fld-quiz-kicker" class="w-full bg-black/40 border border-cyan-900/40 rounded-lg px-3 py-2 text-cyan-100" />
+            <label class="block text-[10px] uppercase text-cyan-200/40">title</label>
+            <input id="fld-quiz-title" class="w-full bg-black/40 border border-cyan-900/40 rounded-lg px-3 py-2 text-cyan-100" />
+            <label class="block text-[10px] uppercase text-cyan-200/40">subtitle</label>
+            <textarea id="fld-quiz-sub" rows="2" class="w-full bg-black/40 border border-cyan-900/40 rounded-lg px-3 py-2 text-cyan-100"></textarea>
+          </div>
+          <div class="rounded-2xl border border-cyan-700/25 bg-cyan-950/20 p-6 space-y-4">
+            <h2 class="text-cyan-300/80 text-xs uppercase tracking-widest">Append station</h2>
+            <div class="grid sm:grid-cols-2 gap-3 font-mono text-xs">
+              <div>
+                <label class="text-cyan-200/40">mood_emoji</label>
+                <input id="new-q-emoji" class="w-full mt-1 bg-black/35 border border-cyan-900/40 rounded-lg px-2 py-2 text-xl" placeholder="😊" maxlength="8" />
+              </div>
+              <div>
+                <label class="text-cyan-200/40">asked_by</label>
+                <input id="new-q-askedby" class="w-full mt-1 bg-black/35 border border-cyan-900/40 rounded-lg px-2 py-2" placeholder="Jordan" />
+              </div>
+              <div>
+                <label class="text-cyan-200/40">label</label>
+                <input id="new-q-title" class="w-full mt-1 bg-black/35 border border-cyan-900/40 rounded-lg px-2 py-2" />
+              </div>
+              <div>
+                <label class="text-cyan-200/40">icon_key</label>
+                <input id="new-q-icon" class="w-full mt-1 bg-black/35 border border-cyan-900/40 rounded-lg px-2 py-2" placeholder="diamond" />
+              </div>
+            </div>
+            <div>
+              <label class="text-cyan-200/40 text-xs">prompt</label>
+              <textarea id="new-q-prompt" rows="2" class="w-full mt-1 bg-black/35 border border-cyan-900/40 rounded-lg px-2 py-2 font-sans text-sm"></textarea>
+            </div>
+            <label class="flex items-center gap-2 text-xs text-cyan-200/60 font-sans">
+              <input id="new-q-locked" type="checkbox" class="rounded border-cyan-700" />
+              locked_station
+            </label>
+            <div>
+              <label class="text-cyan-200/40 text-xs">locked_note</label>
+              <input id="new-q-locked-note" class="w-full mt-1 bg-black/35 border border-cyan-900/40 rounded-lg px-2 py-2 font-sans text-sm" />
+            </div>
+            <button type="button" id="btn-add-q" class="px-5 py-2 rounded-lg border border-cyan-500/50 text-cyan-200 text-xs font-mono hover:bg-cyan-950/60">+ ADD_STATION</button>
+          </div>
+          <div>
+            <h2 class="text-xs uppercase tracking-widest text-cyan-500/70 mb-3 font-mono">Registered stations</h2>
+            <div id="list-questions"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>window.__SITE_DATA_PREFIX__ = "../";</script>
+    <script src="../assets/js/site-data.js"></script>
+    <script src="../assets/js/admin-core.js"></script>
+  </body>
+</html>

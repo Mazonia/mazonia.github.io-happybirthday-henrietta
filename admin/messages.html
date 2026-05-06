@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin · Messages</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="../assets/js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Caveat:wght@400;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" />
+    <link rel="stylesheet" href="../assets/css/site.css" />
+  </head>
+  <body class="min-h-screen overflow-x-hidden bg-[#1c1410] text-amber-50 font-body-md">
+    <div id="admin-lock" class="fixed inset-0 z-[300] hidden bg-slate-950/80 backdrop-blur-xl">
+      <div class="min-h-full flex items-center justify-center px-4 py-8">
+        <div class="glass-card max-w-md w-full rounded-3xl p-8 border border-white/10 space-y-4">
+          <h1 class="font-display-lg text-primary text-3xl">Admin access</h1>
+          <p class="text-on-surface-variant text-sm">Passphrase is set on <strong class="text-yellow-200/90">Overview</strong> → Admin access (or leave blank there).</p>
+          <input id="admin-lock-input" type="password" class="w-full rounded-xl bg-surface-container-high/40 border border-white/10 px-4 py-3 outline-none focus:ring-1 focus:ring-primary" placeholder="Passphrase" />
+          <p id="admin-lock-err" class="text-error text-sm hidden">Incorrect passphrase.</p>
+          <button type="button" id="admin-lock-submit" class="w-full py-3 rounded-full bg-primary-container text-on-primary-container font-bold">Unlock</button>
+          <a class="block text-center text-xs text-slate-500 hover:text-yellow-200" href="../index.html">← Back to site</a>
+        </div>
+      </div>
+    </div>
+    <div class="fixed inset-0 pointer-events-none z-0 opacity-40" style="background-image: radial-gradient(circle at 20% 20%, rgba(180,83,9,0.15), transparent 40%), radial-gradient(circle at 80% 60%, rgba(120,53,15,0.2), transparent 35%)"></div>
+    <div class="relative min-h-screen md:pl-[17rem]">
+      <aside class="hidden md:flex flex-col fixed left-4 top-4 bottom-4 w-60 z-[200] bg-[#120d0a]/95 backdrop-blur-2xl border border-amber-900/30 rounded-3xl shadow-2xl overflow-hidden">
+        <div class="p-6 border-b border-amber-900/30 shrink-0">
+          <p class="font-black text-amber-400 text-lg font-handwritten-note">Messages</p>
+          <p class="text-[10px] uppercase tracking-widest text-amber-200/40">Edit public page</p>
+        </div>
+        <nav class="flex-1 p-2 space-y-1 overflow-y-auto min-h-0 text-amber-100/80">
+          <a href="/admin/index.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-xs uppercase tracking-widest hover:bg-amber-950/50 border-l-4 border-transparent"><span class="material-symbols-outlined text-lg shrink-0">dashboard</span> Overview</a>
+          <a href="/admin/gallery.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-xs uppercase tracking-widest hover:bg-amber-950/50 border-l-4 border-transparent"><span class="material-symbols-outlined text-lg shrink-0">diamond</span> Gallery</a>
+          <a href="/admin/vault.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-xs uppercase tracking-widest hover:bg-amber-950/50 border-l-4 border-transparent"><span class="material-symbols-outlined text-lg shrink-0">potted_plant</span> Vault</a>
+          <a href="/admin/messages.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-xs uppercase tracking-widest bg-amber-500/15 text-amber-200 border-l-4 border-amber-500"><span class="material-symbols-outlined text-lg shrink-0">push_pin</span> Messages</a>
+          <a href="/admin/questions.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-xs uppercase tracking-widest hover:bg-amber-950/50 border-l-4 border-transparent"><span class="material-symbols-outlined text-lg shrink-0">quiz</span> Truth Drill</a>
+          <a href="/admin/scrapbook.html" class="flex items-center gap-3 rounded-xl px-4 py-3 text-xs uppercase tracking-widest hover:bg-amber-950/50 border-l-4 border-transparent"><span class="material-symbols-outlined text-lg shrink-0">auto_stories</span> Scrapbook</a>
+        </nav>
+        <div class="p-4 border-t border-amber-900/30 shrink-0">
+          <a href="../index.html" class="block text-center py-2 text-xs uppercase tracking-widest text-amber-200/50 hover:text-amber-200">View live site</a>
+        </div>
+      </aside>
+      <div class="relative z-[90] p-4 md:p-8 max-w-6xl mx-auto md:mx-0">
+        <header class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+          <div>
+            <p class="text-[10px] uppercase tracking-[0.2em] text-amber-500/70 mb-1">Same name as the live site</p>
+            <h1 class="font-display-lg text-4xl text-amber-100 leading-tight font-handwritten-note">Messages</h1>
+            <p class="text-amber-200/50 text-sm mt-2 max-w-xl">Admin for <strong class="text-amber-200/80">messages.html</strong>. Each card is one sticky note visitors see — edit text, colors, photo, or remove it (changes save as you go). Board title/subtitle need <strong class="text-amber-200/80">Save everything</strong>.</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <span id="toast" class="text-xs text-amber-300/80 hidden">Saved</span>
+            <button type="button" id="btn-save-all" class="px-5 py-2 rounded-full bg-amber-600 text-stone-950 font-bold text-sm shadow-lg">Save everything</button>
+          </div>
+        </header>
+        <div class="md:hidden mb-6">
+          <label class="text-[10px] uppercase text-amber-200/40">Jump to</label>
+          <select class="mt-1 w-full bg-black/30 border border-amber-900/40 rounded-xl px-3 py-2 text-sm" onchange="if(this.value)location.href=this.value">
+            <option value="">Jump to page editor…</option>
+            <option value="/admin/index.html">Overview</option>
+            <option value="/admin/gallery.html">Gallery</option>
+            <option value="/admin/vault.html">Vault</option>
+            <option value="/admin/messages.html" selected>Messages</option>
+            <option value="/admin/questions.html">Truth Drill</option>
+            <option value="/admin/scrapbook.html">Scrapbook</option>
+          </select>
+        </div>
+        <div class="space-y-6">
+          <div class="rounded-3xl p-6 border border-amber-800/30 bg-amber-950/20 space-y-4">
+            <h2 class="text-lg font-bold text-amber-200/90 uppercase tracking-widest text-xs">Board header (public page)</h2>
+            <label class="block text-[10px] uppercase text-amber-200/50">Title</label>
+            <input id="fld-msg-title" class="w-full bg-black/25 border border-amber-900/40 rounded-xl px-4 py-2" />
+            <label class="block text-[10px] uppercase text-amber-200/50">Subtitle</label>
+            <textarea id="fld-msg-sub" rows="2" class="w-full bg-black/25 border border-amber-900/40 rounded-xl px-4 py-2"></textarea>
+          </div>
+          <div class="rounded-3xl p-6 border border-dashed border-amber-700/40 bg-amber-950/10 space-y-4">
+            <h2 class="text-lg font-bold text-amber-200/90 uppercase tracking-widest text-xs">Pin a new note</h2>
+            <div class="grid sm:grid-cols-2 gap-3">
+              <div>
+                <label class="text-[10px] uppercase text-amber-200/50">Author</label>
+                <input id="new-msg-author" class="w-full mt-1 bg-black/25 border border-amber-900/40 rounded-xl px-3 py-2" />
+              </div>
+              <div>
+                <label class="text-[10px] uppercase text-amber-200/50">Shape</label>
+                <select id="new-msg-shape" class="w-full mt-1 bg-black/25 border border-amber-900/40 rounded-xl px-3 py-2">
+                  <option value="square">Square</option>
+                  <option value="gem">Gem</option>
+                  <option value="crane">Crane</option>
+                  <option value="excavator">Excavator</option>
+                  <option value="caterpillar">Caterpillar</option>
+                </select>
+              </div>
+              <div>
+                <label class="text-[10px] uppercase text-amber-200/50">Tint</label>
+                <select id="new-msg-tint" class="w-full mt-1 bg-black/25 border border-amber-900/40 rounded-xl px-3 py-2">
+                  <option value="rose">Rose</option>
+                  <option value="teal">Teal</option>
+                  <option value="gold">Gold</option>
+                  <option value="slate">Slate</option>
+                </select>
+              </div>
+              <div>
+                <label class="text-[10px] uppercase text-amber-200/50">Tag (optional)</label>
+                <input id="new-msg-tag" class="w-full mt-1 bg-black/25 border border-amber-900/40 rounded-xl px-3 py-2" />
+              </div>
+            </div>
+            <div>
+              <label class="text-[10px] uppercase text-amber-200/50">Photo — URL or file</label>
+              <div class="flex gap-2 mt-1">
+                <input id="new-msg-img" class="flex-1 min-w-0 bg-black/25 border border-amber-900/40 rounded-xl px-3 py-2 text-sm font-mono" placeholder="https://…" />
+                <label class="shrink-0 inline-flex items-center justify-center px-3 rounded-xl border border-amber-700/50 bg-amber-950/40 cursor-pointer hover:bg-amber-900/40 text-[10px] uppercase tracking-wider text-amber-200/80">
+                  File
+                  <input id="new-msg-img-file" type="file" accept="image/*" class="hidden" />
+                </label>
+              </div>
+            </div>
+            <div>
+              <label class="text-[10px] uppercase text-amber-200/50">Message</label>
+              <textarea id="new-msg-body" rows="3" class="w-full mt-1 bg-black/25 border border-amber-900/40 rounded-xl px-3 py-2 font-handwritten-note text-lg"></textarea>
+            </div>
+            <button type="button" id="btn-add-msg" class="px-6 py-2 rounded-full bg-amber-500 text-stone-900 font-bold text-sm">Add to board</button>
+          </div>
+          <div>
+            <h2 class="text-xs uppercase tracking-[0.2em] text-amber-400/80 mb-3">All notes — click in and edit</h2>
+            <div id="list-messages"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>window.__SITE_DATA_PREFIX__ = "../";</script>
+    <script src="../assets/js/site-data.js"></script>
+    <script src="../assets/js/admin-core.js"></script>
+  </body>
+</html>

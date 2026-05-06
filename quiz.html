@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Truth Drill | Ore Celebrations</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="assets/js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Caveat:wght@400;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" />
+    <link rel="stylesheet" href="assets/css/site.css" />
+  </head>
+  <body class="bg-background text-on-background font-body-md min-h-screen">
+    <div class="fixed inset-0 bg-gradient-to-b from-surface-container-lowest via-background to-surface-dim z-0 pointer-events-none"></div>
+    <img alt="" class="fixed inset-0 w-full h-full object-cover opacity-25 grayscale z-0 pointer-events-none" data-bind="hero-img" src="" />
+
+    <header class="fixed top-0 left-0 right-0 z-50 flex items-center justify-center">
+      <nav class="rounded-full mt-4 mx-auto max-w-fit px-6 py-2 border border-white/10 bg-slate-900/30 backdrop-blur-xl shadow-[0_8px_32px_0_rgba(241,213,146,0.1)] flex items-center gap-6 md:gap-8 relative z-10">
+        <a href="index.html" class="text-2xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent tracking-tight" data-bind="site-title">Ore Celebrations</a>
+        <div class="hidden md:flex items-center gap-6">
+          <a data-feature="scrapbook" data-nav-top="scrapbook" class="font-sans tracking-tight" href="scrapbook.html">Scrapbook</a>
+          <a data-feature="vault" data-nav-top="vault" class="font-sans tracking-tight" href="vault.html">Vault</a>
+          <a data-feature="gallery" data-nav-top="gallery" class="font-sans tracking-tight" href="gallery.html">Gallery</a>
+          <a data-feature="messages" data-nav-top="messages" class="font-sans tracking-tight" href="messages.html">Messages</a>
+          <a data-feature="quiz" data-nav-top="quiz" class="font-sans tracking-tight" href="quiz.html">Truth Drill</a>
+        </div>
+        <div class="flex items-center gap-3 border-l border-white/10 pl-4">
+          <div class="w-8 h-8 rounded-full overflow-hidden border border-yellow-500/50">
+            <img data-bind="profile-img" alt="" class="w-full h-full object-cover" src="" />
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <aside class="fixed left-0 top-0 bottom-0 w-64 hidden lg:flex flex-col bg-slate-950/40 backdrop-blur-2xl h-[calc(100vh-4rem)] my-8 ml-4 rounded-3xl border border-white/5 shadow-2xl shadow-yellow-900/20 z-40">
+      <div class="p-8">
+        <p class="font-black text-yellow-500 text-xl tracking-widest uppercase">The Dig Site</p>
+        <p class="text-slate-400 font-label-sm mt-1 uppercase text-[10px]">Mining Memories</p>
+      </div>
+      <nav class="flex-1 px-4 space-y-2">
+        <a href="index.html" data-nav="home" class="py-3 px-6 flex items-center gap-4 rounded-xl transition-all"><span class="material-symbols-outlined text-yellow-500">construction</span><span class="font-sans uppercase tracking-widest text-xs">Home</span></a>
+        <a data-feature="gallery" href="gallery.html" data-nav="gallery" class="py-3 px-6 flex items-center gap-4 rounded-xl transition-all"><span class="material-symbols-outlined text-yellow-500">diamond</span><span class="font-sans uppercase tracking-widest text-xs">Gallery</span></a>
+        <a data-feature="vault" href="vault.html" data-nav="vault" class="py-3 px-6 flex items-center gap-4 rounded-xl transition-all"><span class="material-symbols-outlined text-yellow-500">potted_plant</span><span class="font-sans uppercase tracking-widest text-xs">Vault</span></a>
+        <a data-feature="messages" href="messages.html" data-nav="messages" class="py-3 px-6 flex items-center gap-4 rounded-xl transition-all"><span class="material-symbols-outlined text-yellow-500">push_pin</span><span class="font-sans uppercase tracking-widest text-xs">Messages</span></a>
+        <a data-feature="quiz" href="quiz.html" data-nav="quiz" class="py-3 px-6 flex items-center gap-4 rounded-xl transition-all"><span class="material-symbols-outlined text-yellow-500">quiz</span><span class="font-sans uppercase tracking-widest text-xs">Truth Drill</span></a>
+        <a data-feature="scrapbook" href="scrapbook.html" data-nav="scrapbook" class="py-3 px-6 flex items-center gap-4 rounded-xl transition-all"><span class="material-symbols-outlined text-yellow-500">auto_stories</span><span class="font-sans uppercase tracking-widest text-xs">Scrapbook</span></a>
+      </nav>
+    </aside>
+
+    <main class="relative z-10 lg:ml-72 pt-32 px-margin pb-28 lg:pb-20">
+      <div class="max-w-3xl mb-10">
+        <span class="font-handwritten-note text-primary-fixed mb-2 block text-handwritten-note" id="quiz-kicker"></span>
+        <h1 class="font-display-lg text-display-lg text-primary mb-3" id="quiz-title"></h1>
+        <p class="text-on-surface-variant font-body-md leading-relaxed" id="quiz-subtitle"></p>
+        <div class="vein-divider mt-8 opacity-30 max-w-md"></div>
+      </div>
+
+      <div id="quiz-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5"></div>
+
+      <div class="mt-14 glass-card p-6 rounded-3xl flex flex-col sm:flex-row sm:items-center gap-6 max-w-3xl border border-white/10">
+        <div>
+          <h2 class="text-title-lg font-title-lg text-primary">Progress</h2>
+          <p class="text-label-sm text-outline uppercase tracking-widest mt-1"><span id="quiz-count"></span></p>
+        </div>
+        <div class="flex-1 w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+          <div id="quiz-bar" class="h-full bg-gradient-to-r from-yellow-500 to-amber-200 w-0 transition-[width] duration-500"></div>
+        </div>
+      </div>
+    </main>
+
+    <div id="quiz-modal" class="fixed inset-0 z-[200] hidden bg-slate-950/75 backdrop-blur-md">
+      <div class="min-h-full flex items-center justify-center p-4">
+        <div class="glass-card max-w-lg w-full rounded-3xl p-6 sm:p-8 border border-white/10 shadow-2xl max-h-[90vh] overflow-y-auto">
+          <div class="flex justify-between items-start gap-4 mb-2">
+            <p id="qm-emoji" class="text-5xl leading-none" aria-hidden="true"></p>
+            <button type="button" id="qm-close" class="text-slate-400 hover:text-white material-symbols-outlined shrink-0" aria-label="Close">close</button>
+          </div>
+          <p id="qm-prompt" class="text-on-surface text-base sm:text-lg leading-relaxed mb-6"></p>
+          <label class="block text-label-sm text-outline uppercase tracking-widest mb-2">Your answer</label>
+          <textarea id="qm-input" rows="4" class="w-full bg-surface-container-lowest border border-white/10 rounded-2xl p-4 text-on-surface focus:border-primary outline-none resize-y" placeholder="Write here..."></textarea>
+          <p id="qm-asker-hint" class="text-xs text-on-surface-variant mt-3 hidden"></p>
+          <div class="flex justify-end gap-3 mt-6">
+            <button type="button" id="qm-cancel" class="px-4 py-2 text-sm text-slate-400 hover:text-white">Cancel</button>
+            <button type="button" id="qm-save" class="px-6 py-2 rounded-full bg-primary-container text-on-primary-container font-bold text-sm">Save answer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="relative z-10 w-full flex justify-between items-center px-12 mt-8 pb-24 lg:pb-10">
+      <span class="text-yellow-500 font-bold text-[10px] uppercase" data-bind="site-title">Ore Celebrations</span>
+    </footer>
+
+    <div class="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-xl border-t border-white/10 flex justify-around py-3 text-[10px]">
+      <a class="flex flex-col items-center text-slate-400" href="index.html"><span class="material-symbols-outlined">construction</span>Home</a>
+      <a data-feature="gallery" class="flex flex-col items-center text-slate-400" href="gallery.html"><span class="material-symbols-outlined">diamond</span>Gallery</a>
+      <a data-feature="messages" class="flex flex-col items-center text-slate-400" href="messages.html"><span class="material-symbols-outlined">push_pin</span>Notes</a>
+      <a data-feature="quiz" class="flex flex-col items-center text-yellow-400" href="quiz.html"><span class="material-symbols-outlined">quiz</span>Drill</a>
+    </div>
+
+    <script src="assets/js/site-data.js"></script>
+    <script src="assets/js/shell.js"></script>
+    <script>
+      var ANS_KEY = "oreCelebrations.quizAnswers.v1";
+      var DEFAULT_MOODS = ["✨", "🥹", "😂", "🤔", "💛", "🌙", "⭐️", "🫶"];
+
+      function readAnswers() {
+        try {
+          return JSON.parse(localStorage.getItem(ANS_KEY) || "{}") || {};
+        } catch (e) {
+          return {};
+        }
+      }
+      function writeAnswers(obj) {
+        localStorage.setItem(ANS_KEY, JSON.stringify(obj));
+      }
+      function answerText(raw) {
+        if (raw == null) return "";
+        if (typeof raw === "string") return raw;
+        if (typeof raw === "object" && raw.text != null) return String(raw.text);
+        return "";
+      }
+
+      function normalizeQuestion(q, idx) {
+        var locked = q.locked === true;
+        var emoji = (q.moodEmoji && String(q.moodEmoji).trim()) || DEFAULT_MOODS[idx % DEFAULT_MOODS.length];
+        var askedBy = (q.askedBy && String(q.askedBy).trim()) || (q.title && String(q.title).trim()) || "Someone who loves you";
+        return { raw: q, locked: locked, emoji: emoji, askedBy: askedBy };
+      }
+
+      document.addEventListener("DOMContentLoaded", async function () {
+        var data = await applySiteShell({ active: "quiz" });
+        var qp = data.quizPage || {};
+        document.getElementById("quiz-kicker").textContent = qp.kicker || "";
+        document.getElementById("quiz-title").textContent = qp.title || "The Truth Drill";
+        document.getElementById("quiz-subtitle").textContent = qp.subtitle || "";
+        var qs = (data.questions || []).map(function (q, i) {
+          return normalizeQuestion(q, i);
+        }).filter(function (x) {
+          return !x.locked;
+        });
+        var root = document.getElementById("quiz-grid");
+        var answers = readAnswers();
+        var openId = null;
+
+        function syncProgress() {
+          var total = qs.length;
+          var done = qs.filter(function (x) {
+            return answerText(answers[x.raw.id]).length > 0;
+          }).length;
+          document.getElementById("quiz-count").textContent = done + " of " + total + " answered";
+          var pct = total ? Math.round((done / total) * 100) : 0;
+          document.getElementById("quiz-bar").style.width = pct + "%";
+        }
+
+        function renderCard(x) {
+          var q = x.raw;
+          var id = q.id;
+          var ans = answerText(answers[id]);
+          var answered = ans.length > 0;
+          var wrap = document.createElement("div");
+          wrap.className = "quiz-card-wrap";
+          wrap.dataset.qid = id;
+          wrap.innerHTML =
+            '<button type="button" class="quiz-card group w-full text-left rounded-3xl border border-white/10 bg-surface-container/30 hover:bg-surface-container-high/40 hover:border-primary/30 transition-all p-4 sm:p-5 flex flex-col items-center gap-2 min-h-[140px] sm:min-h-[160px]">' +
+            '<span class="text-5xl sm:text-6xl leading-none select-none transition-transform group-hover:scale-105" aria-hidden="true">' +
+            x.emoji +
+            "</span>" +
+            (answered
+              ? '<span class="text-[10px] uppercase tracking-widest text-tertiary font-bold">Saved</span>' +
+                '<span class="text-xs text-primary text-center font-medium leading-snug">From ' +
+                escapeHtml(x.askedBy) +
+                "</span>" +
+                '<span class="text-[11px] text-on-surface-variant text-center line-clamp-2 w-full">' +
+                escapeHtml(ans) +
+                "</span>"
+              : '<span class="text-[10px] uppercase tracking-widest text-outline">Tap to open</span>') +
+            "</button>";
+          wrap.querySelector(".quiz-card").addEventListener("click", function () {
+            openModal(x);
+          });
+          return wrap;
+        }
+
+        function rebuildGrid() {
+          root.innerHTML = "";
+          qs.forEach(function (x) {
+            root.appendChild(renderCard(x));
+          });
+        }
+
+        function openModal(x) {
+          openId = x.raw.id;
+          document.getElementById("qm-emoji").textContent = x.emoji;
+          document.getElementById("qm-prompt").textContent = x.raw.prompt || "";
+          document.getElementById("qm-input").value = answerText(answers[openId]);
+          var hint = document.getElementById("qm-asker-hint");
+          var existing = answerText(answers[openId]).length > 0;
+          if (existing) {
+            hint.textContent = "Asked by " + x.askedBy;
+            hint.classList.remove("hidden");
+          } else {
+            hint.classList.add("hidden");
+            hint.textContent = "";
+          }
+          document.getElementById("quiz-modal").classList.remove("hidden");
+        }
+
+        function closeModal() {
+          openId = null;
+          document.getElementById("quiz-modal").classList.add("hidden");
+        }
+
+        document.getElementById("qm-close").addEventListener("click", closeModal);
+        document.getElementById("qm-cancel").addEventListener("click", closeModal);
+        document.getElementById("qm-save").addEventListener("click", function () {
+          if (!openId) return;
+          var x = qs.find(function (o) {
+            return o.raw.id === openId;
+          });
+          if (!x) return;
+          var text = document.getElementById("qm-input").value.trim();
+          answers[openId] = text;
+          writeAnswers(answers);
+          syncProgress();
+          rebuildGrid();
+          closeModal();
+        });
+
+        rebuildGrid();
+        syncProgress();
+      });
+
+      function escapeHtml(s) {
+        return String(s || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+      }
+    </script>
+  </body>
+</html>
