@@ -108,11 +108,11 @@
           var out = [];
           var arr = Array.isArray(p.media) ? p.media : [];
           arr.forEach(function (m) {
-            if (m && m.src) out.push({ type: m.type || inferMediaType(m.src), src: m.src });
+            if (m && m.src) out.push({ type: m.type || inferMediaType(m.src), src: m.src, size: m.size || "landscape" });
           });
           if (!out.length) {
-            if (p.image) out.push({ type: "image", src: p.image });
-            if (p.video) out.push({ type: "video", src: p.video });
+            if (p.image) out.push({ type: "image", src: p.image, size: "landscape" });
+            if (p.video) out.push({ type: "video", src: p.video, size: "landscape" });
           }
           return out;
         }
@@ -136,10 +136,54 @@
         document.addEventListener("keydown", function (e) {
           if (e.key === "Escape" && !modal.classList.contains("hidden")) closeModal();
         });
+        function buildSpreadIndex() {
+          // Use explicit placement if provided: p.spread (1-based) and p.slot (1..perSpread).
+          // Otherwise fall back to current array order.
+          var placed = pages.some(function (p) {
+            return p && p.spread != null && p.slot != null;
+          });
+          if (!placed) {
+            var totalA = Math.max(1, Math.ceil(pages.length / perSpread));
+            return {
+              total: totalA,
+              getPack: function (s) {
+                var start = s * perSpread;
+                return pages.slice(start, start + perSpread);
+              },
+            };
+          }
+          var maxSpread = 1;
+          var bySpread = {};
+          pages.forEach(function (p, idx) {
+            if (!p) return;
+            var s = Math.max(1, Number(p.spread || 0) || 0);
+            var sl = Math.max(1, Math.min(perSpread, Number(p.slot || 0) || 0));
+            if (!s || !sl) {
+              s = Math.floor(idx / perSpread) + 1;
+              sl = (idx % perSpread) + 1;
+            }
+            maxSpread = Math.max(maxSpread, s);
+            if (!bySpread[s]) bySpread[s] = {};
+            // if duplicates, first wins
+            if (!bySpread[s][sl]) bySpread[s][sl] = p;
+          });
+          return {
+            total: Math.max(1, maxSpread),
+            getPack: function (s0) {
+              var s = s0 + 1;
+              var map = bySpread[s] || {};
+              var pack = [];
+              for (var i = 1; i <= perSpread; i++) pack.push(map[i] || { title: "", note: "", media: [], showCount: 1, __empty: true, spread: s, slot: i });
+              return pack;
+            },
+          };
+        }
+
+        var spreadIndex = buildSpreadIndex();
+
         function renderSpread() {
           book.innerHTML = "";
-          var start = spread * perSpread;
-          var pack = pages.slice(start, start + perSpread);
+          var pack = spreadIndex.getPack(spread);
           var left = document.createElement("section");
           left.className = "p-4 sm:p-6 md:border-r md:border-amber-900/20";
           left.innerHTML = '<div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="sb-left"></div>';
@@ -152,12 +196,12 @@
           var rightRoot = right.querySelector("#sb-right");
           var leftCount = Math.ceil(pack.length / 2);
           pack.slice(0, leftCount).forEach(function (p, i) {
-            leftRoot.appendChild(cardFor(p, start + i, i, leftCount));
+            leftRoot.appendChild(cardFor(p, i, i, leftCount));
           });
           pack.slice(leftCount).forEach(function (p, i) {
-            rightRoot.appendChild(cardFor(p, start + leftCount + i, i, pack.length - leftCount));
+            rightRoot.appendChild(cardFor(p, leftCount + i, i, pack.length - leftCount));
           });
-          var total = Math.max(1, Math.ceil(pages.length / perSpread));
+          var total = spreadIndex.total;
           indicator.textContent = "Spread " + (spread + 1) + " of " + total;
           prev.disabled = spread <= 0;
           next.disabled = spread >= total - 1;
@@ -176,17 +220,20 @@
           card.style.transform = "rotate(" + ((i % 2 === 0 ? -1.2 : 1.2) * (1 + (i % 2))) + "deg)";
           card.innerHTML =
             pageMediaBlock(p) +
-            '<div class="p-3 sm:p-4 space-y-1.5">' +
-            '<h2 class="font-headline-md text-slate-800 text-base sm:text-lg">' +
-            escapeHtml(p.title) +
-            "</h2>" +
-            '<p class="font-handwritten-note text-base sm:text-lg text-slate-700">' +
-            escapeHtml(p.note) +
-            "</p></div>" +
-            '<span class="absolute -top-1 left-1/2 -translate-x-1/2 w-12 h-3 rounded-sm bg-yellow-200/90 shadow"></span>';
-          card.addEventListener("click", function () {
-            openModal(p);
-          });
+            '<span class="absolute -top-1 left-1/2 -translate-x-1/2 w-12 h-3 rounded-sm bg-yellow-200/90 shadow"></span>' +
+            '<span class="absolute top-2 left-2 px-2 py-1 rounded-full bg-black/55 text-white text-[10px] font-mono tracking-wider">' +
+            "S" +
+            escapeHtml(String(p.spread || (spread + 1))) +
+            "·" +
+            escapeHtml(String(p.slot || (i + 1))) +
+            "</span>";
+          if (!p.__empty) {
+            card.addEventListener("click", function () {
+              openModal(p);
+            });
+          } else {
+            card.classList.add("opacity-60", "cursor-default");
+          }
           return card;
         }
         function pageMediaBlock(p) {
@@ -195,10 +242,16 @@
           var pack = items.slice(0, show);
           if (!pack.length) return '<div class="h-full min-h-[120px] bg-amber-100 flex items-center justify-center text-xs text-slate-500">No media</div>';
           if (pack.length === 1) return mediaBlock(pack[0], false);
-          var cols = pack.length >= 4 ? 2 : pack.length === 3 ? 3 : 2;
-          var html = '<div class="grid gap-1 h-full min-h-[120px] bg-black" style="grid-template-columns:repeat(' + cols + ',minmax(0,1fr))">';
+          var html = '<div class="grid grid-cols-2 gap-1 bg-black p-0.5" style="grid-auto-rows:1fr">';
           pack.forEach(function (m) {
-            html += '<div class="overflow-hidden">' + mediaBlock(m, false) + "</div>";
+            var sz = (m && m.size) || "landscape";
+            var wrap =
+              sz === "portrait"
+                ? "row-span-2 aspect-[9/16]"
+                : sz === "square"
+                  ? "aspect-square"
+                  : "col-span-2 aspect-video";
+            html += '<div class="overflow-hidden ' + wrap + '">' + mediaBlock(m, false) + "</div>";
           });
           html += "</div>";
           return html;
@@ -210,7 +263,7 @@
           }
         });
         next.addEventListener("click", function () {
-          var total = Math.max(1, Math.ceil(pages.length / perSpread));
+          var total = spreadIndex.total;
           if (spread < total - 1) {
             spread++;
             renderSpread();
@@ -242,15 +295,18 @@
         var vid = p.type === "video" ? String(p.src || "").trim() : String(p.video || "").trim();
         var img = p.type === "image" ? String(p.src || "").trim() : String(p.image || "").trim();
         var yt = youtubeId(vid);
-        var cls = large ? "h-full max-h-[72vh]" : "h-full min-h-[120px]";
+        // Standardize all card media to the same shape.
+        var cls = large ? "h-full max-h-[72vh]" : "aspect-video";
         if (yt) {
           return (
-            '<div class="' + cls + ' bg-black">' +
-            '<iframe class="w-full h-full" src="https://www.youtube.com/embed/' +
+            '<div class="' + cls + ' bg-black" style="position:relative;">' +
+            '<iframe class="w-full h-full" style="border:none;" src="https://www.youtube.com/embed/' +
             escapeAttr(yt) +
             '?autoplay=1&mute=1&loop=1&playlist=' +
             escapeAttr(yt) +
-            '&controls=1&playsinline=1&modestbranding=1&rel=0" title="Video" allow="autoplay; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>'
+            '&controls=0&playsinline=1&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&disablekb=1&fs=0" title="Video" allow="autoplay; encrypted-media" loading="lazy"></iframe>' +
+            '<div style="position:absolute;inset:0;z-index:2;pointer-events:none;"></div>' +
+            '</div>'
           );
         }
         if (vid) {

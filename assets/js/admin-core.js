@@ -17,6 +17,23 @@
     return document.getElementById(id);
   }
 
+  // If someone lands on `/admin` (no trailing slash), relative links resolve against
+  // the repo root and can jump to public pages. Normalize to an actual admin file path.
+  function normalizeAdminPath() {
+    var p = String(location.pathname || "");
+    // Don't redirect if URL already points to a file (has extension)
+    if (/\.html?$/i.test(p)) return false;
+    if (/\/admin$/i.test(p)) {
+      location.replace(p + "/index.html" + (location.search || "") + (location.hash || ""));
+      return true;
+    }
+    if (/\/admin\/$/i.test(p)) {
+      location.replace(p + "index.html" + (location.search || "") + (location.hash || ""));
+      return true;
+    }
+    return false;
+  }
+
   function toast() {
     var t = $("toast");
     if (!t) return;
@@ -98,9 +115,14 @@
       if (p.video == null) p.video = "";
       p.media = Array.isArray(p.media) ? p.media : [];
       if (!p.media.length) {
-        if (p.image) p.media.push({ type: "image", src: p.image });
-        if (p.video) p.media.push({ type: "video", src: p.video });
+        if (p.image) p.media.push({ type: "image", src: p.image, size: "landscape" });
+        if (p.video) p.media.push({ type: "video", src: p.video, size: "landscape" });
       }
+      p.media.forEach(function (m) {
+        if (!m) return;
+        if (!m.type) m.type = inferMediaType(m.src);
+        if (!m.size) m.size = "landscape"; // landscape | square | portrait
+      });
       if (!p.showCount) p.showCount = Math.max(1, p.media.length || 1);
     });
   }
@@ -1067,46 +1089,118 @@
     });
   }
 
-  function renderScrapbook() {
-    var root = $("list-scrap");
+  function renderScrapbookPages() {
+    var root = $("list-scrap-pages");
     if (!root) return;
     root.innerHTML = "";
     root.className = "space-y-4";
+
+    var perSpread = Math.max(2, Number((data.scrapbook && data.scrapbook.itemsPerSpread) || 4) || 4);
     (data.scrapbook.pages || []).forEach(function (p, idx) {
+      if (!p.id) p.id = SiteData.uid();
+      if (!p.spread) p.spread = Math.floor(idx / perSpread) + 1;
+      if (!p.slot) p.slot = (idx % perSpread) + 1;
+
       var box = document.createElement("div");
-      box.className =
-        "space-y-2 rounded-2xl border border-violet-700/25 bg-violet-950/20 p-4 ring-1 ring-violet-400/10";
+      box.className = "space-y-3 rounded-2xl border border-violet-700/25 bg-black/15 p-4 ring-1 ring-violet-400/10";
       box.innerHTML =
         '<div class="flex justify-between items-center border-b border-violet-900/40 pb-2">' +
-        '<span class="text-[10px] uppercase text-violet-300/70">Spread ' +
+        '<span class="text-[10px] uppercase text-violet-300/70">Page ' +
         (idx + 1) +
         '</span><button type="button" class="text-xs text-red-300 btn-del-scrap" data-id="' +
         escapeAttr(p.id) +
         '">Remove</button></div>' +
+        '<div class="grid grid-cols-2 gap-2">' +
+        '<div><label class="text-[10px] uppercase text-violet-200/50">Spread #</label>' +
+        '<input type="number" min="1" class="sp-spread w-full bg-black/30 border border-violet-900/40 rounded-lg px-2 py-1.5 text-xs font-mono" data-id="' +
+        escapeAttr(p.id) +
+        '" value="' +
+        escapeAttr(p.spread || 1) +
+        '" /></div>' +
+        '<div><label class="text-[10px] uppercase text-violet-200/50">Slot (1–' +
+        perSpread +
+        ')</label>' +
+        '<input type="number" min="1" max="' +
+        perSpread +
+        '" class="sp-slot w-full bg-black/30 border border-violet-900/40 rounded-lg px-2 py-1.5 text-xs font-mono" data-id="' +
+        escapeAttr(p.id) +
+        '" value="' +
+        escapeAttr(p.slot || 1) +
+        '" /></div></div>' +
+        '<button type="button" class="text-xs text-red-300 btn-del-scrap" data-id="' +
+        escapeAttr(p.id) +
+        '">Remove</button>' +
+        '<div><label class="text-[10px] uppercase text-violet-200/50">Title (only shows in big view)</label>' +
         '<input class="sp-title w-full bg-black/30 border border-violet-900/40 rounded-lg px-2 py-1.5" data-id="' +
         escapeAttr(p.id) +
         '" value="' +
         escapeAttr(p.title) +
-        '" />' +
+        '" /></div>' +
+        '<div><label class="text-[10px] uppercase text-violet-200/50">Note (only shows in big view)</label>' +
         '<textarea rows="2" class="sp-note w-full bg-black/30 border border-violet-900/40 rounded-lg px-2 py-1.5" data-id="' +
         escapeAttr(p.id) +
         '">' +
         escapeHtml(p.note) +
-        "</textarea>" +
-        '<label class="text-[10px] uppercase text-violet-200/50">Media URLs (one per line)</label>' +
-        '<textarea rows="4" class="sp-media w-full bg-black/30 border border-violet-900/40 rounded-lg px-2 py-1 text-xs font-mono" data-id="' +
+        "</textarea></div>" +
+        '<div class="rounded-xl border border-violet-900/40 bg-black/20 p-3 space-y-2">' +
+        '<div class="flex items-center justify-between gap-2">' +
+        '<p class="text-[10px] uppercase tracking-widest text-violet-200/60">Media</p>' +
+        '<button type="button" class="text-[10px] uppercase text-violet-200/80 underline btn-add-media" data-id="' +
+        escapeAttr(p.id) +
+        '">+ Add media</button></div>' +
+        '<div class="media-list space-y-2" data-id="' +
         escapeAttr(p.id) +
         '">' +
-        escapeHtml((p.media || []).map(function (m) { return m.src; }).join("\n")) +
-        "</textarea>" +
-        '<label class="text-[10px] uppercase text-violet-200/50">How many media to show on this page</label>' +
+        (p.media || [])
+          .map(function (m, mi) {
+            var size = (m && m.size) || "landscape";
+            return (
+              '<div class="grid grid-cols-[1fr_9rem_4rem] gap-2 items-center" data-mi="' +
+              mi +
+              '">' +
+              '<input class="media-url w-full bg-black/30 border border-violet-900/40 rounded-lg px-2 py-1 text-[11px] font-mono" data-id="' +
+              escapeAttr(p.id) +
+              '" data-mi="' +
+              mi +
+              '" value="' +
+              escapeAttr(m && m.src) +
+              '" placeholder="https://… (YouTube or image)" />' +
+              '<select class="media-size w-full bg-black/30 border border-violet-900/40 rounded-lg px-2 py-1 text-[11px]" data-id="' +
+              escapeAttr(p.id) +
+              '" data-mi="' +
+              mi +
+              '">' +
+              '<option value="landscape"' +
+              (size === "landscape" ? " selected" : "") +
+              ">Landscape</option>" +
+              '<option value="square"' +
+              (size === "square" ? " selected" : "") +
+              ">Square</option>" +
+              '<option value="portrait"' +
+              (size === "portrait" ? " selected" : "") +
+              ">Portrait</option></select>" +
+              '<button type="button" class="text-[10px] uppercase text-red-300 btn-del-media" data-id="' +
+              escapeAttr(p.id) +
+              '" data-mi="' +
+              mi +
+              '">Del</button></div>'
+            );
+          })
+          .join("") +
+        "</div>" +
+        '<div class="grid grid-cols-2 gap-2">' +
+        '<div><label class="text-[10px] uppercase text-violet-200/50">Media to show (1…)</label>' +
         '<input type="number" min="1" class="sp-show w-full bg-black/30 border border-violet-900/40 rounded-lg px-2 py-1 text-xs font-mono" data-id="' +
         escapeAttr(p.id) +
         '" value="' +
         escapeAttr(p.showCount || 1) +
-        '" />';
+        '" /></div>' +
+        '<div class="flex items-end"><button type="button" class="w-full px-3 py-2 rounded-lg border border-violet-500/30 text-[10px] uppercase text-violet-200/70 btn-sort-pages">Sort into spreads</button></div></div>' +
+        "</div>";
       root.appendChild(box);
     });
+
+    // Reuse the same event wiring/classes as the spreads list.
     root.querySelectorAll(".btn-del-scrap").forEach(function (btn) {
       btn.addEventListener("click", function () {
         var id = btn.getAttribute("data-id");
@@ -1114,8 +1208,28 @@
           return x.id !== id;
         });
         persist();
-        renderScrapbook();
+        renderScrapbookPages();
         renderOverviewStats();
+      });
+    });
+    root.querySelectorAll(".sp-spread").forEach(function (inp) {
+      inp.addEventListener("input", function () {
+        var id = inp.getAttribute("data-id");
+        var p = data.scrapbook.pages.find(function (x) {
+          return x.id === id;
+        });
+        if (p) p.spread = Math.max(1, Number(inp.value) || 1);
+        schedulePersist();
+      });
+    });
+    root.querySelectorAll(".sp-slot").forEach(function (inp) {
+      inp.addEventListener("input", function () {
+        var id = inp.getAttribute("data-id");
+        var p = data.scrapbook.pages.find(function (x) {
+          return x.id === id;
+        });
+        if (p) p.slot = Math.max(1, Math.min(perSpread, Number(inp.value) || 1));
+        schedulePersist();
       });
     });
     root.querySelectorAll(".sp-title").forEach(function (inp) {
@@ -1138,28 +1252,6 @@
         schedulePersist();
       });
     });
-    root.querySelectorAll(".sp-media").forEach(function (inp) {
-      inp.addEventListener("input", function () {
-        var id = inp.getAttribute("data-id");
-        var p = data.scrapbook.pages.find(function (x) {
-          return x.id === id;
-        });
-        if (p) {
-          var lines = String(inp.value || "")
-            .split("\n")
-            .map(function (s) {
-              return s.trim();
-            })
-            .filter(Boolean);
-          p.media = lines.map(function (src) {
-            return { type: inferMediaType(src), src: src };
-          });
-          p.image = p.media[0] && p.media[0].type === "image" ? p.media[0].src : "";
-          p.video = p.media[0] && p.media[0].type === "video" ? p.media[0].src : "";
-        }
-        schedulePersist();
-      });
-    });
     root.querySelectorAll(".sp-show").forEach(function (inp) {
       inp.addEventListener("input", function () {
         var id = inp.getAttribute("data-id");
@@ -1168,6 +1260,76 @@
         });
         if (p) p.showCount = Math.max(1, Number(inp.value) || 1);
         schedulePersist();
+      });
+    });
+
+    root.querySelectorAll(".btn-add-media").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var id = btn.getAttribute("data-id");
+        var p = data.scrapbook.pages.find(function (x) {
+          return x.id === id;
+        });
+        if (!p) return;
+        if (!Array.isArray(p.media)) p.media = [];
+        p.media.push({ type: "image", src: "", size: "landscape" });
+        persist();
+        renderScrapbookPages();
+      });
+    });
+    root.querySelectorAll(".btn-del-media").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var id = btn.getAttribute("data-id");
+        var mi = Number(btn.getAttribute("data-mi"));
+        var p = data.scrapbook.pages.find(function (x) {
+          return x.id === id;
+        });
+        if (!p || !Array.isArray(p.media)) return;
+        p.media.splice(mi, 1);
+        persist();
+        renderScrapbookPages();
+      });
+    });
+    root.querySelectorAll(".media-url").forEach(function (inp) {
+      inp.addEventListener("input", function () {
+        var id = inp.getAttribute("data-id");
+        var mi = Number(inp.getAttribute("data-mi"));
+        var p = data.scrapbook.pages.find(function (x) {
+          return x.id === id;
+        });
+        if (!p || !Array.isArray(p.media) || !p.media[mi]) return;
+        p.media[mi].src = inp.value.trim();
+        p.media[mi].type = inferMediaType(inp.value);
+        p.image = p.media[0] && p.media[0].type === "image" ? p.media[0].src : "";
+        p.video = p.media[0] && p.media[0].type === "video" ? p.media[0].src : "";
+        schedulePersist();
+      });
+    });
+    root.querySelectorAll(".media-size").forEach(function (sel) {
+      sel.addEventListener("change", function () {
+        var id = sel.getAttribute("data-id");
+        var mi = Number(sel.getAttribute("data-mi"));
+        var p = data.scrapbook.pages.find(function (x) {
+          return x.id === id;
+        });
+        if (!p || !Array.isArray(p.media) || !p.media[mi]) return;
+        p.media[mi].size = sel.value;
+        schedulePersist();
+      });
+    });
+    root.querySelectorAll(".btn-sort-pages").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        // Canonical order: by spread, then slot, then title.
+        data.scrapbook.pages.sort(function (a, b) {
+          var sa = Number(a.spread || 1),
+            sb = Number(b.spread || 1);
+          if (sa !== sb) return sa - sb;
+          var pa = Number(a.slot || 1),
+            pb = Number(b.slot || 1);
+          if (pa !== pb) return pa - pb;
+          return String(a.title || "").localeCompare(String(b.title || ""));
+        });
+        persist();
+        renderScrapbookPages();
       });
     });
   }
@@ -1407,19 +1569,25 @@
       });
     }
 
-    var bs = $("btn-add-scrap");
+    var bs = $("btn-add-scrap-page");
     if (bs) {
       bs.addEventListener("click", function () {
         readSiteFieldsIntoData();
+        var perSpread = Math.max(2, Number((data.scrapbook && data.scrapbook.itemsPerSpread) || 4) || 4);
+        var idx = (data.scrapbook.pages || []).length;
         data.scrapbook.pages.push({
           id: SiteData.uid(),
-          title: "New spread",
+          spread: Math.floor(idx / perSpread) + 1,
+          slot: (idx % perSpread) + 1,
+          title: "New page",
           note: "Handwritten note",
+          media: [{ type: "image", src: data.meta.heroImage || "", size: "landscape" }],
+          showCount: 1,
           image: data.meta.heroImage || "",
           video: "",
         });
         persist();
-        renderScrapbook();
+        renderScrapbookPages();
         renderOverviewStats();
       });
     }
@@ -1512,7 +1680,7 @@
             renderQuestionsList();
             renderGalleryList();
             renderVaultTimeline();
-            renderScrapbook();
+            renderScrapbookPages();
             renderOverviewStats();
             checkAdminLock();
             persist();
@@ -1541,6 +1709,7 @@
       if (!el) return;
       el.addEventListener("change", function () {
         readSiteFieldsIntoData();
+        renderScrapbookPages();
         schedulePersist();
       });
     });
@@ -1548,6 +1717,7 @@
 
   function boot() {
     document.addEventListener("DOMContentLoaded", async function () {
+      if (normalizeAdminPath()) return;
       data = await SiteData.load();
       ensureArrays();
       checkAdminLock();
@@ -1559,7 +1729,7 @@
       renderQuestionsList();
       renderGalleryList();
       renderVaultTimeline();
-      renderScrapbook();
+      renderScrapbookPages();
       renderVaultLetters();
       wireAll();
     });

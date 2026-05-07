@@ -190,12 +190,17 @@
       function homeVideoBlock(src) {
         var yt = youtubeId(src);
         if (yt) {
+          // controls=0, modestbranding=1, rel=0, showinfo=0, iv_load_policy=3 all suppress YouTube UI
+          // The wrapping div + overlay div hides any residual logo/watermark via CSS
           return (
-            '<iframe class="w-full h-full rounded-xl" src="https://www.youtube.com/embed/' +
+            '<div style="position:relative;width:100%;height:100%;">' +
+            '<iframe class="w-full h-full rounded-xl" style="border:none;" src="https://www.youtube.com/embed/' +
             escapeAttr(yt) +
             '?autoplay=1&mute=1&loop=1&playlist=' +
             escapeAttr(yt) +
-            '&controls=0&modestbranding=1&playsinline=1" title="Memory video" allow="autoplay; encrypted-media; picture-in-picture" loading="lazy"></iframe>'
+            '&controls=0&modestbranding=1&playsinline=1&rel=0&showinfo=0&iv_load_policy=3&disablekb=1&fs=0" title="Memory video" allow="autoplay; encrypted-media" loading="lazy"></iframe>' +
+            '<div style="position:absolute;inset:0;z-index:2;pointer-events:none;"></div>' +
+            '</div>'
           );
         }
         return (

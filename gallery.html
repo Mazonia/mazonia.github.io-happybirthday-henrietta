@@ -147,12 +147,14 @@
         var frame = large ? "aspect-auto h-full max-h-[75vh]" : "aspect-[4/3]";
         if (yt) {
           return (
-            '<div class="' + frame + ' overflow-hidden bg-black w-full">' +
-            '<iframe class="w-full h-full min-h-[200px]" src="https://www.youtube.com/embed/' +
+            '<div class="' + frame + ' overflow-hidden bg-black w-full" style="position:relative;">' +
+            '<iframe class="w-full h-full min-h-[200px]" style="border:none;" src="https://www.youtube.com/embed/' +
             escapeAttr(yt) +
             '?autoplay=1&mute=1&loop=1&playlist=' +
             escapeAttr(yt) +
-            '&controls=1&playsinline=1" title="Video" allow="autoplay; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>'
+            '&controls=0&playsinline=1&rel=0&modestbranding=1&showinfo=0&iv_load_policy=3&disablekb=1&fs=0" title="Video" allow="autoplay; encrypted-media" loading="lazy"></iframe>' +
+            '<div style="position:absolute;inset:0;z-index:2;pointer-events:none;"></div>' +
+            '</div>'
           );
         }
         if (vid) {

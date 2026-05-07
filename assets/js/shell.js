@@ -75,7 +75,7 @@
       .bday-lock-emoji{position:absolute;font-size:clamp(1.3rem,2vw,2rem);opacity:.92;filter:drop-shadow(0 3px 6px rgba(0,0,0,.3));animation:bdayFloat 5s ease-in-out infinite}\
       @keyframes partySwing{0%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}100%{transform:rotate(-6deg)}}\
       @keyframes partyPop{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}\
-      .party-room{position:fixed;inset:0;pointer-events:none;z-index:60}\
+      .party-room{position:fixed;inset:0;pointer-events:none;z-index:2147483647}\
       .party-string{position:absolute;top:0;width:2px;height:84px;background:linear-gradient(to bottom,rgba(255,255,255,.9),rgba(255,255,255,.08));}\
       .party-hang{position:absolute;top:70px;width:0;height:0;border-left:16px solid transparent;border-right:16px solid transparent;border-top:34px solid var(--party-color,#f43f5e);filter:drop-shadow(0 4px 8px rgba(0,0,0,.35));transform-origin:50% -70px;animation:partySwing 4.8s ease-in-out infinite}\
       .party-hang::after{content:'';position:absolute;left:-5px;top:-36px;width:10px;height:10px;border-radius:999px;background:#fff8}\
@@ -195,7 +195,8 @@
       q('[data-cd="h"]').textContent = String(h).padStart(2, "0");
       q('[data-cd="m"]').textContent = String(m).padStart(2, "0");
       q('[data-cd="s"]').textContent = String(s).padStart(2, "0");
-      if (diff <= 0) location.reload();
+      if (diff <= 0 && tick._wasPositive) { location.reload(); return; }
+      if (diff > 0) tick._wasPositive = true;
     }
     tick();
     setInterval(tick, 1000);
@@ -225,11 +226,131 @@
       dot.className = "subtle-confetti-dot";
       dot.style.left = Math.round(Math.random() * 100) + "%";
       dot.style.background = colors[i % colors.length];
-      dot.style.animation = "subtleConfettiFall " + (18 + Math.random() * 16).toFixed(1) + "s linear infinite";
+      // Slightly faster fall so it feels more alive.
+      dot.style.animation = "subtleConfettiFall " + (14 + Math.random() * 12).toFixed(1) + "s linear infinite";
       dot.style.animationDelay = (Math.random() * 20).toFixed(1) + "s";
       layer.appendChild(dot);
     }
     document.body.appendChild(layer);
+  }
+
+  function injectPartyDecorV2Styles() {
+    if (document.getElementById("party-decor-v2-styles")) return;
+    var style = document.createElement("style");
+    style.id = "party-decor-v2-styles";
+    style.textContent =
+      "@keyframes orbFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}"+
+      "@keyframes bdaySwing{0%{transform:rotate(-8deg) translateY(0)}50%{transform:rotate(8deg) translateY(-4px)}100%{transform:rotate(-8deg) translateY(0)}}"+
+      "@keyframes bdayBob{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-5px) scale(1.04)}}"+
+      ".party-decor-v2{position:fixed;top:0;left:0;right:0;pointer-events:none;z-index:40;height:110px}"+
+      ".party-garland{position:absolute;top:0;left:0;right:0;height:110px}"+
+      ".party-garland svg{width:100%;height:100%;display:block}"+
+      ".party-hang-item{position:absolute;top:0;transform-origin:50% -4px;animation:bdaySwing 4.2s ease-in-out infinite}"+
+      ".party-hang-item svg,.party-hang-item span{display:block;filter:drop-shadow(0 3px 6px rgba(0,0,0,.4))}"+
+      ".party-string-line{position:absolute;top:0;width:1.5px;background:linear-gradient(to bottom,rgba(255,255,255,.8),rgba(255,255,255,.05));}";
+    document.head.appendChild(style);
+  }
+
+  function attachHangingDecorV2() {
+    if (global.__orePartyDecorV2Attached) return;
+    global.__orePartyDecorV2Attached = true;
+    injectPartyDecorV2Styles();
+
+    var layer = document.createElement("div");
+    layer.className = "party-decor-v2";
+    layer.id = "party-decor-v2";
+
+    // String + wavy rope SVG
+    var garland = document.createElement("div");
+    garland.className = "party-garland";
+    garland.innerHTML =
+      '<svg viewBox="0 0 1200 110" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">' +
+      '<path d="M0,18 C150,70 300,70 450,28 C600,-14 750,4 900,34 C1050,62 1150,44 1200,36" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="6 4"/>' +
+      '<path d="M0,26 C160,82 320,80 500,38 C680,-8 860,10 1050,44 C1100,52 1160,48 1200,46" fill="none" stroke="rgba(250,204,21,.55)" stroke-width="2" stroke-linecap="round"/>' +
+      '</svg>';
+    layer.appendChild(garland);
+
+    // Birthday items to hang: triangles, stars, balloons, gifts, bunting letters
+    var items = [
+      // [xPercent, stringHeight, svgOrEmoji, color, delay, swingDur]
+      { x: 5,  sh: 52, type: "triangle", color: "#ec4899", delay: "0s",    dur: "4.8s" },
+      { x: 12, sh: 44, type: "star",     color: "#facc15", delay: "0.4s",  dur: "5.2s" },
+      { x: 20, sh: 58, type: "balloon",  color: "#22d3ee", delay: "0.8s",  dur: "4.4s" },
+      { x: 28, sh: 46, type: "triangle", color: "#a78bfa", delay: "0.2s",  dur: "5.6s" },
+      { x: 36, sh: 54, type: "gift",     color: "#f97316", delay: "1.0s",  dur: "4.2s" },
+      { x: 44, sh: 42, type: "star",     color: "#fb7185", delay: "0.6s",  dur: "5.0s" },
+      { x: 52, sh: 60, type: "balloon",  color: "#34d399", delay: "1.2s",  dur: "4.6s" },
+      { x: 60, sh: 48, type: "triangle", color: "#60a5fa", delay: "0.3s",  dur: "5.4s" },
+      { x: 68, sh: 56, type: "gift",     color: "#f43f5e", delay: "0.9s",  dur: "4.0s" },
+      { x: 76, sh: 44, type: "star",     color: "#c084fc", delay: "0.5s",  dur: "5.8s" },
+      { x: 84, sh: 52, type: "balloon",  color: "#fbbf24", delay: "1.1s",  dur: "4.3s" },
+      { x: 92, sh: 46, type: "triangle", color: "#2dd4bf", delay: "0.7s",  dur: "5.1s" },
+    ];
+
+    function makeSvg(type, color) {
+      if (type === "triangle") {
+        return '<svg width="28" height="32" viewBox="0 0 28 32" xmlns="http://www.w3.org/2000/svg"><polygon points="14,2 27,30 1,30" fill="' + color + '" opacity=".93"/><circle cx="14" cy="2" r="3" fill="rgba(255,255,255,.5)"/></svg>';
+      }
+      if (type === "star") {
+        return '<svg width="30" height="30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"><polygon points="15,2 18.5,11 28,11 20.5,17 23.5,26 15,21 6.5,26 9.5,17 2,11 11.5,11" fill="' + color + '" opacity=".95"/><circle cx="15" cy="1" r="2.5" fill="rgba(255,255,255,.5)"/></svg>';
+      }
+      if (type === "balloon") {
+        return '<svg width="24" height="38" viewBox="0 0 24 38" xmlns="http://www.w3.org/2000/svg"><ellipse cx="12" cy="14" rx="11" ry="13" fill="' + color + '" opacity=".92"/><ellipse cx="8" cy="9" rx="3" ry="4" fill="rgba(255,255,255,.3)"/><path d="M12,27 Q10,32 12,37" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.5" stroke-linecap="round"/><circle cx="12" cy="1" r="2" fill="rgba(255,255,255,.45)"/></svg>';
+      }
+      if (type === "gift") {
+        return '<svg width="30" height="30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="12" width="26" height="17" rx="2" fill="' + color + '" opacity=".92"/><rect x="1" y="8" width="28" height="6" rx="2" fill="' + color + '" opacity=".75"/><rect x="13" y="8" width="4" height="21" fill="rgba(255,255,255,.45)"/><path d="M15,8 Q10,2 6,5 Q2,8 8,10 Q12,9 15,8" fill="rgba(255,255,255,.55)"/><path d="M15,8 Q20,2 24,5 Q28,8 22,10 Q18,9 15,8" fill="rgba(255,255,255,.55)"/><circle cx="15" cy="1" r="2.5" fill="rgba(255,255,255,.45)"/></svg>';
+      }
+      return '';
+    }
+
+    items.forEach(function(it) {
+      // String line
+      var str = document.createElement("div");
+      str.className = "party-string-line";
+      str.style.left = it.x + "%";
+      str.style.height = it.sh + "px";
+      layer.appendChild(str);
+
+      // Hanging item
+      var hang = document.createElement("div");
+      hang.className = "party-hang-item";
+      hang.style.left = "calc(" + it.x + "% - 15px)";
+      hang.style.top = it.sh + "px";
+      hang.style.animationDelay = it.delay;
+      hang.style.animationDuration = it.dur;
+      hang.innerHTML = makeSvg(it.type, it.color);
+      layer.appendChild(hang);
+    });
+
+    document.body.appendChild(layer);
+  }
+
+  function decorateClientSideNav() {
+    // Emoji decoration removed per design update.
+    // Add a large party popper as a background accent in the sidebar.
+    if (global.__oreClientNavDecorated) return;
+    global.__oreClientNavDecorated = true;
+    var aside = document.querySelector("aside");
+    if (!aside) return;
+    // Make aside relatively positioned so the popper is contained
+    if (getComputedStyle(aside).position === "static") aside.style.position = "relative";
+    var popper = document.createElement("div");
+    popper.setAttribute("aria-hidden", "true");
+    popper.style.cssText = [
+      "position:absolute",
+      "bottom:-10px",
+      "right:-10px",
+      "font-size:9rem",
+      "line-height:1",
+      "opacity:0.08",
+      "pointer-events:none",
+      "user-select:none",
+      "transform:rotate(-20deg)",
+      "z-index:0",
+      "filter:blur(1px) saturate(2)"
+    ].join(";");
+    popper.textContent = "\uD83C\uDF89"; // 🎉
+    aside.appendChild(popper);
   }
 
   function attachMediaProtection() {
@@ -275,6 +396,7 @@
     global.__orePartyRoomDecorAttached = true;
     var layer = document.createElement("div");
     layer.className = "party-room";
+    layer.style.zIndex = "2147483647";
     var topColors = ["#ef4444", "#f59e0b", "#eab308", "#22c55e", "#06b6d4", "#3b82f6", "#a855f7", "#ec4899"];
     [9, 21, 33, 45, 57, 69, 81, 93].forEach(function (x, idx) {
       var str = document.createElement("span");
@@ -303,7 +425,8 @@
     right.style.animationDelay = "0.6s";
     layer.appendChild(left);
     layer.appendChild(right);
-    document.body.appendChild(layer);
+    // Append at the top level so no parent can clip it.
+    (document.documentElement || document.body).appendChild(layer);
   }
 
   function highlightNav(active) {
@@ -344,8 +467,11 @@
     var isLocked = renderLockdownOverlay(m);
     if (!isLocked) {
       attachSubtleConfetti();
-      attachPartyRoomDecor();
+      decorateClientSideNav();
+      attachHangingDecorV2();
     }
+    // Always attach party room decor (behind navbar) regardless of lock state
+    // (party room decor was previously at very high z-index; now handled by attachHangingDecorV2)
     attachMediaProtection();
 
     return data;

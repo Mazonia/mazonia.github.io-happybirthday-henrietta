@@ -5,7 +5,7 @@
     "heroKicker": "Happy 20th!",
     "heroTitle": "Happy Birthday Henrietta!",
     "profileImage": "https://lh3.googleusercontent.com/aida-public/AB6AXuADPoreysbgfGG6OMaPNI704N5Pvfom77R8aNVYfSwT3b-qqDPaM7I-C0z5E1XArKJRtiZ7zBD_fEIqjwJ_jc09CoNnV11TZjGdUHnQUHzRoBj6an09spDTrTlHqucUZfZqQTaa7rwTOtl1wtZX5KcxNU_RNPwmJMQ-wcbnjssV32Fjmo2NEeWTpyF6Tqrk9MgSo2EYyT8LYGPx0GR9eUxL2cN5yuRC2IZJy2y03ghB8EYB_X2BVJECZVc8m7auX9ttHRtugRMRbco",
-    "heroImage": "https://lh3.googleusercontent.com/aida-public/AB6AXuACscApqk0V8ek1SiVOedokIxRkUIB31gfzXWkf0IQntHBGi4ZSSD4V4NK6OVy3uppIDFCbiatGkiwr9caPfLN5HhGJloKtIRlxlRHwSzR8jKtkuoD2UslXVzuxxf2kvVaIyhZL7_nxRd2JIQRVXX6Q8q7th-pTBFUzrVtXOyxYB04l9WlFC6KdDXfIYhYQWSdYdSLzqCJmnsL3SpBrKf59Eg8byY0uzgXRGAnIlgglWhVDGTGjLgYAGk3ruPX9KmZw9kC96QFIpF8",
+    "heroImage": "images/smile_sammy.jpeg",
     "footerYear": 2026,
     "adminPassphrase": "",
     "lockdown": {
@@ -34,7 +34,7 @@
   },
   "messagesPage": {
     "title": "The Friendship Board",
-    "subtitle": "A virtual corkboard of birthday wishes, mining puns, and heartfelt sticky notes from the crew."
+    "subtitle": "A virtual corkboard of birthday wishes, and heartfelt sticky notes from the crew."
   },
   "quizPage": {
     "kicker": "Deep excavation in progress...",
@@ -48,63 +48,72 @@
   "messages": [
     {
       "id": "m1",
-      "author": "Sam P.",
-      "body": "Happy Birthday to our favorite rockstar! May your day be as precious as a 24-carat find.",
+      "author": "Kudus",
+      "body": "Happy Birthday! I hope today brings you as much joy as you bring to people around you. And may your new age be a ladder to greatness....",
       "shape": "gem",
-      "tint": "rose",
-      "tag": "Urgent Love",
-      "image": ""
-    },
-    {
-      "id": "m2",
-      "author": "Elena M.",
-      "body": "Don't work too hard at the site today. Remember to actually celebrate the milestone!",
-      "shape": "square",
-      "tint": "teal",
+      "tint": "sunset",
       "tag": "",
       "image": ""
     },
     {
+      "id": "m2",
+      "author": "Nadia",
+      "body": "I want to thank you for the kind of friendship that doesn’t need daily presence to stay real. From the start, you made space for me without questions, without judgment, without keeping score. You didn’t just listen, you understood, and in doing so you made me feel like a sister instead of just a friend.\n\nLife pulled us onto different paths and we don’t see each other the way we used to. But the phone calls haven’t changed. You still answer with the same warmth, the same patience, the same way of making me feel heard even when my words are messy and my thoughts are scattered. That’s rare, and I don’t take it for granted.\n\nDistance can dull a lot of things, but it hasn’t touched what we have. You’ve been my steady place, my reminder that I’m not alone, and that some bonds hold simply because they’re built on care, not convenience.\n\nI’m grateful for you. For the laughter we’ve shared, for the silence you’ve sat through with me, and for still showing up for me even now. You’re family in every way that matters.",
+      "shape": "square",
+      "tint": "slate",
+      "tag": "Heartfelt",
+      "image": ""
+    },
+    {
       "id": "m3",
-      "author": "Dad & Mom",
-      "body": "\"Life is like mining; you have to go through a lot of dirt to find the gold. You're definitely the gold!\"",
-      "shape": "gem",
-      "tint": "gold",
+      "author": "....Edwin, A.K.A. Bulldog",
+      "body": "Hertyyyy! Happy birthday! I’m so glad I met you...you’re truly one of a kind. May you continue to age like fine wine. God bless you!",
+      "shape": "excavator",
+      "tint": "sky",
       "tag": "",
       "image": ""
     },
     {
       "id": "m4",
-      "author": "Jordan K.",
-      "body": "Drinks on me tonight! We're celebrating the best future engineer in the industry.",
-      "shape": "square",
+      "author": "Azumah",
+      "body": "\"Chale ano fit, it sounds corny\"",
+      "shape": "caterpillar",
       "tint": "rose",
       "tag": "",
       "image": ""
     },
     {
       "id": "m5",
-      "author": "Crew",
-      "body": "Keep digging deep, the best is yet to come!",
-      "shape": "gem",
-      "tint": "teal",
+      "author": "....Damien",
+      "body": "Happy birthday to someone that i will never forget,\n\nNo matter where life takes us, a part of me will always quietly root for your happiness.\n\nSo here's to you,\n\nMay this year bring you all that your heart seeks and more.\n\nHope my prayers can hug you, when my arms can't.",
+      "shape": "crane",
+      "tint": "sky",
       "tag": "",
       "image": ""
     },
     {
       "id": "m6",
-      "author": "Mark T.",
-      "body": "I found this old photo of our first site visit. We look so young! Happy Birthday, partner.",
-      "shape": "square",
-      "tint": "slate",
+      "author": "Tabi",
+      "body": "Happy Womb Escape, prettiest boss🙂‍↕️. Thanks for being a great boss and friend and mentoring me in times of need. Stop being evil too and welcome to the 20s.",
+      "shape": "gem",
+      "tint": "mint",
       "tag": "",
-      "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuDKuBhM4z6LofZVDkZ3isOG5raX7pjZ2sSKvuCEWGb7fbpKrJa4Byudg79DWXdnl02fvdkA_A_jpUuI1sEyj9cYFQZOOd7_mBzePpDlJdRRUfq18ibp98FJ4b8WlBCDgy_y6f7GufgmPQgmQ00EXO-Dv88MNfZm9WjtKhQM4BAdkj05-_DPoYXYu7abPRwTk8Ce6gFVG2mIKWisJiUNvNJODREyc6h0KXzxt6QNI2432RsJ-AQFl7rzGcxb9lTXSGe3XZbIK5hs2_g"
+      "image": ""
     },
     {
       "id": "m7",
-      "author": "Professor Vance",
-      "body": "Another year, another layer of brilliance! Shine on.",
-      "shape": "gem",
+      "author": "Samuella Afiyo",
+      "body": "Happy 20th birthday!\n\nIt’s crazy how long we’ve known each other 10+ years of school, exams, sleepovers, and all the little memories in between. Even though life took us different ways for a bit, I’m really grateful our friendship has stayed.\n\nWishing you all the best as you step into your 20s. I’m proud of you and glad to call you my friend 🤍",
+      "shape": "square",
+      "tint": "slate",
+      "tag": "",
+      "image": ""
+    },
+    {
+      "id": "m8",
+      "author": "....Augustus, A.K.A. Sir Beauty",
+      "body": "Henrietta, the way you show up for people without making it loud is something I really admire. You make ordinary moments feel steady and kind, and I’m grateful you’re in my life. I hope today reminds you how much you’re valued, even in the small things you don’t notice about yourself.",
+      "shape": "excavator",
       "tint": "gold",
       "tag": "",
       "image": ""
@@ -113,38 +122,38 @@
   "questions": [
     {
       "id": "q1",
-      "moodEmoji": "✨",
-      "askedBy": "Sam",
+      "moodEmoji": "⁉️",
+      "askedBy": "Azumah",
       "icon": "explosion",
       "title": "The Catalyst",
-      "prompt": "What event sparked your passion for engineering?",
+      "prompt": "Are you and Oduro just friends or something more?",
       "locked": false,
       "lockedNote": ""
     },
     {
       "id": "q2",
-      "moodEmoji": "💪",
-      "askedBy": "Elena",
+      "moodEmoji": "🤔",
+      "askedBy": "Edwin",
       "icon": "shopping_cart",
       "title": "Heavy Lifting",
-      "prompt": "What was the hardest project you ever finished?",
+      "prompt": "What's the weirdest thing you love to have?",
       "locked": false,
       "lockedNote": ""
     },
     {
       "id": "q3",
       "moodEmoji": "🙂",
-      "askedBy": "Jordan",
+      "askedBy": "",
       "icon": "hard_hat",
       "title": "Safety Check",
-      "prompt": "What's your ritual before a big exam or deadline?",
+      "prompt": "What's three things do you regret most?",
       "locked": false,
       "lockedNote": ""
     },
     {
       "id": "q4",
-      "moodEmoji": "🤔",
-      "askedBy": "Mom",
+      "moodEmoji": "⛏️",
+      "askedBy": "",
       "icon": "construction",
       "title": "The Pickaxe",
       "prompt": "What truth about yourself did you unearth this year?",
@@ -163,11 +172,11 @@
     },
     {
       "id": "q6",
-      "moodEmoji": "🌙",
-      "askedBy": "Dad",
+      "moodEmoji": "💭",
+      "askedBy": "Beauty",
       "icon": "precision_manufacturing",
       "title": "The Core",
-      "prompt": "What keeps you grounded when everything moves too fast?",
+      "prompt": "What’s one thing you’ve always wanted to tell me(Beauty) but never got the courage to say?",
       "locked": false,
       "lockedNote": ""
     },
@@ -177,7 +186,7 @@
       "askedBy": "Mark",
       "icon": "diamond",
       "title": "The Find",
-      "prompt": "What's your most precious memory from this semester?",
+      "prompt": "What's your most precious memory from this last semester?",
       "locked": false,
       "lockedNote": ""
     },
@@ -187,7 +196,7 @@
       "askedBy": "The crew",
       "icon": "map",
       "title": "The Blueprint",
-      "prompt": "Where do you see your career shaft leading next?",
+      "prompt": "Where do you wanna vist most in Ghana?",
       "locked": false,
       "lockedNote": ""
     }
@@ -195,17 +204,59 @@
   "gallery": [
     {
       "id": "g1",
-      "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuAC0RqBwtR1HfB9nIStU75hxEOoDDQAxJ4c_OO0XhcDHGZvhrrGUs_u1kuDEzdvhXV3Ssn_gfqyaOS5KydNnUQP1_VxE2jg0xod54bKi3oNGtDli1Vmt1p1txDIPl-AqJaA-mYo8kc2JNwCT5K_vTU86kJ54itNDNjjhoH6Y-4vNET9JjVs9rliDs4r6oZPYQ50d8VqIRHo4M328gOnhP2PQZ8VmjooaDa72og0dbaeaazRceRfZebr_8NL6a4dtlC4DiqCKKfujec",
+      "image": "images/besties_sam.jpeg",
       "video": "",
-      "caption": "Golden hour at the quarry",
-      "date": "2024-06-12"
+      "caption": "Three Good Friends",
+      "date": "-Samuella"
     },
     {
       "id": "g2",
-      "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuC2f3pCb95GcvBcVD0e8tXgxY0TRczSZfRVXLA0v_I4dEAg0geTDXNC-InpzKbBjv4D5TzR0sD13k9gSy8fqS2EgzqHlBl3A_YPNMERT2iSLjPT5ZLFI1CG2Z-9y5dPk0ShtIgM6r7BViYTAF7Oa4aiOQUePrUMHExc3ncVtJ-4wiUCdDNwHfoOhTh-ctN0UHUdWwwSrqF74mjpOG9SzIGbuhExXBPN0fn0XHI4vXgs-RRAwMrTo2HUmN5ZR5ECqMsxsyMmvKqK7qM",
+      "image": "images/church_nadia.jpeg",
       "video": "",
-      "caption": "Confetti and slate",
-      "date": "2024-11-02"
+      "caption": "Church girlies",
+      "date": "Nadia"
+    },
+    {
+      "id": "g3",
+      "image": "images/sitting_nba.jpeg",
+      "video": "",
+      "caption": "Back-sitter",
+      "date": "NBA"
+    },
+    {
+      "id": "g4",
+      "image": "images/learning_mee.jpg",
+      "video": "",
+      "caption": "Church girlies",
+      "date": "Nadia"
+    },
+    {
+      "id": "g5",
+      "image": "",
+      "video": "https://www.youtube.com/embed/TRVigxvW4yE?autoplay=1&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1&loop=1&playlist=TRVigxvW4yE",
+      "caption": "Butleress",
+      "date": "Tabi"
+    },
+    {
+      "id": "g6",
+      "image": "images/kudus_sent.jpeg",
+      "video": "",
+      "caption": "View once",
+      "date": "Kudus"
+    },
+    {
+      "id": "g7",
+      "image": "images/church_nadia.jpeg",
+      "video": "",
+      "caption": "Church girlies",
+      "date": "Nadia"
+    },
+    {
+      "id": "g8",
+      "image": "images/church_nadia.jpeg",
+      "video": "",
+      "caption": "Church girlies",
+      "date": "Nadia"
     }
   ],
   "vault": {
