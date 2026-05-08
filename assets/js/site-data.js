@@ -24,7 +24,22 @@
     var raw = localStorage.getItem(STORAGE_KEY);
     if (raw) {
       var parsed = safeParse(raw);
-      if (parsed) return parsed;
+      if (parsed) {
+        // Version-guard: fetch the JSON to compare dataVersion.
+        // If the JSON has a newer version, wipe localStorage and return fresh data.
+        try {
+          var fresh = await fetchDefault();
+          var storedVersion = parsed.dataVersion || 0;
+          var freshVersion  = fresh.dataVersion  || 0;
+          if (freshVersion > storedVersion) {
+            localStorage.removeItem(STORAGE_KEY);
+            return fresh;
+          }
+        } catch (e) {
+          // Offline or fetch failed — use localStorage fallback
+        }
+        return parsed;
+      }
     }
     return fetchDefault();
   }

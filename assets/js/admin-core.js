@@ -895,7 +895,7 @@
         '" value="' +
         escapeAttr(g.date) +
         '" />' +
-        '<label class="text-[10px] uppercase text-fuchsia-200/50">Still image (URL or file)</label>' +
+        '<label class="text-[10px] uppercase text-fuchsia-200/50">Still image (URL or file) — also used as video poster while loading</label>' +
         '<input type="text" class="gal-img w-full bg-black/30 border border-fuchsia-900/35 rounded-lg px-2 py-1 text-xs font-mono" data-id="' +
         id +
         '" value="' +
@@ -1816,19 +1816,15 @@
   function injectAdminPartyPopper() {
     var aside = document.querySelector("aside");
     if (!aside) return;
-    // Remove overflow-hidden to allow the popper to be visible in the bottom corner
-    aside.style.overflow = "visible";
-    // Set position:relative so popper is contained
-    aside.style.position = "relative";
     var popper = document.createElement("div");
     popper.setAttribute("aria-hidden", "true");
     popper.style.cssText = [
       "position:absolute",
-      "bottom:8px",
-      "right:8px",
-      "font-size:7rem",
+      "bottom:12px",
+      "right:12px",
+      "font-size:6rem",
       "line-height:1",
-      "opacity:0.07",
+      "opacity:0.08",
       "pointer-events:none",
       "user-select:none",
       "transform:rotate(-18deg)",

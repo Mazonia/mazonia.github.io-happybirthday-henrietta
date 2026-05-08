@@ -196,8 +196,9 @@
       q('[data-cd="m"]').textContent = String(m).padStart(2, "0");
       q('[data-cd="s"]').textContent = String(s).padStart(2, "0");
       if (diff <= 0 && tick._wasPositive) {
-        // Fireworks celebration for 5s then reload
-        startFireworksFinale(root, function() { location.reload(); });
+        // Set flag so homepage shows fireworks, then reload immediately
+        sessionStorage.setItem("oreCelebrations.postUnlock", "1");
+        location.reload();
         return;
       }
       if (diff > 0) tick._wasPositive = true;
@@ -561,11 +562,91 @@
       attachSubtleConfetti();
       decorateClientSideNav();
       attachHangingDecorV2();
+
+      // Post-unlock fireworks: triggered once when countdown reaches zero
+      if (sessionStorage.getItem("oreCelebrations.postUnlock") === "1") {
+        sessionStorage.removeItem("oreCelebrations.postUnlock");
+        runPageFireworks(5000);
+      }
     }
-    // Always attach party room decor (behind navbar) regardless of lock state
-    // (party room decor was previously at very high z-index; now handled by attachHangingDecorV2)
     attachMediaProtection();
 
     return data;
   };
+
+  // Full-page fireworks overlay (used for post-unlock celebration)
+  function runPageFireworks(duration) {
+    var overlay = document.createElement("div");
+    overlay.style.cssText = "position:fixed;inset:0;z-index:9990;pointer-events:none;";
+    var cv = document.createElement("canvas");
+    cv.style.cssText = "width:100%;height:100%;display:block;";
+    overlay.appendChild(cv);
+    document.body.appendChild(overlay);
+
+    function resize() {
+      cv.width = window.innerWidth;
+      cv.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener("resize", resize);
+
+    var ctx = cv.getContext("2d");
+    var particles = [];
+    var colors = ["#facc15","#f9a8d4","#22d3ee","#a78bfa","#fb7185","#fef08a","#86efac","#f97316","#fff","#60a5fa"];
+    var start = Date.now();
+    var lastBurst = 0;
+
+    function burst() {
+      var x = 60 + Math.random() * (cv.width - 120);
+      var y = 40 + Math.random() * (cv.height * 0.6);
+      var color = colors[Math.floor(Math.random() * colors.length)];
+      var count = 60 + Math.floor(Math.random() * 30);
+      for (var i = 0; i < count; i++) {
+        var angle = (Math.PI * 2 * i) / count;
+        var speed = 3 + Math.random() * 5;
+        particles.push({
+          x: x, y: y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed - 2,
+          alpha: 1, color: color,
+          size: 2.5 + Math.random() * 3,
+          life: 0.01 + Math.random() * 0.007
+        });
+      }
+    }
+
+    var raf;
+    function frame() {
+      var now = Date.now();
+      var elapsed = now - start;
+      ctx.clearRect(0, 0, cv.width, cv.height);
+      if (now - lastBurst > 300) {
+        burst(); burst();
+        if (Math.random() > 0.5) burst();
+        lastBurst = now;
+      }
+      for (var i = particles.length - 1; i >= 0; i--) {
+        var p = particles[i];
+        p.x += p.vx; p.y += p.vy;
+        p.vy += 0.08;
+        p.alpha -= p.life;
+        if (p.alpha <= 0) { particles.splice(i, 1); continue; }
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, p.alpha);
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+      if (elapsed < duration) {
+        raf = requestAnimationFrame(frame);
+      } else {
+        cancelAnimationFrame(raf);
+        window.removeEventListener("resize", resize);
+        if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+      }
+    }
+    raf = requestAnimationFrame(frame);
+  }
 })(window);
