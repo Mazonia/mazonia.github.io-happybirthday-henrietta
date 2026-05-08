@@ -53,6 +53,13 @@
         <h1 class="font-display-lg text-display-lg text-primary mb-3" id="quiz-title"></h1>
         <p class="text-on-surface-variant font-body-md leading-relaxed" id="quiz-subtitle"></p>
         <div class="vein-divider mt-8 opacity-30 max-w-md"></div>
+        <div class="mt-6 flex items-start gap-3 bg-yellow-500/10 border border-yellow-500/25 rounded-2xl px-4 py-3 max-w-xl">
+          <span class="material-symbols-outlined text-yellow-400 text-lg mt-0.5 shrink-0">lock</span>
+          <p class="text-yellow-200/80 text-sm leading-relaxed">
+            <strong class="text-yellow-300 font-semibold">One shot only.</strong>
+            Once you save an answer it's locked — you won't be able to change it. Think before you type! 😄
+          </p>
+        </div>
       </div>
 
       <div id="quiz-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5"></div>
@@ -252,32 +259,6 @@
           writeAnswers(answers);
           syncProgress();
           rebuildGrid();
-
-          // Email her answer to the developer automatically
-          var currentQ = qs.find(function(x){ return x.raw.id === openId; });
-          if (text && currentQ) {
-            var subject = encodeURIComponent("Truth Drill Answer: " + (currentQ.raw.title || currentQ.askedBy));
-            var body = encodeURIComponent(
-              "Question: " + (currentQ.raw.prompt || "") + "\n\n" +
-              "Asked by: " + currentQ.askedBy + "\n\n" +
-              "Henrietta's answer:\n" + text + "\n\n" +
-              "— Sent from Ore Celebrations 🎂"
-            );
-            var a = document.createElement("a");
-            a.href = "mailto:pandemicmaz@gmail.com?subject=" + subject + "&body=" + body;
-            a.style.display = "none";
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-
-            // Toast confirmation
-            var toast = document.createElement("div");
-            toast.textContent = "✅ Answer saved & email sent to developer!";
-            toast.style.cssText = "position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:rgba(30,30,30,.95);color:#fde68a;padding:10px 20px;border-radius:999px;font-size:.8rem;z-index:9999;pointer-events:none;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.4);";
-            document.body.appendChild(toast);
-            setTimeout(function(){ if(toast.parentNode) toast.parentNode.removeChild(toast); }, 3500);
-          }
-
           closeModal();
         });
 
