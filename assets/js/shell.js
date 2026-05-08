@@ -77,24 +77,37 @@
       '<p class="ore-gate-title">Birthday Site Access</p>' +
       '<p class="ore-gate-sub">Enter your passcode to explore Henrietta\'s birthday site.<br>' +
       '<em style="opacity:.5;font-style:normal;font-size:.72rem;">Don\'t have one? Ask the developer.</em></p>' +
-      '<input id="ore-gate-inp" class="ore-gate-input" type="password" placeholder="Enter passcode…" autocomplete="off" />' +
+      '<div style="position:relative;width:100%;">' +
+      '<input id="ore-gate-inp" class="ore-gate-input" type="password" placeholder="Enter passcode…" autocomplete="off" style="padding-right:2.8rem;" />' +
+      '<button type="button" id="ore-gate-eye" style="position:absolute;right:.6rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#94a3b8;font-size:1.1rem;padding:0;" title="Show/hide">👁</button>' +
+      '</div>' +
       '<p id="ore-gate-err" class="ore-gate-err">Wrong passcode — try again.</p>' +
       '<button id="ore-gate-btn" class="ore-gate-btn">Let me in 🎉</button>' +
-      '<p id="ore-gate-timer" class="ore-gate-timer" style="display:none;"></p>' +
       '</div>';
     document.body.appendChild(_gateEl);
     setTimeout(function() {
       var inp = document.getElementById("ore-gate-inp");
       if (inp) inp.focus();
     }, 80);
+    // Eye toggle
+    var eyeBtn = document.getElementById("ore-gate-eye");
+    if (eyeBtn) {
+      eyeBtn.addEventListener("click", function() {
+        var inp = document.getElementById("ore-gate-inp");
+        if (!inp) return;
+        inp.type = inp.type === "password" ? "text" : "password";
+        eyeBtn.textContent = inp.type === "password" ? "👁" : "🙈";
+      });
+    }
     function tryAccess() {
       var val = normPass(document.getElementById("ore-gate-inp").value);
       if (val === normPass(VISITOR_PASS)) {
         setAccess("visitor");
-        hideGate(true);
+        // Always redirect to homepage after login so fireworks play and lockdown clears
+        location.href = "index.html";
       } else if (val === normPass(ADMIN_PASS)) {
         setAccess("admin");
-        hideGate(false);
+        location.href = "index.html";
       } else {
         var err = document.getElementById("ore-gate-err");
         if (err) { err.style.display = "block"; }
@@ -160,17 +173,14 @@
   function initClientAccessGate() {
     // Skip gate on admin pages
     if (location.pathname.indexOf("/admin") !== -1) return;
-    // If lockdown target date has passed, no gate needed — site is open
-    // We check this lazily; renderLockdownOverlay already returns false if date passed
-    // If there's an active valid session, just show the pill
     if (hasValidAccess()) {
       var a = getAccess();
       injectVisitorPill(a && a.type === "visitor");
       if (a && a.type === "visitor") startVisitorTimer();
       return;
     }
-    // Do NOT auto-show gate — user clicks the "Birthday countdown" link to open it
-    // (showGate() is wired in renderLockdownOverlay)
+    // Auto-show gate when no valid session — site is locked by default
+    showGate();
   }
 
   document.addEventListener("DOMContentLoaded", initClientAccessGate);

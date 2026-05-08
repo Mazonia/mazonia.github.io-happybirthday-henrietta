@@ -69,6 +69,7 @@
     <div class="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-xl border-t border-white/10 flex justify-around py-3 text-[10px]">
       <a class="flex flex-col items-center text-slate-400" href="index.html"><span class="material-symbols-outlined">construction</span>Home</a>
       <a data-feature="gallery" class="flex flex-col items-center text-yellow-400" href="gallery.html"><span class="material-symbols-outlined">diamond</span>Gallery</a>
+      <a data-feature="scrapbook" class="flex flex-col items-center text-slate-400" href="scrapbook.html"><span class="material-symbols-outlined">auto_stories</span>Scrapbook</a>
       <a data-feature="messages" class="flex flex-col items-center text-slate-400" href="messages.html"><span class="material-symbols-outlined">push_pin</span>Notes</a>
       <a data-feature="quiz" class="flex flex-col items-center text-slate-400" href="quiz.html"><span class="material-symbols-outlined">quiz</span>Drill</a>
     </div>
@@ -148,14 +149,18 @@
         } else {
           root.querySelectorAll("video[data-galvid]").forEach(function(v) { v.load(); v.play().catch(function(){}); });
         }
-        // Device-aware usage hint
+        // Device-aware usage hint — insert BEFORE the grid
         var hintEl = document.createElement("p");
-        hintEl.className = "text-center text-[11px] text-slate-500 mt-6 col-span-full";
+        hintEl.className = "text-center text-[11px] text-slate-400 mb-4 tracking-wide";
+        hintEl.style.cssText = "background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:999px;padding:.35rem 1rem;display:inline-block;width:auto;margin:0 auto .8rem;";
         var isTouch = navigator.maxTouchPoints > 0;
         hintEl.textContent = isTouch
-          ? "Tap on a picture once to show colour • Double-tap to open in wider view"
-          : "Hover over a picture to show colours • Click to open in wider view";
-        root.parentNode.insertBefore(hintEl, root.nextSibling);
+          ? "Tap to show colour  •  Double-tap to open larger"
+          : "Hover to show colours  •  Click to open larger";
+        var hintWrap = document.createElement("div");
+        hintWrap.className = "flex justify-center mb-4";
+        hintWrap.appendChild(hintEl);
+        root.parentNode.insertBefore(hintWrap, root);
       });
       function escapeHtml(s) {
         return String(s || "")

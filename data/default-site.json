@@ -1,5 +1,5 @@
 {
-  "dataVersion": 4,
+  "dataVersion": 5,
   "meta": {
     "siteTitle": "Birthday Celebration",
     "celebrantName": "Henrietta",
@@ -10,9 +10,22 @@
     "footerYear": 2026,
     "adminPassphrase": "",
     "lockdown": {
-      "enabled": false,
+      "enabled": true,
       "targetDate": "2026-05-29T00:00:00",
-      "images": []
+      "images": [
+        "images/smile_sammy.jpeg",
+        "images/besties_sam.jpeg",
+        "images/church_nadia.jpeg",
+        "images/church_sammy.jpeg",
+        "images/clums_sammy.jpeg",
+        "images/happy_me.jpg",
+        "images/kudus_sent.jpeg",
+        "images/learning_mee.jpg",
+        "images/sitting_covered.jpeg",
+        "images/sitting_nba.jpeg",
+        "images/smile_sammy_remastered.jpeg",
+        "images/asemoo.png"
+      ]
     }
   },
   "features": {
