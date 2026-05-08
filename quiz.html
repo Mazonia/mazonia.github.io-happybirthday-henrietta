@@ -75,9 +75,15 @@
             <button type="button" id="qm-close" class="text-slate-400 hover:text-white material-symbols-outlined shrink-0" aria-label="Close">close</button>
           </div>
           <p id="qm-prompt" class="text-on-surface text-base sm:text-lg leading-relaxed mb-6"></p>
+          <p id="qm-asker-hint" class="text-xs text-on-surface-variant mt-1 mb-3 hidden"></p>
           <label class="block text-label-sm text-outline uppercase tracking-widest mb-2">Your answer</label>
           <textarea id="qm-input" rows="4" class="w-full bg-surface-container-lowest border border-white/10 rounded-2xl p-4 text-on-surface focus:border-primary outline-none resize-y" placeholder="Write here..."></textarea>
-          <p id="qm-asker-hint" class="text-xs text-on-surface-variant mt-3 hidden"></p>
+          <!-- Lock row: shown when answer is already saved -->
+          <div id="qm-lock-row" class="hidden flex items-center gap-3 mt-3 p-3 rounded-xl bg-yellow-500/10 border border-yellow-500/20">
+            <span class="material-symbols-outlined text-yellow-400 text-lg">lock</span>
+            <p class="text-xs text-yellow-200/80 flex-1">This answer is saved and locked. Enter the passphrase to make changes.</p>
+            <button type="button" id="qm-unlock-btn" class="px-3 py-1.5 text-xs rounded-full bg-yellow-500/20 text-yellow-200 hover:bg-yellow-500/30 font-bold">Change answer 🔒</button>
+          </div>
           <div class="flex justify-end gap-3 mt-6">
             <button type="button" id="qm-cancel" class="px-4 py-2 text-sm text-slate-400 hover:text-white">Cancel</button>
             <button type="button" id="qm-save" class="px-6 py-2 rounded-full bg-primary-container text-on-primary-container font-bold text-sm">Save answer</button>
@@ -129,6 +135,7 @@
 
       document.addEventListener("DOMContentLoaded", async function () {
         var data = await applySiteShell({ active: "quiz" });
+        var adminPass = (data.meta && data.meta.adminPassphrase) || "";
         var qp = data.quizPage || {};
         document.getElementById("quiz-kicker").textContent = qp.kicker || "";
         document.getElementById("quiz-title").textContent = qp.title || "The Truth Drill";
@@ -141,6 +148,7 @@
         var root = document.getElementById("quiz-grid");
         var answers = readAnswers();
         var openId = null;
+        var editingLocked = false;
 
         function syncProgress() {
           var total = qs.length;
@@ -166,12 +174,9 @@
             x.emoji +
             "</span>" +
             (answered
-              ? '<span class="text-[10px] uppercase tracking-widest text-tertiary font-bold">Saved</span>' +
+              ? '<span class="text-[10px] uppercase tracking-widest text-tertiary font-bold">Saved ✓</span>' +
                 '<span class="text-xs text-primary text-center font-medium leading-snug">From ' +
                 escapeHtml(x.askedBy) +
-                "</span>" +
-                '<span class="text-[11px] text-on-surface-variant text-center line-clamp-2 w-full">' +
-                escapeHtml(ans) +
                 "</span>"
               : '<span class="text-[10px] uppercase tracking-widest text-outline">Tap to open</span>') +
             "</button>";
@@ -188,36 +193,58 @@
           });
         }
 
+        function setModalLocked(isLocked) {
+          var inp = document.getElementById("qm-input");
+          var saveBtn = document.getElementById("qm-save");
+          var lockRow = document.getElementById("qm-lock-row");
+          inp.disabled = isLocked;
+          inp.style.opacity = isLocked ? "0.5" : "1";
+          inp.style.cursor = isLocked ? "not-allowed" : "";
+          saveBtn.style.display = isLocked ? "none" : "";
+          if (lockRow) lockRow.style.display = isLocked ? "" : "none";
+        }
+
         function openModal(x) {
           openId = x.raw.id;
+          editingLocked = false;
+          var existing = answerText(answers[openId]);
+          var hasAnswer = existing.length > 0;
+
           document.getElementById("qm-emoji").textContent = x.emoji;
           document.getElementById("qm-prompt").textContent = x.raw.prompt || "";
-          document.getElementById("qm-input").value = answerText(answers[openId]);
+          document.getElementById("qm-input").value = existing;
+
           var hint = document.getElementById("qm-asker-hint");
-          var existing = answerText(answers[openId]).length > 0;
-          if (existing) {
-            hint.textContent = "Asked by " + x.askedBy;
-            hint.classList.remove("hidden");
-          } else {
-            hint.classList.add("hidden");
-            hint.textContent = "";
-          }
+          hint.textContent = "Asked by " + x.askedBy;
+          hint.classList.remove("hidden");
+
+          setModalLocked(hasAnswer);
           document.getElementById("quiz-modal").classList.remove("hidden");
         }
 
         function closeModal() {
           openId = null;
+          editingLocked = false;
           document.getElementById("quiz-modal").classList.add("hidden");
         }
 
         document.getElementById("qm-close").addEventListener("click", closeModal);
         document.getElementById("qm-cancel").addEventListener("click", closeModal);
+
+        document.getElementById("qm-unlock-btn").addEventListener("click", function () {
+          var pass = window.prompt("Enter the admin passphrase to edit this answer:");
+          if (pass === null) return;
+          if (!adminPass || pass === adminPass) {
+            editingLocked = true;
+            setModalLocked(false);
+            document.getElementById("qm-input").focus();
+          } else {
+            alert("Incorrect passphrase.");
+          }
+        });
+
         document.getElementById("qm-save").addEventListener("click", function () {
           if (!openId) return;
-          var x = qs.find(function (o) {
-            return o.raw.id === openId;
-          });
-          if (!x) return;
           var text = document.getElementById("qm-input").value.trim();
           answers[openId] = text;
           writeAnswers(answers);

@@ -195,11 +195,103 @@
       q('[data-cd="h"]').textContent = String(h).padStart(2, "0");
       q('[data-cd="m"]').textContent = String(m).padStart(2, "0");
       q('[data-cd="s"]').textContent = String(s).padStart(2, "0");
-      if (diff <= 0 && tick._wasPositive) { location.reload(); return; }
+      if (diff <= 0 && tick._wasPositive) {
+        // Fireworks celebration for 5s then reload
+        startFireworksFinale(root, function() { location.reload(); });
+        return;
+      }
       if (diff > 0) tick._wasPositive = true;
+      // Start fireworks at 3 seconds remaining
+      if (diff <= 3000 && !tick._fireworksStarted) {
+        tick._fireworksStarted = true;
+        startFireworks(root);
+      }
     }
     tick();
     setInterval(tick, 1000);
+
+    // --- Fireworks helpers ---
+    function makeFireworksCanvas(parent) {
+      var cv = document.createElement("canvas");
+      cv.id = "bday-fireworks-canvas";
+      cv.style.cssText = "position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:10;";
+      parent.appendChild(cv);
+      return cv;
+    }
+
+    function runFireworks(canvas, duration, onDone) {
+      var W = canvas.offsetWidth || window.innerWidth;
+      var H = canvas.offsetHeight || window.innerHeight;
+      canvas.width = W; canvas.height = H;
+      var ctx = canvas.getContext("2d");
+      var particles = [];
+      var colors = ["#facc15","#f9a8d4","#22d3ee","#a78bfa","#fb7185","#fef08a","#86efac","#f97316"];
+      var start = Date.now();
+      var lastBurst = 0;
+
+      function burst() {
+        var x = 80 + Math.random() * (W - 160);
+        var y = 80 + Math.random() * (H * 0.55);
+        var color = colors[Math.floor(Math.random() * colors.length)];
+        for (var i = 0; i < 52; i++) {
+          var angle = (Math.PI * 2 * i) / 52;
+          var speed = 2.5 + Math.random() * 3.5;
+          particles.push({
+            x: x, y: y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed - 1.5,
+            alpha: 1, color: color,
+            size: 2.5 + Math.random() * 2,
+            life: 0.012 + Math.random() * 0.008
+          });
+        }
+      }
+
+      var raf;
+      function frame() {
+        var now = Date.now();
+        var elapsed = now - start;
+        ctx.clearRect(0, 0, W, H);
+        // Auto-burst every 400ms
+        if (now - lastBurst > 400) { burst(); if (Math.random() > 0.4) burst(); lastBurst = now; }
+        for (var i = particles.length - 1; i >= 0; i--) {
+          var p = particles[i];
+          p.x += p.vx; p.y += p.vy;
+          p.vy += 0.06; // gravity
+          p.alpha -= p.life;
+          if (p.alpha <= 0) { particles.splice(i, 1); continue; }
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, p.alpha);
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+        if (elapsed < duration) {
+          raf = requestAnimationFrame(frame);
+        } else {
+          cancelAnimationFrame(raf);
+          if (onDone) onDone();
+        }
+      }
+      raf = requestAnimationFrame(frame);
+      return { stop: function() { cancelAnimationFrame(raf); } };
+    }
+
+    var _fw = null;
+    function startFireworks(parent) {
+      if (_fw) return;
+      var cv = document.getElementById("bday-fireworks-canvas") || makeFireworksCanvas(parent);
+      _fw = runFireworks(cv, 99999, null); // runs until finale stops it
+    }
+    function startFireworksFinale(parent, onDone) {
+      if (_fw) _fw.stop();
+      var cv = document.getElementById("bday-fireworks-canvas") || makeFireworksCanvas(parent);
+      // Intense 5-second finale then callback
+      runFireworks(cv, 5000, onDone);
+    }
+    // --- End fireworks ---
     return true;
   }
 

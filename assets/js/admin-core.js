@@ -17,20 +17,10 @@
     return document.getElementById(id);
   }
 
-  // If someone lands on `/admin` (no trailing slash), relative links resolve against
-  // the repo root and can jump to public pages. Normalize to an actual admin file path.
+  // normalizeAdminPath: disabled — static servers like `npx serve` canonicalize
+  // /admin/index.html → /admin/ which would loop forever.
+  // All admin links now use explicit filenames so no redirect is needed.
   function normalizeAdminPath() {
-    var p = String(location.pathname || "");
-    // Don't redirect if URL already points to a file (has extension)
-    if (/\.html?$/i.test(p)) return false;
-    if (/\/admin$/i.test(p)) {
-      location.replace(p + "/index.html" + (location.search || "") + (location.hash || ""));
-      return true;
-    }
-    if (/\/admin\/$/i.test(p)) {
-      location.replace(p + "index.html" + (location.search || "") + (location.hash || ""));
-      return true;
-    }
     return false;
   }
 
@@ -197,6 +187,77 @@
       });
     });
   }
+
+  // ---- Media manifest: pick from project images/videos ----
+  var _mediaManifest = null;
+  function loadMediaManifest(cb) {
+    if (_mediaManifest) { cb(_mediaManifest); return; }
+    var prefix = typeof window.__SITE_DATA_PREFIX__ !== "undefined" ? window.__SITE_DATA_PREFIX__ : "";
+    fetch(prefix + "data/media-manifest.json", { cache: "no-store" })
+      .then(function(r) { return r.json(); })
+      .then(function(m) { _mediaManifest = m; cb(m); })
+      .catch(function() { cb({ images: [], videos: [] }); });
+  }
+
+  /**
+   * Inserts a "Pick from project ▾" dropdown before targetInput.
+   * mode: "image" | "video" | "any"
+   */
+  function injectProjectPicker(targetInput, mode) {
+    if (!targetInput || targetInput._pickerInjected) return;
+    targetInput._pickerInjected = true;
+    loadMediaManifest(function(manifest) {
+      var files = [];
+      if (mode === "image" || mode === "any") files = files.concat(manifest.images || []);
+      if (mode === "video" || mode === "any") files = files.concat(manifest.videos || []);
+      if (!files.length) return;
+
+      var wrap = document.createElement("div");
+      wrap.style.cssText = "display:flex;gap:4px;align-items:center;margin-bottom:4px;";
+
+      var sel = document.createElement("select");
+      sel.style.cssText = "flex:1;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:4px 8px;font-size:11px;color:#e2e8f0;cursor:pointer;";
+      var placeholder = document.createElement("option");
+      placeholder.value = "";
+      placeholder.textContent = "📁 Pick from project…";
+      sel.appendChild(placeholder);
+
+      // Group images and videos
+      if ((mode === "image" || mode === "any") && manifest.images && manifest.images.length) {
+        var imgGrp = document.createElement("optgroup");
+        imgGrp.label = "── Images ──";
+        (manifest.images || []).forEach(function(f) {
+          var o = document.createElement("option");
+          o.value = f;
+          o.textContent = f.split("/").pop();
+          imgGrp.appendChild(o);
+        });
+        sel.appendChild(imgGrp);
+      }
+      if ((mode === "video" || mode === "any") && manifest.videos && manifest.videos.length) {
+        var vidGrp = document.createElement("optgroup");
+        vidGrp.label = "── Videos ──";
+        (manifest.videos || []).forEach(function(f) {
+          var o = document.createElement("option");
+          o.value = f;
+          o.textContent = f.split("/").pop();
+          vidGrp.appendChild(o);
+        });
+        sel.appendChild(vidGrp);
+      }
+
+      sel.addEventListener("change", function() {
+        if (!sel.value) return;
+        targetInput.value = sel.value;
+        targetInput.dispatchEvent(new Event("input", { bubbles: true }));
+        sel.value = "";
+      });
+
+      wrap.appendChild(sel);
+      targetInput.parentNode.insertBefore(wrap, targetInput);
+    });
+  }
+  // ---- End media manifest ----
 
   function checkAdminLock() {
     var pass = (data.meta && data.meta.adminPassphrase) || "";
@@ -473,7 +534,10 @@
         renderHomeMediaList();
       });
     });
+    // Project pickers for home memory media
+    root.querySelectorAll(".home-media-url").forEach(function(inp) { injectProjectPicker(inp, "any"); });
   }
+
 
   function renderFeatureToggles() {
     var root = $("feature-toggles");
@@ -695,6 +759,8 @@
         renderOverviewStats();
       });
     });
+    // Inject project pickers for message photo inputs
+    root.querySelectorAll(".msg-img").forEach(function(inp) { injectProjectPicker(inp, "image"); });
   }
 
   function renderQuestionsList() {
@@ -900,6 +966,9 @@
         renderOverviewStats();
       });
     });
+    // Inject project pickers for gallery image and video inputs
+    root.querySelectorAll(".gal-img").forEach(function(inp) { injectProjectPicker(inp, "image"); });
+    root.querySelectorAll(".gal-vid").forEach(function(inp) { injectProjectPicker(inp, "video"); });
   }
 
   function renderVaultTimeline() {
@@ -1000,6 +1069,8 @@
         schedulePersist();
       });
     });
+    // Inject project pickers for timeline image inputs
+    root.querySelectorAll(".tl-img").forEach(function(inp) { injectProjectPicker(inp, "image"); });
   }
 
   function renderVaultLetters() {
@@ -1332,6 +1403,8 @@
         renderScrapbookPages();
       });
     });
+    // Inject project pickers for scrapbook media URL inputs
+    root.querySelectorAll(".media-url").forEach(function(inp) { injectProjectPicker(inp, "any"); });
   }
 
   function wireGlobalImagePickers() {
@@ -1349,6 +1422,11 @@
         });
       });
     });
+    // Project pickers for overview branding images
+    ["fld-meta-prof", "fld-meta-heroimg"].forEach(function(id) {
+      var inp = $(id); if (inp) injectProjectPicker(inp, "image");
+    });
+
     var homeImgInp = $("inp-home-img-files");
     if (homeImgInp) {
       homeImgInp.addEventListener("change", function () {
@@ -1735,5 +1813,32 @@
     });
   }
 
+  function injectAdminPartyPopper() {
+    var aside = document.querySelector("aside");
+    if (!aside) return;
+    // Remove overflow-hidden to allow the popper to be visible in the bottom corner
+    aside.style.overflow = "visible";
+    // Set position:relative so popper is contained
+    aside.style.position = "relative";
+    var popper = document.createElement("div");
+    popper.setAttribute("aria-hidden", "true");
+    popper.style.cssText = [
+      "position:absolute",
+      "bottom:8px",
+      "right:8px",
+      "font-size:7rem",
+      "line-height:1",
+      "opacity:0.07",
+      "pointer-events:none",
+      "user-select:none",
+      "transform:rotate(-18deg)",
+      "z-index:0",
+      "filter:blur(1px) saturate(2)"
+    ].join(";");
+    popper.textContent = "\uD83C\uDF89"; // 🎉
+    aside.appendChild(popper);
+  }
+
   boot();
+  document.addEventListener("DOMContentLoaded", injectAdminPartyPopper);
 })();

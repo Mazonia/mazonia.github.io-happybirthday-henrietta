@@ -4,8 +4,8 @@
     "celebrantName": "Henrietta",
     "heroKicker": "Happy 20th!",
     "heroTitle": "Happy Birthday Henrietta!",
-    "profileImage": "https://lh3.googleusercontent.com/aida-public/AB6AXuADPoreysbgfGG6OMaPNI704N5Pvfom77R8aNVYfSwT3b-qqDPaM7I-C0z5E1XArKJRtiZ7zBD_fEIqjwJ_jc09CoNnV11TZjGdUHnQUHzRoBj6an09spDTrTlHqucUZfZqQTaa7rwTOtl1wtZX5KcxNU_RNPwmJMQ-wcbnjssV32Fjmo2NEeWTpyF6Tqrk9MgSo2EYyT8LYGPx0GR9eUxL2cN5yuRC2IZJy2y03ghB8EYB_X2BVJECZVc8m7auX9ttHRtugRMRbco",
-    "heroImage": "images/smile_sammy.jpeg",
+    "profileImage": "images/smile_sammy.jpeg",
+    "heroImage": "images/smile_sammy_remastered.jpeg",
     "footerYear": 2026,
     "adminPassphrase": "",
     "lockdown": {
@@ -24,12 +24,12 @@
   },
   "home": {
     "memoryImages": [
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuAC0RqBwtR1HfB9nIStU75hxEOoDDQAxJ4c_OO0XhcDHGZvhrrGUs_u1kuDEzdvhXV3Ssn_gfqyaOS5KydNnUQP1_VxE2jg0xod54bKi3oNGtDli1Vmt1p1txDIPl-AqJaA-mYo8kc2JNwCT5K_vTU86kJ54itNDNjjhoH6Y-4vNET9JjVs9rliDs4r6oZPYQ50d8VqIRHo4M328gOnhP2PQZ8VmjooaDa72og0dbaeaazRceRfZebr_8NL6a4dtlC4DiqCKKfujec",
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuC2f3pCb95GcvBcVD0e8tXgxY0TRczSZfRVXLA0v_I4dEAg0geTDXNC-InpzKbBjv4D5TzR0sD13k9gSy8fqS2EgzqHlBl3A_YPNMERT2iSLjPT5ZLFI1CG2Z-9y5dPk0ShtIgM6r7BViYTAF7Oa4aiOQUePrUMHExc3ncVtJ-4wiUCdDNwHfoOhTh-ctN0UHUdWwwSrqF74mjpOG9SzIGbuhExXBPN0fn0XHI4vXgs-RRAwMrTo2HUmN5ZR5ECqMsxsyMmvKqK7qM"
+      "images/church_sammy.jpeg",
+      "images/smile_sammy_remastered.jpeg"
     ],
-    "surpriseProgress": 85,
+    "surpriseProgress": 39,
     "quote": "\"Calculated probability of an amazing night: 99.9%\"",
-    "quoteAttribution": "The Dig Team",
+    "quoteAttribution": "The Developer",
     "messagesTeaserCount": 12
   },
   "messagesPage": {
@@ -117,6 +117,24 @@
       "tint": "gold",
       "tag": "",
       "image": ""
+    },
+    {
+      "id": "m9",
+      "author": "Pius",
+      "body": "Henrietta, you’re honestly one of the most genuine people I know. Your presence alone brings calm and happiness and it’s something I don’t take for granted. I appreciate you more than I probably say and I’m really glad to have you in my life. Keep being you, it’s more than enough.🙂",
+      "shape": "caterpillar",
+      "tint": "rose",
+      "tag": "",
+      "image": ""
+    },
+    {
+      "id": "m10",
+      "author": "Mercy",
+      "body": "It’s been a whole journey and I’m so glad we’re in this together 🤭. I know you’ll probably read this and think I’m just talking or that I only said it because I had to, and you'll definitely tease me later saying ”I know you love me”🤭. But honestly, I really do care for you and I appreciate everything about us. I love how we're growing together and I'm praying for your success in everything. Love you for reeeaaallllllll Herty. ❤️",
+      "shape": "square",
+      "tint": "slate",
+      "tag": "",
+      "image": ""
     }
   ],
   "questions": [
@@ -163,10 +181,10 @@
     {
       "id": "q5",
       "moodEmoji": "💡",
-      "askedBy": "Professor Vance",
+      "askedBy": "Pius",
       "icon": "lightbulb",
       "title": "Guiding Light",
-      "prompt": "Who is the mentor that keeps your shaft illuminated?",
+      "prompt": "What’s one memory you’ll probably never forget?",
       "locked": false,
       "lockedNote": ""
     },
@@ -182,11 +200,11 @@
     },
     {
       "id": "q7",
-      "moodEmoji": "💛",
-      "askedBy": "Mark",
+      "moodEmoji": "😂",
+      "askedBy": "Mercy",
       "icon": "diamond",
       "title": "The Find",
-      "prompt": "What's your most precious memory from this last semester?",
+      "prompt": "So now that you’ve finally reached level 20, do you need me to give you a “mastaklas”🤭on how to go about it or you going to keep pretending you’ve got it figured out already?😌😂",
       "locked": false,
       "lockedNote": ""
     },
@@ -233,7 +251,7 @@
     {
       "id": "g5",
       "image": "",
-      "video": "https://www.youtube.com/embed/TRVigxvW4yE?autoplay=1&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1&loop=1&playlist=TRVigxvW4yE",
+      "video": "videos/ironing.mp4",
       "caption": "Butleress",
       "date": "Tabi"
     },
