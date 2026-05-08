@@ -273,6 +273,8 @@
   }
 
   function renderLockdownOverlay(meta) {
+    // If the user has already authenticated, never show the lockdown screen
+    if (hasValidAccess()) return false;
     var target = new Date(meta.lockdown.targetDate || "2026-05-29T00:00:00");
     if (!(target instanceof Date) || isNaN(target.getTime())) target = new Date("2026-05-29T00:00:00");
     if (!meta.lockdown.enabled || Date.now() >= target.getTime()) return false;

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html class="dark" lang="en">
   <head>
     <meta charset="utf-8" />
@@ -65,7 +65,7 @@
     <main class="lg:ml-72 pt-28 px-4 md:px-8 pb-28 lg:pb-16 relative z-10">
       <header class="mb-8">
         <h1 class="font-display-lg text-display-lg text-primary">Birthday Scrapbook</h1>
-        <p class="text-yellow-100/70 max-w-xl text-sm">Memories pressed between pages — flip through them all.</p>
+        <p class="text-yellow-100/70 max-w-xl text-sm">Memories pressed between pages â€” flip through them all.</p>
       </header>
       <!-- Book wrapper -->
       <div class="rounded-[28px] border border-yellow-200/20 bg-[#3a1f0a]/70 shadow-[0_32px_80px_rgba(0,0,0,.6)] p-3 sm:p-5 backdrop-blur-sm">
@@ -74,9 +74,9 @@
           <div id="sb-book" class="grid grid-cols-1 md:grid-cols-2"></div>
         </div>
         <div class="mt-4 flex items-center justify-between gap-4">
-          <button id="sb-prev" type="button" class="px-5 py-2 rounded-xl bg-amber-900/70 text-amber-100 text-sm font-semibold hover:bg-amber-800 disabled:opacity-30 disabled:cursor-not-allowed transition-all">← Prev</button>
+          <button id="sb-prev" type="button" class="px-5 py-2 rounded-xl bg-amber-900/70 text-amber-100 text-sm font-semibold hover:bg-amber-800 disabled:opacity-30 disabled:cursor-not-allowed transition-all">â† Prev</button>
           <span id="sb-indicator" class="text-amber-200/80 text-xs font-mono tracking-widest"></span>
-          <button id="sb-next" type="button" class="px-5 py-2 rounded-xl bg-amber-900/70 text-amber-100 text-sm font-semibold hover:bg-amber-800 disabled:opacity-30 disabled:cursor-not-allowed transition-all">Next →</button>
+          <button id="sb-next" type="button" class="px-5 py-2 rounded-xl bg-amber-900/70 text-amber-100 text-sm font-semibold hover:bg-amber-800 disabled:opacity-30 disabled:cursor-not-allowed transition-all">Next â†’</button>
         </div>
       </div>
     </main>
@@ -115,7 +115,7 @@
       var modalMedia = document.getElementById("sb-modal-media");
       var currentSpread = 0;
 
-      // ── Helpers ──────────────────────────────────────────────────────────────
+      // â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
       function esc(s){ return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
       function escA(s){ return String(s||"").replace(/"/g,"&quot;"); }
       function isVid(src){ return /\.(mp4|webm|ogg|mov)(\?|$)/i.test(src); }
@@ -138,9 +138,9 @@
         return '<div class="'+cls+' overflow-hidden"><img alt="" class="w-full h-full object-cover" src="'+escA(src)+'" loading="lazy" /></div>';
       }
 
-      // ── Creative per-page renderer ────────────────────────────────────────────
+      // â”€â”€ Creative per-page renderer â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
       // Each page entry gets one of 8 layout templates cycling + random decorations
-      var STICKERS = ["🎀","🌸","✨","🎊","💛","📸","🫶","🎈","🍀","⭐","🎁","💕"];
+      var STICKERS = ["ðŸŽ€","ðŸŒ¸","âœ¨","ðŸŽŠ","ðŸ’›","ðŸ“¸","ðŸ«¶","ðŸŽˆ","ðŸ€","â­","ðŸŽ","ðŸ’•"];
       var WASHI_COLORS = ["rgba(255,220,80,.45)","rgba(255,160,180,.45)","rgba(160,220,255,.4)","rgba(180,255,160,.38)","rgba(220,180,255,.42)"];
       var TAPE_TILTS = ["rotate(-3deg)","rotate(2deg)","rotate(-6deg)","rotate(5deg)","rotate(-1deg)"];
 
@@ -249,128 +249,181 @@
         );
       }
 
-      // ── Multi-item page layouts ───────────────────────────────────────────────
-      // Each page shows 4 items. Layout variant cycles for visual variety.
-      var ITEMS_PER_PAGE = 4;   // items per half-page (left or right)
-      var ITEMS_PER_SPREAD = ITEMS_PER_PAGE * 2; // 8 per spread
-      var totalSpreads = Math.max(1, Math.ceil(pages.length / ITEMS_PER_SPREAD));
+      // â”€â”€ Shuffle pages so images and videos are interleaved â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // Interleave: take one image-type then one video-type alternately
+      var imgPages = pages.filter(function(p){ return mediaType(p) !== "vid"; });
+      var vidPages = pages.filter(function(p){ return mediaType(p) === "vid"; });
+      var mixed = [];
+      var ii = 0, vi = 0;
+      while (ii < imgPages.length || vi < vidPages.length) {
+        // 2 images then 1 video pattern for natural feel
+        if (ii < imgPages.length) mixed.push(imgPages[ii++]);
+        if (ii < imgPages.length) mixed.push(imgPages[ii++]);
+        if (vi < vidPages.length) mixed.push(vidPages[vi++]);
+      }
+      pages = mixed;
 
-      // Render one page-half (an array of up to ITEMS_PER_PAGE items, pageBase = global index of first)
-      function renderPage(items, pageBase, side) {
-        var section = document.createElement("section");
-        section.className = "sb-page p-3 sm:p-4 relative" + (side===0 ? " md:border-r md:border-amber-900/20" : "");
+      // â”€â”€ Page sizes: deterministic pattern of 3 or 4 per page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // Page pattern: 4, 3, 4, 4, 3, 4 â€¦ gives natural variety without always 8/spread
+      var PAGE_PATTERN = [4, 3, 4, 4, 3, 4];
+      // Pre-compute page slices
+      var pageSlices = []; // [{start, count}]
+      var cursor = 0;
+      var pi = 0;
+      while (cursor < pages.length) {
+        var cnt = PAGE_PATTERN[pi % PAGE_PATTERN.length];
+        cnt = Math.min(cnt, pages.length - cursor);
+        if (cnt > 0) pageSlices.push({ start: cursor, count: cnt });
+        cursor += cnt;
+        pi++;
+      }
+      // Group pages into spreads (2 pages each)
+      var spreadSlices = [];
+      for (var si = 0; si < pageSlices.length; si += 2) {
+        spreadSlices.push([pageSlices[si], pageSlices[si+1] || null]);
+      }
+      var totalSpreads = Math.max(1, spreadSlices.length);
 
-        var variant = Math.floor(pageBase / ITEMS_PER_PAGE) % 4;
-        var html = "";
+      // â”€â”€ Thumb builder â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      function thumb(p, globalIdx, cls) {
+        if (!p) return '<div class="'+cls+' bg-amber-100/10 flex items-center justify-center opacity-20"><span class="material-symbols-outlined text-xl text-amber-800">photo_camera</span></div>';
+        var src = mediaSrc(p);
+        var poster = (p.image||"").trim();
+        var t = mediaType(p);
+        var inner = "";
+        if (t==="vid") {
+          inner = '<video class="w-full h-full object-cover" muted loop playsinline preload="none" data-sbvid="1"'+(poster?' poster="'+escA(poster)+'"':"")+' src="'+escA(src)+'"></video>';
+          inner += '<div class="sb-play-icon"><span class="material-symbols-outlined" style="font-size:1.1rem;color:#fff;background:rgba(0,0,0,.5);border-radius:50%;padding:3px;">play_arrow</span></div>';
+        } else if (t==="yt") {
+          var ytId = (src.match(/(?:v=|youtu\.be\/|embed\/)([a-zA-Z0-9_-]{11})/)||[])[1]||"";
+          inner = '<img alt="'+escA(p.title||"")+'" class="w-full h-full object-cover" src="https://img.youtube.com/vi/'+ytId+'/hqdefault.jpg" loading="lazy"/>';
+        } else {
+          inner = '<img alt="'+escA(p.title||"")+'" class="w-full h-full object-cover" src="'+escA(src||poster)+'" loading="lazy"/>';
+        }
+        var cap = (p.note||p.title) ? '<p class="sb-caption absolute bottom-0 left-0 right-0 text-[0.55rem] leading-tight px-1 pb-0.5 pt-0.5 truncate" style="background:rgba(253,246,227,.85);">'+esc(p.note||p.title)+'</p>' : "";
+        return '<div class="'+cls+' relative overflow-hidden sb-photo cursor-zoom-in" data-idx="'+globalIdx+'">'+inner+cap+'</div>';
+      }
 
-        // Fill nulls
-        while (items.length < ITEMS_PER_PAGE) items.push(null);
+      // â”€â”€ Layout builder â€” 6 variants for 3-item and 4-item pages â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      function buildPageHTML(items, globalStart, variant) {
+        var n = items.length;
+        var t = function(i, cls) { return thumb(items[i]||null, globalStart+i, cls); };
 
-        function thumb(p, idx, cls, extraStyle) {
-          if (!p) return '<div class="'+cls+' bg-amber-100/10 flex items-center justify-center opacity-20" style="'+( extraStyle||"")+'"><span class="material-symbols-outlined text-2xl text-amber-800">photo_camera</span></div>';
-          var src = mediaSrc(p);
-          var poster = (p.image||"").trim();
-          var t = mediaType(p);
-          var inner = "";
-          if (t==="vid") {
-            inner = '<video class="w-full h-full object-cover" muted loop playsinline preload="auto" data-sbvid="1"'+(poster?' poster="'+escA(poster)+'"':"")+' src="'+escA(src)+'"></video>';
-            inner += '<div class="sb-play-icon"><span class="material-symbols-outlined" style="font-size:1.2rem;color:#fff;background:rgba(0,0,0,.45);border-radius:50%;padding:4px;">play_arrow</span></div>';
-          } else if (t==="yt") {
-            inner = '<img alt="'+escA(p.title||"")+'" class="w-full h-full object-cover" src="https://img.youtube.com/vi/'+(src.match(/(?:v=|youtu\.be\/|embed\/)([a-zA-Z0-9_-]{11})/)||[])[1]+'/hqdefault.jpg" loading="lazy"/>';
+        if (n === 3) {
+          // 3-item variants (0,1,2 mod 3)
+          var v3 = variant % 3;
+          if (v3 === 0) {
+            // Stack vertically equal
+            return '<div class="flex flex-col gap-1.5 h-full">'+
+              '<div class="flex-1 min-h-0">'+t(0,"w-full h-full")+'</div>'+
+              '<div class="flex-1 min-h-0">'+t(1,"w-full h-full")+'</div>'+
+              '<div class="flex-1 min-h-0">'+t(2,"w-full h-full")+'</div>'+
+            '</div>';
+          } else if (v3 === 1) {
+            // 1 big left, 2 stacked right
+            return '<div class="flex gap-1.5 h-full">'+
+              '<div class="flex-[2] min-w-0 min-h-0">'+t(0,"w-full h-full")+'</div>'+
+              '<div class="flex flex-col gap-1.5 flex-1 min-w-0">'+
+                '<div class="flex-1 min-h-0">'+t(1,"w-full h-full")+'</div>'+
+                '<div class="flex-1 min-h-0">'+t(2,"w-full h-full")+'</div>'+
+              '</div>'+
+            '</div>';
           } else {
-            inner = '<img alt="'+escA(p.title||"")+'" class="w-full h-full object-cover" src="'+escA(src||poster)+'" loading="lazy"/>';
+            // 1 big top, 2 side by side bottom
+            return '<div class="flex flex-col gap-1.5 h-full">'+
+              '<div class="flex-[2] min-h-0">'+t(0,"w-full h-full")+'</div>'+
+              '<div class="flex gap-1.5 flex-1 min-h-0">'+
+                '<div class="flex-1 min-h-0">'+t(1,"w-full h-full")+'</div>'+
+                '<div class="flex-1 min-h-0">'+t(2,"w-full h-full")+'</div>'+
+              '</div>'+
+            '</div>';
           }
-          var capText = p.note || p.title || "";
-          var cap = capText ? '<p class="sb-caption text-[0.6rem] leading-tight px-1 pb-1 pt-0.5 truncate">'+esc(capText)+'</p>' : "";
-          return '<div class="'+cls+' relative overflow-hidden sb-photo cursor-zoom-in" style="'+(extraStyle||"")+'" data-idx="'+(pageBase+idx)+'">'+inner+cap+'</div>';
         }
 
-        // Variant 0: 2×2 equal grid
-        if (variant === 0) {
-          html = '<div class="grid grid-cols-2 gap-1.5 h-full">' +
-            thumb(items[0], 0, "aspect-square", "") +
-            thumb(items[1], 1, "aspect-square", "") +
-            thumb(items[2], 2, "aspect-square", "") +
-            thumb(items[3], 3, "aspect-square", "") +
+        // 4-item variants (0,1,2 mod 3)
+        var v4 = variant % 3;
+        if (v4 === 0) {
+          // 2Ã—2 grid
+          return '<div class="grid grid-cols-2 grid-rows-2 gap-1.5 h-full">'+
+            t(0,"min-h-0 h-full")+t(1,"min-h-0 h-full")+
+            t(2,"min-h-0 h-full")+t(3,"min-h-0 h-full")+
+          '</div>';
+        } else if (v4 === 1) {
+          // 1 big top, 3 bottom
+          return '<div class="flex flex-col gap-1.5 h-full">'+
+            '<div class="flex-[2] min-h-0">'+t(0,"w-full h-full")+'</div>'+
+            '<div class="flex gap-1.5 flex-1 min-h-0">'+
+              '<div class="flex-1 min-h-0">'+t(1,"w-full h-full")+'</div>'+
+              '<div class="flex-1 min-h-0">'+t(2,"w-full h-full")+'</div>'+
+              '<div class="flex-1 min-h-0">'+t(3,"w-full h-full")+'</div>'+
+            '</div>'+
+          '</div>';
+        } else {
+          // Tall left hero + 2 stacked right + wide bottom
+          return '<div class="flex flex-col gap-1.5 h-full">'+
+            '<div class="flex gap-1.5 flex-[3] min-h-0">'+
+              '<div class="flex-[3] min-w-0 min-h-0">'+t(0,"w-full h-full")+'</div>'+
+              '<div class="flex flex-col gap-1.5 flex-[2] min-w-0">'+
+                '<div class="flex-1 min-h-0">'+t(1,"w-full h-full")+'</div>'+
+                '<div class="flex-1 min-h-0">'+t(2,"w-full h-full")+'</div>'+
+              '</div>'+
+            '</div>'+
+            '<div class="flex-1 min-h-0">'+t(3,"w-full h-full")+'</div>'+
           '</div>';
         }
-        // Variant 1: 1 big top, 3 small bottom row
-        else if (variant === 1) {
-          html = '<div class="flex flex-col gap-1.5 h-full">' +
-            '<div class="flex-[2]">' + thumb(items[0], 0, "w-full h-full", "") + '</div>' +
-            '<div class="flex gap-1.5 flex-1">' +
-              thumb(items[1], 1, "flex-1 h-full", "") +
-              thumb(items[2], 2, "flex-1 h-full", "") +
-              thumb(items[3], 3, "flex-1 h-full", "") +
-            '</div>' +
-          '</div>';
-        }
-        // Variant 2: Left tall + 2 stacked right + 1 bottom full
-        else if (variant === 2) {
-          html = '<div class="flex flex-col gap-1.5 h-full">' +
-            '<div class="flex gap-1.5 flex-[3]">' +
-              thumb(items[0], 0, "flex-[2] h-full", "") +
-              '<div class="flex flex-col gap-1.5 flex-1">' +
-                thumb(items[1], 1, "flex-1 w-full", "") +
-                thumb(items[2], 2, "flex-1 w-full", "") +
-              '</div>' +
-            '</div>' +
-            '<div class="flex-1">' + thumb(items[3], 3, "w-full h-full", "") + '</div>' +
-          '</div>';
-        }
-        // Variant 3: Top row 3 small, bottom 1 wide
-        else {
-          html = '<div class="flex flex-col gap-1.5 h-full">' +
-            '<div class="flex gap-1.5 flex-1">' +
-              thumb(items[0], 0, "flex-1 h-full", "") +
-              thumb(items[1], 1, "flex-1 h-full", "") +
-              thumb(items[2], 2, "flex-1 h-full", "") +
-            '</div>' +
-            '<div class="flex-[2]">' + thumb(items[3], 3, "w-full h-full", "") + '</div>' +
-          '</div>';
+      }
+
+      // â”€â”€ Render a single page section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      function renderPage(slice, side, spreadIdx) {
+        var section = document.createElement("section");
+        section.className = "sb-page p-3 sm:p-4 relative flex flex-col min-h-0" +
+          (side===0 ? " md:border-r md:border-amber-900/20" : "");
+
+        if (!slice) {
+          section.innerHTML = '<div class="flex-1 flex items-center justify-center opacity-15"><span class="material-symbols-outlined text-4xl text-amber-800">auto_stories</span></div>';
+          return section;
         }
 
-        // Decorative stickers scattered
-        var sk = STICKERS[pageBase % STICKERS.length];
-        var wc = WASHI_COLORS[pageBase % WASHI_COLORS.length];
-        html += sticker(sk, 2, 90, 12);
+        var items = pages.slice(slice.start, slice.start + slice.count);
+        var variant = (spreadIdx * 2 + side);
+
+        var html = '<div class="flex-1 min-h-0">' + buildPageHTML(items, slice.start, variant) + '</div>';
+
+        // Decorations
+        var sk = STICKERS[(spreadIdx * 2 + side) % STICKERS.length];
+        var wc = WASHI_COLORS[(spreadIdx + side) % WASHI_COLORS.length];
+        html += sticker(sk, 1, 88, 10);
         html += '<div class="sb-washi" style="top:0;background:'+wc+'"></div>';
-
-        // Page number
-        html += '<div style="position:absolute;bottom:4px;'+(side===0?'right:10px':'left:10px')+';font-family:\'Caveat\',cursive;font-size:.65rem;color:#8b6914;opacity:.55;">'+(pageBase+1)+'–'+(pageBase+ITEMS_PER_PAGE)+'</div>';
+        html += '<div style="position:absolute;bottom:3px;'+(side===0?'right:8px':'left:8px')+';font-family:\'Caveat\',cursive;font-size:.6rem;color:#8b6914;opacity:.5;">'+(slice.start+1)+' â€“ '+(slice.start+slice.count)+'</div>';
 
         section.innerHTML = html;
 
-        // Attach click handlers to each thumb
+        // Click handlers
         section.querySelectorAll("[data-idx]").forEach(function(el) {
           var i = parseInt(el.getAttribute("data-idx"), 10);
           var p = pages[i];
-          if (p) {
-            el.addEventListener("click", function(){ openModal(p); });
-          }
+          if (p) el.addEventListener("click", function(){ openModal(p); });
         });
 
         return section;
       }
 
+      // â”€â”€ Render a spread â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
       function renderSpread() {
         book.innerHTML = "";
-        var start = currentSpread * ITEMS_PER_SPREAD;
+        var pair = spreadSlices[currentSpread] || [null, null];
+        var leftSlice  = pair[0] || null;
+        var rightSlice = pair[1] || null;
 
-        // Left page: items [start … start+3]
-        var leftItems = pages.slice(start, start + ITEMS_PER_PAGE);
-        // Right page: items [start+4 … start+7]
-        var rightItems = pages.slice(start + ITEMS_PER_PAGE, start + ITEMS_PER_SPREAD);
+        book.appendChild(renderPage(leftSlice,  0, currentSpread));
+        book.appendChild(renderPage(rightSlice, 1, currentSpread));
 
-        book.appendChild(renderPage(leftItems, start, 0));
-        book.appendChild(renderPage(rightItems, start + ITEMS_PER_PAGE, 1));
-
-        var endPage = Math.min(start + ITEMS_PER_SPREAD, pages.length);
-        indicator.textContent = "Spread " + (currentSpread+1) + " of " + totalSpreads + "  ·  items " + (start+1) + "–" + endPage;
+        var startItem = leftSlice  ? leftSlice.start  + 1 : "â€“";
+        var endItem   = rightSlice ? rightSlice.start + rightSlice.count : (leftSlice ? leftSlice.start + leftSlice.count : "â€“");
+        indicator.textContent = "Spread " + (currentSpread+1) + " of " + totalSpreads + "  Â·  items " + startItem + "â€“" + endItem;
         prevBtn.disabled = currentSpread <= 0;
         nextBtn.disabled = currentSpread >= totalSpreads - 1;
 
-        // IntersectionObserver for video autoplay
         if ("IntersectionObserver" in window) {
           var vio = new IntersectionObserver(function(entries) {
             entries.forEach(function(en) {
@@ -378,14 +431,14 @@
               if (en.isIntersecting) { v.load(); v.play().catch(function(){}); }
               else { v.pause(); }
             });
-          }, { threshold: 0.2 });
+          }, { threshold: 0.25 });
           book.querySelectorAll("video[data-sbvid]").forEach(function(v){ vio.observe(v); });
         } else {
           book.querySelectorAll("video[data-sbvid]").forEach(function(v){ v.load(); v.play().catch(function(){}); });
         }
       }
 
-      // ── Modal ────────────────────────────────────────────────────────────────
+      // â”€â”€ Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
       function openModal(p) {
         var src = mediaSrc(p);
         var poster = (p.image||"").trim();
