@@ -394,7 +394,7 @@
         var wc = WASHI_COLORS[(spreadIdx + side) % WASHI_COLORS.length];
         html += sticker(sk, 1, 88, 10);
         html += '<div class="sb-washi" style="top:0;background:'+wc+'"></div>';
-        html += '<div style="position:absolute;bottom:3px;'+(side===0?'right:8px':'left:8px')+';font-family:\'Caveat\',cursive;font-size:.6rem;color:#8b6914;opacity:.5;">'+(slice.start+1)+' â€“ '+(slice.start+slice.count)+'</div>';
+        html += '<div style="position:absolute;bottom:3px;'+(side===0?'right:8px':'left:8px')+';font-family:\'Caveat\',cursive;font-size:.75rem;color:#8b6914;opacity:.8;z-index:10;background:rgba(253,246,227,.7);padding:1px 5px;border-radius:4px;">'+(slice.start+1)+' - '+(slice.start+slice.count)+'</div>';
 
         section.innerHTML = html;
 
@@ -418,9 +418,9 @@
         book.appendChild(renderPage(leftSlice,  0, currentSpread));
         book.appendChild(renderPage(rightSlice, 1, currentSpread));
 
-        var startItem = leftSlice  ? leftSlice.start  + 1 : "â€“";
-        var endItem   = rightSlice ? rightSlice.start + rightSlice.count : (leftSlice ? leftSlice.start + leftSlice.count : "â€“");
-        indicator.textContent = "Spread " + (currentSpread+1) + " of " + totalSpreads + "  Â·  items " + startItem + "â€“" + endItem;
+        var startItem = leftSlice  ? leftSlice.start  + 1 : "-";
+        var endItem   = rightSlice ? rightSlice.start + rightSlice.count : (leftSlice ? leftSlice.start + leftSlice.count : "-");
+        indicator.textContent = "Spread " + (currentSpread+1) + " of " + totalSpreads + "  *  items " + startItem + "-" + endItem;
         prevBtn.disabled = currentSpread <= 0;
         nextBtn.disabled = currentSpread >= totalSpreads - 1;
 
