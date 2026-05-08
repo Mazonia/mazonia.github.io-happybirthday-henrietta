@@ -103,7 +103,6 @@
       var val = normPass(document.getElementById("ore-gate-inp").value);
       if (val === normPass(VISITOR_PASS)) {
         setAccess("visitor");
-        // Always redirect to homepage after login so fireworks play and lockdown clears
         location.href = "index.html";
       } else if (val === normPass(ADMIN_PASS)) {
         setAccess("admin");
@@ -171,17 +170,21 @@
   }
 
   function initClientAccessGate() {
-    // Skip gate on admin pages
+    // Skip gate entirely on admin pages
     if (location.pathname.indexOf("/admin") !== -1) return;
     if (hasValidAccess()) {
       var a = getAccess();
+      // Show a small pill indicator for timed visitor sessions
       injectVisitorPill(a && a.type === "visitor");
       if (a && a.type === "visitor") startVisitorTimer();
-      return;
     }
-    // Auto-show gate when no valid session — site is locked by default
-    showGate();
+    // Do NOT auto-show gate — the gate is opt-in only (triggered by the
+    // lockdown screen's hidden "Birthday countdown" button, or explicitly).
+    // Pages are freely accessible; the lockdown overlay is the primary gate.
   }
+
+  // Expose showGate so the lockdown overlay's secret link can call it.
+  global.showAccessGate = showGate;
 
   document.addEventListener("DOMContentLoaded", initClientAccessGate);
   // ── End client access gate ─────────────────────────────────────────────────
