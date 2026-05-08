@@ -767,10 +767,10 @@
       // Post-unlock fireworks: intense 5s after countdown reaches zero
       if (sessionStorage.getItem("oreCelebrations.postUnlock") === "1") {
         sessionStorage.removeItem("oreCelebrations.postUnlock");
-        runPageFireworks(5000);
+        runPageFireworks(5000, function() { startAmbientFireworks(); });
       } else if (opts && opts.active === "home") {
-        // Brief welcome fireworks on every homepage visit
-        runPageFireworks(4000);
+        // Intense welcome burst, then gentle ambient forever
+        runPageFireworks(4000, function() { startAmbientFireworks(); });
       }
     }
     attachMediaProtection();
@@ -779,7 +779,8 @@
   };
 
   // Full-page fireworks overlay (used for post-unlock celebration)
-  function runPageFireworks(duration) {
+  // onDone callback is called when the duration expires
+  function runPageFireworks(duration, onDone) {
     var overlay = document.createElement("div");
     overlay.style.cssText = "position:fixed;inset:0;z-index:9990;pointer-events:none;";
     var cv = document.createElement("canvas");
@@ -849,8 +850,82 @@
         cancelAnimationFrame(raf);
         window.removeEventListener("resize", resize);
         if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+        if (typeof onDone === "function") onDone();
       }
     }
     raf = requestAnimationFrame(frame);
+  }
+
+  // Gentle always-on ambient fireworks for the homepage
+  function startAmbientFireworks() {
+    if (global.__oreAmbientFW) return; // already running
+    global.__oreAmbientFW = true;
+
+    var overlay = document.createElement("div");
+    overlay.id = "ore-ambient-fw";
+    overlay.style.cssText = "position:fixed;inset:0;z-index:9980;pointer-events:none;";
+    var cv = document.createElement("canvas");
+    cv.style.cssText = "width:100%;height:100%;display:block;";
+    overlay.appendChild(cv);
+    document.body.appendChild(overlay);
+
+    function resize() { cv.width = window.innerWidth; cv.height = window.innerHeight; }
+    resize();
+    window.addEventListener("resize", resize);
+
+    var ctx = cv.getContext("2d");
+    var particles = [];
+    var colors = ["#facc15","#f9a8d4","#22d3ee","#a78bfa","#fb7185","#fef08a","#86efac","#60a5fa"];
+    var lastBurst = 0;
+    // Burst interval: 4000-6000ms (random), very small bursts
+    var nextInterval = 4000 + Math.random() * 2000;
+
+    function ambientBurst() {
+      // One small burst at a random edge-ish position
+      var x = 80 + Math.random() * (cv.width - 160);
+      var y = 30 + Math.random() * (cv.height * 0.45);
+      var color = colors[Math.floor(Math.random() * colors.length)];
+      var count = 18 + Math.floor(Math.random() * 12); // 18-30 particles (vs 60-90 intense)
+      for (var i = 0; i < count; i++) {
+        var angle = (Math.PI * 2 * i) / count;
+        var speed = 1.2 + Math.random() * 2.2;
+        particles.push({
+          x: x, y: y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed - 1,
+          alpha: 0.65,
+          color: color,
+          size: 1.5 + Math.random() * 1.5,
+          life: 0.008 + Math.random() * 0.005  // fades gently
+        });
+      }
+      nextInterval = 4000 + Math.random() * 2000;
+    }
+
+    function ambientFrame() {
+      var now = Date.now();
+      ctx.clearRect(0, 0, cv.width, cv.height);
+      if (now - lastBurst > nextInterval) {
+        ambientBurst();
+        lastBurst = now;
+      }
+      for (var i = particles.length - 1; i >= 0; i--) {
+        var p = particles[i];
+        p.x += p.vx; p.y += p.vy;
+        p.vy += 0.055;
+        p.alpha -= p.life;
+        if (p.alpha <= 0) { particles.splice(i, 1); continue; }
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, p.alpha);
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+      requestAnimationFrame(ambientFrame);
+    }
+    lastBurst = Date.now() - nextInterval; // fire first burst immediately
+    requestAnimationFrame(ambientFrame);
   }
 })(window);
