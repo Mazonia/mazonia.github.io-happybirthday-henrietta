@@ -160,14 +160,17 @@
   function initClientAccessGate() {
     // Skip gate on admin pages
     if (location.pathname.indexOf("/admin") !== -1) return;
-    injectAccessStyles();
+    // If lockdown target date has passed, no gate needed — site is open
+    // We check this lazily; renderLockdownOverlay already returns false if date passed
+    // If there's an active valid session, just show the pill
     if (hasValidAccess()) {
       var a = getAccess();
       injectVisitorPill(a && a.type === "visitor");
       if (a && a.type === "visitor") startVisitorTimer();
       return;
     }
-    showGate();
+    // Do NOT auto-show gate — user clicks the "Birthday countdown" link to open it
+    // (showGate() is wired in renderLockdownOverlay)
   }
 
   document.addEventListener("DOMContentLoaded", initClientAccessGate);
@@ -326,7 +329,9 @@
     center.className = "bday-lock-center";
     center.innerHTML =
       '<div class="bday-lock-card">' +
-      '<p style="letter-spacing:.18em;font-size:.65rem;text-transform:uppercase;opacity:.72">Birthday countdown</p>' +
+      '<p style="letter-spacing:.18em;font-size:.65rem;text-transform:uppercase;opacity:.72">' +
+      '<a id="bday-access-link" href="#" style="color:inherit;text-decoration:none;cursor:pointer;" onclick="return false;">Birthday countdown</a>' +
+      '</p>' +
       '<h1 style="margin:.2rem 0 0;font-size:clamp(1.4rem,3vw,2.3rem);font-weight:700;color:#fde68a;font-family:Caveat,cursive;letter-spacing:.02em">Henrietta turns ....(it\'s a secret!) <br> on May 29, 2026</h1>' +
       '<p style="margin:.55rem 0 0;opacity:.82;font-size:.92rem">The site opens soon. Until then, enjoy the celebration countdown.</p>' +
       '<div class="bday-lock-count">' +
@@ -335,6 +340,11 @@
       '<div class="bday-lock-box"><div class="bday-lock-num" data-cd="m">0</div><div class="bday-lock-lbl">Minutes</div></div>' +
       '<div class="bday-lock-box"><div class="bday-lock-num" data-cd="s">0</div><div class="bday-lock-lbl">Seconds</div></div>' +
       "</div></div>";
+    // Wire the "Birthday countdown" text link to open access gate
+    setTimeout(function() {
+      var lnk = document.getElementById("bday-access-link");
+      if (lnk) lnk.addEventListener("click", function(e) { e.preventDefault(); showGate(); });
+    }, 200);
     var deco = document.createElement("div");
     deco.className = "bday-lock-deco";
     var decoItems = [
@@ -356,6 +366,9 @@
     root.appendChild(center);
     document.body.appendChild(root);
 
+    // Start constant low-intensity fireworks immediately
+    startFireworks(root, "ambient");
+
     function tick() {
       var diff = Math.max(0, target.getTime() - Date.now());
       var d = Math.floor(diff / 86400000);
@@ -368,16 +381,15 @@
       q('[data-cd="m"]').textContent = String(m).padStart(2, "0");
       q('[data-cd="s"]').textContent = String(s).padStart(2, "0");
       if (diff <= 0 && tick._wasPositive) {
-        // Set flag so homepage shows fireworks, then reload immediately
         sessionStorage.setItem("oreCelebrations.postUnlock", "1");
         location.reload();
         return;
       }
       if (diff > 0) tick._wasPositive = true;
-      // Start fireworks at 3 seconds remaining
-      if (diff <= 3000 && !tick._fireworksStarted) {
-        tick._fireworksStarted = true;
-        startFireworks(root);
+      // Intensify at 60 seconds remaining
+      if (diff <= 60000 && !tick._intensified) {
+        tick._intensified = true;
+        startFireworks(root, "intense");
       }
     }
     tick();
@@ -392,7 +404,7 @@
       return cv;
     }
 
-    function runFireworks(canvas, duration, onDone) {
+    function runFireworks(canvas, duration, onDone, burstEveryMs, burstCount) {
       var W = canvas.offsetWidth || window.innerWidth;
       var H = canvas.offsetHeight || window.innerHeight;
       canvas.width = W; canvas.height = H;
@@ -401,21 +413,24 @@
       var colors = ["#facc15","#f9a8d4","#22d3ee","#a78bfa","#fb7185","#fef08a","#86efac","#f97316"];
       var start = Date.now();
       var lastBurst = 0;
+      var everyMs = burstEveryMs || 400;
+      var bCount = burstCount || 2;
 
       function burst() {
         var x = 80 + Math.random() * (W - 160);
-        var y = 80 + Math.random() * (H * 0.55);
+        var y = 60 + Math.random() * (H * 0.55);
         var color = colors[Math.floor(Math.random() * colors.length)];
-        for (var i = 0; i < 52; i++) {
-          var angle = (Math.PI * 2 * i) / 52;
-          var speed = 2.5 + Math.random() * 3.5;
+        var n = 40 + Math.floor(Math.random() * 20);
+        for (var i = 0; i < n; i++) {
+          var angle = (Math.PI * 2 * i) / n;
+          var speed = 2 + Math.random() * 4;
           particles.push({
             x: x, y: y,
             vx: Math.cos(angle) * speed,
             vy: Math.sin(angle) * speed - 1.5,
             alpha: 1, color: color,
-            size: 2.5 + Math.random() * 2,
-            life: 0.012 + Math.random() * 0.008
+            size: 2 + Math.random() * 2.5,
+            life: 0.011 + Math.random() * 0.009
           });
         }
       }
@@ -425,12 +440,14 @@
         var now = Date.now();
         var elapsed = now - start;
         ctx.clearRect(0, 0, W, H);
-        // Auto-burst every 400ms
-        if (now - lastBurst > 400) { burst(); if (Math.random() > 0.4) burst(); lastBurst = now; }
+        if (now - lastBurst > everyMs) {
+          for (var b = 0; b < bCount; b++) burst();
+          lastBurst = now;
+        }
         for (var i = particles.length - 1; i >= 0; i--) {
           var p = particles[i];
           p.x += p.vx; p.y += p.vy;
-          p.vy += 0.06; // gravity
+          p.vy += 0.06;
           p.alpha -= p.life;
           if (p.alpha <= 0) { particles.splice(i, 1); continue; }
           ctx.save();
@@ -453,16 +470,13 @@
     }
 
     var _fw = null;
-    function startFireworks(parent) {
-      if (_fw) return;
-      var cv = document.getElementById("bday-fireworks-canvas") || makeFireworksCanvas(parent);
-      _fw = runFireworks(cv, 99999, null); // runs until finale stops it
-    }
-    function startFireworksFinale(parent, onDone) {
+    function startFireworks(parent, mode) {
+      // mode: "ambient" (low, every 2.5s), "intense" (high, every 400ms)
       if (_fw) _fw.stop();
       var cv = document.getElementById("bday-fireworks-canvas") || makeFireworksCanvas(parent);
-      // Intense 5-second finale then callback
-      runFireworks(cv, 5000, onDone);
+      var interval = (mode === "intense") ? 400 : 2400;
+      var burstCount = (mode === "intense") ? 2 : 1;
+      _fw = runFireworks(cv, 99999999, null, interval, burstCount);
     }
     // --- End fireworks ---
     return true;
@@ -735,10 +749,13 @@
       decorateClientSideNav();
       attachHangingDecorV2();
 
-      // Post-unlock fireworks: triggered once when countdown reaches zero
+      // Post-unlock fireworks: intense 5s after countdown reaches zero
       if (sessionStorage.getItem("oreCelebrations.postUnlock") === "1") {
         sessionStorage.removeItem("oreCelebrations.postUnlock");
         runPageFireworks(5000);
+      } else if (opts && opts.active === "home") {
+        // Brief welcome fireworks on every homepage visit
+        runPageFireworks(4000);
       }
     }
     attachMediaProtection();

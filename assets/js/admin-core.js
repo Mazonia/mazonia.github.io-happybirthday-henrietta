@@ -399,44 +399,105 @@
     if ($("fld-lock-images")) setVal("fld-lock-images", (data.meta.lockdown.images || []).join("\n"));
   }
 
+  var _lockImgManifest = null;
+  function getLockImgOptions(cb) {
+    if (_lockImgManifest) { cb(_lockImgManifest); return; }
+    fetch("../data/media-manifest.json")
+      .then(function(r){ return r.json(); })
+      .then(function(j){ _lockImgManifest = (j.images || []); cb(_lockImgManifest); })
+      .catch(function(){ _lockImgManifest = []; cb([]); });
+  }
+
   function renderLockdownImagesList() {
     var root = $("list-lock-images");
     if (!root) return;
-    root.innerHTML = "";
-    (data.meta.lockdown.images || []).forEach(function (url, idx) {
-      var card = document.createElement("div");
-      card.className = "rounded-xl border border-white/15 bg-black/25 p-2 space-y-2";
-      card.innerHTML =
-        '<div class="aspect-[4/5] rounded-lg overflow-hidden border border-white/20 bg-black/20 shadow-[0_8px_24px_rgba(0,0,0,.35)]">' +
-        '<img alt="" class="w-full h-full object-cover" src="' +
-        escapeAttr(url) +
-        '" /></div>' +
-        '<input type="text" class="lock-img-url w-full bg-surface-container-high/40 border border-white/10 rounded-lg px-2 py-1 text-[11px] font-mono" data-i="' +
-        idx +
-        '" value="' +
-        escapeAttr(url) +
-        '" />' +
-        '<button type="button" class="lock-img-del text-[11px] uppercase text-error underline" data-i="' +
-        idx +
-        '">Remove</button>';
-      root.appendChild(card);
-    });
-    root.querySelectorAll(".lock-img-url").forEach(function (inp) {
-      inp.addEventListener("input", function () {
-        var i = Number(inp.getAttribute("data-i"));
-        data.meta.lockdown.images[i] = inp.value.trim();
-        syncLockdownTextarea();
-        schedulePersist();
+    getLockImgOptions(function(options) {
+      root.innerHTML = "";
+      var imgs = data.meta.lockdown.images || [];
+      // Always show at least 12 frame slots (lockdown screen default)
+      var slotCount = Math.max(12, imgs.length);
+
+      // Add frame button
+      var addRow = document.createElement("div");
+      addRow.className = "col-span-full flex justify-end";
+      addRow.innerHTML = '<button type="button" id="btn-lock-add-frame" class="text-xs uppercase tracking-wider px-3 py-1.5 rounded-full bg-primary-container text-on-primary-container font-bold">+ Add frame</button>';
+      root.appendChild(addRow);
+      addRow.querySelector("#btn-lock-add-frame").addEventListener("click", function() {
+        data.meta.lockdown.images.push("");
+        syncLockdownTextarea(); persist(); renderLockdownImagesList();
       });
-    });
-    root.querySelectorAll(".lock-img-del").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        var i = Number(btn.getAttribute("data-i"));
-        data.meta.lockdown.images.splice(i, 1);
-        syncLockdownTextarea();
-        persist();
-        renderLockdownImagesList();
-      });
+
+      for (var idx = 0; idx < slotCount; idx++) {
+        (function(i) {
+          var url = imgs[i] || "";
+          var card = document.createElement("div");
+          card.className = "rounded-xl border border-white/15 bg-black/25 p-2 space-y-2 flex flex-col";
+          // Frame label
+          var lbl = document.createElement("p");
+          lbl.className = "text-[10px] uppercase tracking-wider text-slate-400 font-bold";
+          lbl.textContent = "Frame " + (i + 1);
+          card.appendChild(lbl);
+          // Polaroid preview
+          var preview = document.createElement("div");
+          preview.className = "aspect-[4/5] rounded-lg overflow-hidden border-2 border-white/20 bg-black/30 shadow-inner flex items-center justify-center";
+          if (url) {
+            preview.innerHTML = '<img alt="" class="w-full h-full object-cover" src="' + escapeAttr(url) + '" />';
+          } else {
+            preview.innerHTML = '<span class="text-slate-600 text-xs">Empty</span>';
+          }
+          card.appendChild(preview);
+          // Dropdown picker
+          var sel = document.createElement("select");
+          sel.className = "w-full bg-surface-container-high/60 border border-white/10 rounded-lg px-2 py-1 text-xs";
+          var blankOpt = document.createElement("option");
+          blankOpt.value = ""; blankOpt.textContent = "— pick from project —";
+          sel.appendChild(blankOpt);
+          options.forEach(function(opt) {
+            var o = document.createElement("option");
+            o.value = opt;
+            o.textContent = opt.split("/").pop();
+            if (opt === url) o.selected = true;
+            sel.appendChild(o);
+          });
+          sel.addEventListener("change", function() {
+            if (!sel.value) return;
+            if (!data.meta.lockdown.images) data.meta.lockdown.images = [];
+            data.meta.lockdown.images[i] = sel.value;
+            urlInp.value = sel.value;
+            preview.innerHTML = '<img alt="" class="w-full h-full object-cover" src="' + escapeAttr(sel.value) + '" />';
+            syncLockdownTextarea(); schedulePersist();
+          });
+          card.appendChild(sel);
+          // Manual URL input
+          var urlInp = document.createElement("input");
+          urlInp.type = "text";
+          urlInp.className = "w-full bg-surface-container-high/40 border border-white/10 rounded-lg px-2 py-1 text-[10px] font-mono";
+          urlInp.placeholder = "or paste URL…";
+          urlInp.value = url;
+          urlInp.addEventListener("input", function() {
+            if (!data.meta.lockdown.images) data.meta.lockdown.images = [];
+            data.meta.lockdown.images[i] = urlInp.value.trim();
+            if (urlInp.value.trim()) {
+              preview.innerHTML = '<img alt="" class="w-full h-full object-cover" src="' + escapeAttr(urlInp.value.trim()) + '" />';
+            } else {
+              preview.innerHTML = '<span class="text-slate-600 text-xs">Empty</span>';
+            }
+            syncLockdownTextarea(); schedulePersist();
+          });
+          card.appendChild(urlInp);
+          // Remove button
+          var delBtn = document.createElement("button");
+          delBtn.type = "button";
+          delBtn.className = "text-[10px] uppercase text-error underline self-start";
+          delBtn.textContent = "Remove";
+          delBtn.addEventListener("click", function() {
+            data.meta.lockdown.images.splice(i, 1);
+            syncLockdownTextarea(); persist(); renderLockdownImagesList();
+          });
+          card.appendChild(delBtn);
+          root.appendChild(card);
+        })(idx);
+      }
     });
   }
 

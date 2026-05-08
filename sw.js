@@ -1,6 +1,6 @@
 // Ore Celebrations — Service Worker
 // Bump CACHE_VER whenever you push new code to force clients to get fresh assets.
-var CACHE_VER = "v4";
+var CACHE_VER = "v5";
 var CACHE_NAME = "ore-celebrations-" + CACHE_VER;
 
 // On install: skip waiting so the new SW activates immediately

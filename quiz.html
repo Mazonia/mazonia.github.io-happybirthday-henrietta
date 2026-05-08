@@ -233,14 +233,14 @@
         document.getElementById("qm-cancel").addEventListener("click", closeModal);
 
         document.getElementById("qm-unlock-btn").addEventListener("click", function () {
-          var pass = window.prompt("Enter the admin passphrase to edit this answer:");
+          var pass = window.prompt("Enter the change-answer code\n(text the developer if you don't have it):");
           if (pass === null) return;
-          if (!adminPass || pass === adminPass) {
+          if (pass.trim() === "0000") {
             editingLocked = true;
             setModalLocked(false);
             document.getElementById("qm-input").focus();
           } else {
-            alert("Incorrect passphrase.");
+            alert("That code didn't match — ask the developer for the code.");
           }
         });
 
