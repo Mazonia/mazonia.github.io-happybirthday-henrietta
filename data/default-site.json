@@ -1,5 +1,5 @@
 {
-  "dataVersion": 8,
+  "dataVersion": 9,
   "meta": {
     "siteTitle": "Birthday Celebration",
     "celebrantName": "Henrietta",
@@ -10,7 +10,7 @@
     "footerYear": 2026,
     "adminPassphrase": "",
     "lockdown": {
-      "enabled": false,
+      "enabled": true,
       "targetDate": "2026-05-29T00:00:00",
       "images": [
         "images/smile_sammy.jpeg",
