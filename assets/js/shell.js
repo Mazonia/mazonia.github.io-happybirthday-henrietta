@@ -1,6 +1,178 @@
 (function (global) {
   var FEATURE_ATTR = "[data-feature]";
 
+  // ── Client access gate ──────────────────────────────────────────────────────
+  var ACCESS_KEY   = "oreCelebrations.access.v1";
+  var VISITOR_PASS = "henrietta@20";   // 5-minute timed access
+  var ADMIN_PASS   = "admin@herty";    // unlimited access
+  var VISITOR_MS   = 5 * 60 * 1000;   // 5 minutes
+
+  function normPass(s) { return String(s || "").trim().toLowerCase(); }
+
+  function getAccess() {
+    try { return JSON.parse(sessionStorage.getItem(ACCESS_KEY)) || null; }
+    catch(e) { return null; }
+  }
+  function setAccess(type) {
+    sessionStorage.setItem(ACCESS_KEY, JSON.stringify({ type: type, ts: Date.now() }));
+  }
+  function clearAccess() { sessionStorage.removeItem(ACCESS_KEY); }
+
+  function hasValidAccess() {
+    var a = getAccess();
+    if (!a) return false;
+    if (a.type === "admin") return true;
+    if (a.type === "visitor") return Date.now() - a.ts < VISITOR_MS;
+    return false;
+  }
+
+  function injectAccessStyles() {
+    if (document.getElementById("ore-access-styles")) return;
+    var s = document.createElement("style");
+    s.id = "ore-access-styles";
+    s.textContent = [
+      ".ore-gate{position:fixed;inset:0;z-index:99995;display:flex;align-items:center;justify-content:center;padding:1rem;",
+        "background:radial-gradient(ellipse at 20% 20%,rgba(250,204,21,.07),transparent 50%),",
+        "radial-gradient(ellipse at 80% 80%,rgba(167,139,250,.07),transparent 50%),",
+        "rgba(5,7,15,.92);backdrop-filter:blur(20px);}",
+      ".ore-gate-card{max-width:28rem;width:100%;background:rgba(15,18,32,.85);border:1px solid rgba(255,255,255,.1);",
+        "border-radius:24px;padding:2rem;display:flex;flex-direction:column;align-items:center;gap:1.2rem;",
+        "box-shadow:0 32px 80px rgba(0,0,0,.7),0 0 0 1px rgba(250,204,21,.08);}",
+      ".ore-gate-icon{width:56px;height:56px;border-radius:999px;background:rgba(250,204,21,.12);",
+        "border:1px solid rgba(250,204,21,.25);display:flex;align-items:center;justify-content:center;",
+        "font-size:1.6rem;}",
+      ".ore-gate-title{font-weight:700;font-size:1.3rem;color:#fde68a;letter-spacing:-.01em;margin:0;}",
+      ".ore-gate-sub{font-size:.82rem;color:rgba(203,213,225,.6);margin:0;text-align:center;line-height:1.5;}",
+      ".ore-gate-input{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);",
+        "border-radius:12px;padding:.7rem 1rem;font-size:1rem;color:#f1f5f9;outline:none;transition:border .2s;",
+        "font-family:inherit;box-sizing:border-box;}",
+      ".ore-gate-input:focus{border-color:rgba(250,204,21,.5);}",
+      ".ore-gate-btn{width:100%;padding:.75rem;border-radius:12px;background:linear-gradient(135deg,#facc15,#f59e0b);",
+        "color:#1a1000;font-weight:700;font-size:.95rem;border:none;cursor:pointer;transition:opacity .2s,transform .1s;font-family:inherit;}",
+      ".ore-gate-btn:hover{opacity:.9;}.ore-gate-btn:active{transform:scale(.97);}",
+      ".ore-gate-err{font-size:.78rem;color:#f87171;display:none;margin:0;}",
+      ".ore-gate-timer{font-size:.72rem;color:rgba(250,204,21,.7);letter-spacing:.06em;margin:0;}",
+      ".ore-visitor-pill{position:fixed;top:10px;right:12px;z-index:99994;",
+        "background:rgba(15,18,32,.8);border:1px solid rgba(255,255,255,.12);border-radius:999px;",
+        "padding:.28rem .85rem;font-size:.7rem;color:rgba(250,204,21,.8);cursor:pointer;",
+        "backdrop-filter:blur(8px);transition:background .2s;font-family:inherit;letter-spacing:.04em;}",
+      ".ore-visitor-pill:hover{background:rgba(250,204,21,.12);}"
+    ].join("");
+    document.head.appendChild(s);
+  }
+
+  var _gateEl = null;
+  var _timerInterval = null;
+  var _timerEl = null;
+
+  function showGate() {
+    if (_gateEl && document.body.contains(_gateEl)) return;
+    injectAccessStyles();
+    document.body.style.overflow = "hidden";
+    _gateEl = document.createElement("div");
+    _gateEl.className = "ore-gate";
+    _gateEl.innerHTML =
+      '<div class="ore-gate-card">' +
+      '<div class="ore-gate-icon">🎀</div>' +
+      '<p class="ore-gate-title">Birthday Site Access</p>' +
+      '<p class="ore-gate-sub">Enter your passcode to explore Henrietta\'s birthday site.<br>' +
+      '<em style="opacity:.5;font-style:normal;font-size:.72rem;">Don\'t have one? Ask the developer.</em></p>' +
+      '<input id="ore-gate-inp" class="ore-gate-input" type="password" placeholder="Enter passcode…" autocomplete="off" />' +
+      '<p id="ore-gate-err" class="ore-gate-err">Wrong passcode — try again.</p>' +
+      '<button id="ore-gate-btn" class="ore-gate-btn">Let me in 🎉</button>' +
+      '<p id="ore-gate-timer" class="ore-gate-timer" style="display:none;"></p>' +
+      '</div>';
+    document.body.appendChild(_gateEl);
+    setTimeout(function() {
+      var inp = document.getElementById("ore-gate-inp");
+      if (inp) inp.focus();
+    }, 80);
+    function tryAccess() {
+      var val = normPass(document.getElementById("ore-gate-inp").value);
+      if (val === normPass(VISITOR_PASS)) {
+        setAccess("visitor");
+        hideGate(true);
+      } else if (val === normPass(ADMIN_PASS)) {
+        setAccess("admin");
+        hideGate(false);
+      } else {
+        var err = document.getElementById("ore-gate-err");
+        if (err) { err.style.display = "block"; }
+        var inp = document.getElementById("ore-gate-inp");
+        if (inp) { inp.style.borderColor = "rgba(248,113,113,.6)"; setTimeout(function(){ inp.style.borderColor=""; }, 600); }
+      }
+    }
+    document.getElementById("ore-gate-btn").addEventListener("click", tryAccess);
+    document.getElementById("ore-gate-inp").addEventListener("keydown", function(e) {
+      if (e.key === "Enter") tryAccess();
+    });
+  }
+
+  function hideGate(startTimer) {
+    if (_gateEl && _gateEl.parentNode) _gateEl.parentNode.removeChild(_gateEl);
+    _gateEl = null;
+    document.body.style.overflow = "";
+    injectVisitorPill(startTimer);
+    if (startTimer) startVisitorTimer();
+  }
+
+  function injectVisitorPill(isVisitor) {
+    var old = document.getElementById("ore-visitor-pill");
+    if (old) old.parentNode.removeChild(old);
+    injectAccessStyles();
+    var pill = document.createElement("button");
+    pill.id = "ore-visitor-pill";
+    pill.className = "ore-visitor-pill";
+    if (isVisitor) {
+      _timerEl = pill;
+      pill.textContent = "⏱ 5:00 remaining";
+    } else {
+      pill.textContent = "🔓 Admin access";
+    }
+    pill.addEventListener("click", function() {
+      clearAccess();
+      if (_timerInterval) clearInterval(_timerInterval);
+      location.reload();
+    });
+    document.body.appendChild(pill);
+  }
+
+  function startVisitorTimer() {
+    if (_timerInterval) clearInterval(_timerInterval);
+    var access = getAccess();
+    if (!access) return;
+    _timerInterval = setInterval(function() {
+      var elapsed = Date.now() - access.ts;
+      var remaining = VISITOR_MS - elapsed;
+      if (remaining <= 0) {
+        clearInterval(_timerInterval);
+        clearAccess();
+        location.reload();
+        return;
+      }
+      var mins = Math.floor(remaining / 60000);
+      var secs = Math.floor((remaining % 60000) / 1000);
+      var pill = document.getElementById("ore-visitor-pill");
+      if (pill) pill.textContent = "⏱ " + mins + ":" + String(secs).padStart(2, "0") + " remaining";
+    }, 1000);
+  }
+
+  function initClientAccessGate() {
+    // Skip gate on admin pages
+    if (location.pathname.indexOf("/admin") !== -1) return;
+    injectAccessStyles();
+    if (hasValidAccess()) {
+      var a = getAccess();
+      injectVisitorPill(a && a.type === "visitor");
+      if (a && a.type === "visitor") startVisitorTimer();
+      return;
+    }
+    showGate();
+  }
+
+  document.addEventListener("DOMContentLoaded", initClientAccessGate);
+  // ── End client access gate ─────────────────────────────────────────────────
+
   function isEnabled(features, key) {
     return features && features[key] !== false;
   }
