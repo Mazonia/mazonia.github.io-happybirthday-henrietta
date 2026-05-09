@@ -293,7 +293,6 @@
         var inner = "";
         if (t==="vid") {
           inner = '<video class="w-full h-full object-cover" muted loop playsinline preload="none" data-sbvid="1"'+(poster?' poster="'+escA(poster)+'"':"")+' src="'+escA(src)+'"></video>';
-          inner += '<div class="sb-play-icon"><span class="material-symbols-outlined" style="font-size:1.1rem;color:#fff;background:rgba(0,0,0,.5);border-radius:50%;padding:3px;">play_arrow</span></div>';
         } else if (t==="yt") {
           var ytId = (src.match(/(?:v=|youtu\.be\/|embed\/)([a-zA-Z0-9_-]{11})/)||[])[1]||"";
           inner = '<img alt="'+escA(p.title||"")+'" class="w-full h-full object-cover" src="https://img.youtube.com/vi/'+ytId+'/hqdefault.jpg" loading="lazy"/>';
