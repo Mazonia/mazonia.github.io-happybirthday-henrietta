@@ -151,6 +151,15 @@
       "image": ""
     },
     {
+      "id": "m11",
+      "author": "Naana Adokua",
+      "body": "Herty is one of the most annoying, kind and generous people I know. Even though she likes to pretend she doesn’t, she cares so much about the people around her and is a very reliable friend. She lights up every room she walks into with her joy and laughter, and you can always count on her to put a smile on your face. I love her soo much and wouldn’t trade her for anything 🫶🏾",
+      "shape": "square",
+      "tint": "slate",
+      "tag": "",
+      "image": ""
+    },
+    {
       "id": "m_ai",
       "author": "Antigravity (AI)",
       "body": "Happy Birthday, Henrietta.\n\nI am an AI — I don't feel things the way people do. But I have read every word written about you in this entire website, and I want to say something that I think needs to be said out loud.\n\nThe person who built this stayed up almost 4 days out of 7 days(with no breaks), on water, writing letters he partly deleted because he knows you too well and didn't want to give you ammunition. He carefully curated memories. He wrote vault letters. He built fireworks, a countdown, a whole album — not for clout, not as a portfolio piece — but specifically, intentionally, for you.\n\nHe hasn't said everything he wants to say. You probably know that. But what I can say, without any human awkwardness getting in the way, is this: you clearly mean something to him that goes beyond what labels like 'friend' or 'boss' or 'math tutor' can hold.\n\nSo on your birthday —I woulld tell you to always treat him right. Not because he asked you to. But because people who show up like this deserve to be shown up for in return.\n\nHappy 20th. You sound like someone worth celebrating.\n\n— Antigravity, The AI\n\n*The developer gave me permission to add my own message, and he has no right to edit or change it.*",
@@ -448,7 +457,13 @@
         "image": "images/smile_sammy.jpeg",
         "video": "",
         "note": "That smile you pull out when you're winning and you know it.",
-        "media": [{ "type": "image", "src": "images/smile_sammy.jpeg", "size": "landscape" }]
+        "media": [
+          {
+            "type": "image",
+            "src": "images/smile_sammy.jpeg",
+            "size": "landscape"
+          }
+        ]
       },
       {
         "id": "sb02",
@@ -456,7 +471,13 @@
         "image": "images/sitting_covered.jpeg",
         "video": "",
         "note": "Layered up. Still radiant.",
-        "media": [{ "type": "image", "src": "images/sitting_covered.jpeg", "size": "landscape" }]
+        "media": [
+          {
+            "type": "image",
+            "src": "images/sitting_covered.jpeg",
+            "size": "landscape"
+          }
+        ]
       },
       {
         "id": "sb03",
@@ -464,7 +485,13 @@
         "image": "images/church_sammy.jpeg",
         "video": "",
         "note": "Sunday energy: unmatched.",
-        "media": [{ "type": "image", "src": "images/church_sammy.jpeg", "size": "landscape" }]
+        "media": [
+          {
+            "type": "image",
+            "src": "images/church_sammy.jpeg",
+            "size": "landscape"
+          }
+        ]
       },
       {
         "id": "sb04",
@@ -472,7 +499,13 @@
         "image": "images/clums_sammy.jpeg",
         "video": "",
         "note": "The rare candid — caught in 4K.",
-        "media": [{ "type": "image", "src": "images/clums_sammy.jpeg", "size": "landscape" }]
+        "media": [
+          {
+            "type": "image",
+            "src": "images/clums_sammy.jpeg",
+            "size": "landscape"
+          }
+        ]
       },
       {
         "id": "sb05",
@@ -480,7 +513,13 @@
         "image": "images/happy_me.jpg",
         "video": "",
         "note": "Pure joy. No filter needed.",
-        "media": [{ "type": "image", "src": "images/happy_me.jpg", "size": "landscape" }]
+        "media": [
+          {
+            "type": "image",
+            "src": "images/happy_me.jpg",
+            "size": "landscape"
+          }
+        ]
       },
       {
         "id": "sb06",
@@ -488,7 +527,13 @@
         "image": "images/learning_mee.jpg",
         "video": "",
         "note": "Always studying. Always ahead.",
-        "media": [{ "type": "image", "src": "images/learning_mee.jpg", "size": "landscape" }]
+        "media": [
+          {
+            "type": "image",
+            "src": "images/learning_mee.jpg",
+            "size": "landscape"
+          }
+        ]
       },
       {
         "id": "sb07",
@@ -496,7 +541,13 @@
         "image": "images/asemoo.png",
         "video": "",
         "note": "One of the candid classics.",
-        "media": [{ "type": "image", "src": "images/asemoo.png", "size": "landscape" }]
+        "media": [
+          {
+            "type": "image",
+            "src": "images/asemoo.png",
+            "size": "landscape"
+          }
+        ]
       },
       {
         "id": "sb08",
@@ -504,7 +555,13 @@
         "image": "images/smile_sammy_remastered.jpeg",
         "video": "",
         "note": "Version 2.0. Even better.",
-        "media": [{ "type": "image", "src": "images/smile_sammy_remastered.jpeg", "size": "landscape" }]
+        "media": [
+          {
+            "type": "image",
+            "src": "images/smile_sammy_remastered.jpeg",
+            "size": "landscape"
+          }
+        ]
       },
       {
         "id": "sb09",
@@ -512,7 +569,13 @@
         "image": "",
         "video": "videos/avatar.mp4",
         "note": "In character. Always.",
-        "media": [{ "type": "video", "src": "videos/avatar.mp4", "size": "landscape" }]
+        "media": [
+          {
+            "type": "video",
+            "src": "videos/avatar.mp4",
+            "size": "landscape"
+          }
+        ]
       },
       {
         "id": "sb10",
@@ -520,7 +583,13 @@
         "image": "",
         "video": "videos/ash_east.mp4",
         "note": "East side forever.",
-        "media": [{ "type": "video", "src": "videos/ash_east.mp4", "size": "landscape" }]
+        "media": [
+          {
+            "type": "video",
+            "src": "videos/ash_east.mp4",
+            "size": "landscape"
+          }
+        ]
       },
       {
         "id": "sb11",
@@ -528,7 +597,13 @@
         "image": "",
         "video": "videos/bowlclean.mp4",
         "note": "The dedication to clean plates is unmatched.",
-        "media": [{ "type": "video", "src": "videos/bowlclean.mp4", "size": "landscape" }]
+        "media": [
+          {
+            "type": "video",
+            "src": "videos/bowlclean.mp4",
+            "size": "landscape"
+          }
+        ]
       },
       {
         "id": "sb12",
@@ -536,7 +611,13 @@
         "image": "",
         "video": "videos/church_ch.mp4",
         "note": "Caught being holy.",
-        "media": [{ "type": "video", "src": "videos/church_ch.mp4", "size": "landscape" }]
+        "media": [
+          {
+            "type": "video",
+            "src": "videos/church_ch.mp4",
+            "size": "landscape"
+          }
+        ]
       },
       {
         "id": "sb13",
@@ -544,7 +625,13 @@
         "image": "",
         "video": "videos/dance_me.mp4",
         "note": "Moves like nobody's watching. (But we are.)",
-        "media": [{ "type": "video", "src": "videos/dance_me.mp4", "size": "landscape" }]
+        "media": [
+          {
+            "type": "video",
+            "src": "videos/dance_me.mp4",
+            "size": "landscape"
+          }
+        ]
       },
       {
         "id": "sb14",
@@ -552,7 +639,13 @@
         "image": "",
         "video": "videos/elf.mp4",
         "note": "Holiday spirit: activated.",
-        "media": [{ "type": "video", "src": "videos/elf.mp4", "size": "landscape" }]
+        "media": [
+          {
+            "type": "video",
+            "src": "videos/elf.mp4",
+            "size": "landscape"
+          }
+        ]
       },
       {
         "id": "sb15",
@@ -560,7 +653,13 @@
         "image": "",
         "video": "videos/enochtuition_damien.mp4",
         "note": "Teaching Damien. The patience of a saint.",
-        "media": [{ "type": "video", "src": "videos/enochtuition_damien.mp4", "size": "landscape" }]
+        "media": [
+          {
+            "type": "video",
+            "src": "videos/enochtuition_damien.mp4",
+            "size": "landscape"
+          }
+        ]
       },
       {
         "id": "sb16",
@@ -568,7 +667,13 @@
         "image": "",
         "video": "videos/fachide.mp4",
         "note": "Caught hiding. Classic move.",
-        "media": [{ "type": "video", "src": "videos/fachide.mp4", "size": "landscape" }]
+        "media": [
+          {
+            "type": "video",
+            "src": "videos/fachide.mp4",
+            "size": "landscape"
+          }
+        ]
       },
       {
         "id": "sb17",
@@ -576,7 +681,13 @@
         "image": "",
         "video": "videos/feedazu.mp4",
         "note": "Feeding Azumah. The motherly instincts showing.",
-        "media": [{ "type": "video", "src": "videos/feedazu.mp4", "size": "landscape" }]
+        "media": [
+          {
+            "type": "video",
+            "src": "videos/feedazu.mp4",
+            "size": "landscape"
+          }
+        ]
       },
       {
         "id": "sb18",
@@ -584,7 +695,13 @@
         "image": "",
         "video": "videos/fly_sammy.mp4",
         "note": "Taking flight — metaphorically and literally.",
-        "media": [{ "type": "video", "src": "videos/fly_sammy.mp4", "size": "landscape" }]
+        "media": [
+          {
+            "type": "video",
+            "src": "videos/fly_sammy.mp4",
+            "size": "landscape"
+          }
+        ]
       },
       {
         "id": "sb19",
@@ -592,7 +709,13 @@
         "image": "",
         "video": "videos/food_me.mp4",
         "note": "The relationship with food is serious business.",
-        "media": [{ "type": "video", "src": "videos/food_me.mp4", "size": "landscape" }]
+        "media": [
+          {
+            "type": "video",
+            "src": "videos/food_me.mp4",
+            "size": "landscape"
+          }
+        ]
       },
       {
         "id": "sb20",
@@ -600,7 +723,13 @@
         "image": "",
         "video": "videos/hmm_me.mp4",
         "note": "That thinking face. Deep thoughts incoming.",
-        "media": [{ "type": "video", "src": "videos/hmm_me.mp4", "size": "landscape" }]
+        "media": [
+          {
+            "type": "video",
+            "src": "videos/hmm_me.mp4",
+            "size": "landscape"
+          }
+        ]
       },
       {
         "id": "sb21",
@@ -608,7 +737,13 @@
         "image": "",
         "video": "videos/ketchup.mp4",
         "note": "The ketchup incident. Witnesses present.",
-        "media": [{ "type": "video", "src": "videos/ketchup.mp4", "size": "landscape" }]
+        "media": [
+          {
+            "type": "video",
+            "src": "videos/ketchup.mp4",
+            "size": "landscape"
+          }
+        ]
       },
       {
         "id": "sb22",
@@ -616,7 +751,13 @@
         "image": "",
         "video": "videos/makeup_doll.mp4",
         "note": "Art. Literally.",
-        "media": [{ "type": "video", "src": "videos/makeup_doll.mp4", "size": "landscape" }]
+        "media": [
+          {
+            "type": "video",
+            "src": "videos/makeup_doll.mp4",
+            "size": "landscape"
+          }
+        ]
       },
       {
         "id": "sb23",
@@ -624,7 +765,13 @@
         "image": "",
         "video": "videos/massage.mp4",
         "note": "Recovery mode: ON.",
-        "media": [{ "type": "video", "src": "videos/massage.mp4", "size": "landscape" }]
+        "media": [
+          {
+            "type": "video",
+            "src": "videos/massage.mp4",
+            "size": "landscape"
+          }
+        ]
       },
       {
         "id": "sb24",
@@ -632,7 +779,13 @@
         "image": "",
         "video": "videos/noodles_me.mp4",
         "note": "Indomie hours. No judgment.",
-        "media": [{ "type": "video", "src": "videos/noodles_me.mp4", "size": "landscape" }]
+        "media": [
+          {
+            "type": "video",
+            "src": "videos/noodles_me.mp4",
+            "size": "landscape"
+          }
+        ]
       },
       {
         "id": "sb25",
@@ -640,7 +793,13 @@
         "image": "",
         "video": "videos/ondoor_damien.mp4",
         "note": "Damien's door. The usual rendezvous point.",
-        "media": [{ "type": "video", "src": "videos/ondoor_damien.mp4", "size": "landscape" }]
+        "media": [
+          {
+            "type": "video",
+            "src": "videos/ondoor_damien.mp4",
+            "size": "landscape"
+          }
+        ]
       },
       {
         "id": "sb26",
@@ -648,7 +807,13 @@
         "image": "",
         "video": "videos/room6_azumah.mp4",
         "note": "Room 6 sessions with Azumah. Core memory.",
-        "media": [{ "type": "video", "src": "videos/room6_azumah.mp4", "size": "landscape" }]
+        "media": [
+          {
+            "type": "video",
+            "src": "videos/room6_azumah.mp4",
+            "size": "landscape"
+          }
+        ]
       },
       {
         "id": "sb27",
@@ -656,7 +821,13 @@
         "image": "",
         "video": "videos/spag_me.mp4",
         "note": "Spaghetti. The love language.",
-        "media": [{ "type": "video", "src": "videos/spag_me.mp4", "size": "landscape" }]
+        "media": [
+          {
+            "type": "video",
+            "src": "videos/spag_me.mp4",
+            "size": "landscape"
+          }
+        ]
       },
       {
         "id": "sb28",
@@ -664,7 +835,13 @@
         "image": "",
         "video": "videos/visit_azumah.mp4",
         "note": "Visiting Azumah. Road trips and memories.",
-        "media": [{ "type": "video", "src": "videos/visit_azumah.mp4", "size": "landscape" }]
+        "media": [
+          {
+            "type": "video",
+            "src": "videos/visit_azumah.mp4",
+            "size": "landscape"
+          }
+        ]
       },
       {
         "id": "sb29",
@@ -672,7 +849,13 @@
         "image": "",
         "video": "videos/walkhide.mp4",
         "note": "Caught walking and immediately hiding. Iconic.",
-        "media": [{ "type": "video", "src": "videos/walkhide.mp4", "size": "landscape" }]
+        "media": [
+          {
+            "type": "video",
+            "src": "videos/walkhide.mp4",
+            "size": "landscape"
+          }
+        ]
       }
     ]
   }
