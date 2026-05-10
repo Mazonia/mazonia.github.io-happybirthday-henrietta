@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Messages | Ore Celebrations</title>
+    <title>Messages | Henrietta's Birthday</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script src="assets/js/tailwind-config.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Caveat:wght@400;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" />
@@ -63,7 +63,7 @@
       <a data-feature="scrapbook" class="flex flex-col items-center text-slate-400" href="scrapbook.html"><span class="material-symbols-outlined">auto_stories</span>Book</a>
       <a data-feature="quiz" class="flex flex-col items-center text-slate-400" href="quiz.html"><span class="material-symbols-outlined">quiz</span>Drill</a>
     </div>
-    <script src="assets/js/site-data.js"></script>
+    <script src="assets/js/music.js"></script><script src="assets/js/site-data.js"></script>
     <script src="assets/js/shell.js"></script>
     <script>
       function palette(t) {
@@ -110,7 +110,8 @@
             '<div class="grain absolute inset-0"></div>' +
             (gem ? '<span class="material-symbols-outlined text-secondary mb-4">favorite</span>' : "") +
             (badge ? '<span class="material-symbols-outlined text-secondary/80 mb-2">' + badge + "</span>" : "") +
-            '<div class="min-h-0 flex-1 overflow-auto pr-1"><p class="font-handwritten-note text-xl leading-snug ' +
+            '<div class="min-h-0 flex-1 overflow-auto flex flex-col items-center justify-start text-center">' +
+            '<p class="font-handwritten-note text-2xl leading-snug ' +
             pal.body +
             (forced ? '" style="color:' + forced + ";" : '"') +
             '>' +
@@ -121,7 +122,7 @@
                 escapeAttr(m.image) +
                 '" /></div>'
               : "") +
-            '<p class="mt-4 font-label-sm ' +
+            '<p class="mt-4 font-label-sm text-center ' +
             pal.by +
             (forced ? '" style="color:' + forced + ";" : '"') +
             '> - ' +

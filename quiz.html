@@ -3,12 +3,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Truth Drill | Ore Celebrations</title>
+    <title>Truth Drill | Henrietta's Birthday</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script src="assets/js/tailwind-config.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Caveat:wght@400;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" />
     <link rel="stylesheet" href="assets/css/site.css" />
     <script>if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js').catch(function(){});</script>
+    <style>
+      @keyframes bannerShimmer{0%,100%{opacity:0;transform:translateX(-100%)}50%{opacity:1;transform:translateX(100%)}}
+      @keyframes bannerPop{0%{opacity:0;transform:scale(.92) translateY(20px)}60%{transform:scale(1.02) translateY(-4px)}100%{opacity:1;transform:scale(1) translateY(0)}}
+      #quiz-complete-banner.visible{animation:bannerPop .6s cubic-bezier(.34,1.4,.64,1) both;}
+    </style>
   </head>
   <body class="bg-background text-on-background font-body-md min-h-screen">
     <div class="fixed inset-0 bg-gradient-to-b from-surface-container-lowest via-background to-surface-dim z-0 pointer-events-none"></div>
@@ -73,6 +78,30 @@
           <div id="quiz-bar" class="h-full bg-gradient-to-r from-yellow-500 to-amber-200 w-0 transition-[width] duration-500"></div>
         </div>
       </div>
+
+      <!-- Golden completion banner (hidden until all answered) -->
+      <div id="quiz-complete-banner" class="hidden mt-10 max-w-3xl" aria-live="polite">
+        <div class="relative overflow-hidden rounded-3xl p-8 sm:p-10 text-center border border-yellow-400/40"
+             style="background:linear-gradient(135deg,rgba(30,20,0,.85) 0%,rgba(60,40,0,.9) 50%,rgba(30,20,0,.85) 100%);box-shadow:0 0 60px rgba(250,204,21,.18),0 0 120px rgba(250,204,21,.08);">
+          <!-- shimmer stripe -->
+          <div class="absolute inset-0 pointer-events-none" style="background:linear-gradient(105deg,transparent 40%,rgba(250,204,21,.07) 50%,transparent 60%);animation:bannerShimmer 3s ease-in-out infinite;"></div>
+          <div class="relative z-10 flex flex-col items-center gap-5">
+            <div class="flex items-center gap-3">
+              <span class="text-5xl" aria-hidden="true">🏆</span>
+              <span class="text-5xl" aria-hidden="true">✨</span>
+              <span class="text-5xl" aria-hidden="true">🏆</span>
+            </div>
+            <h2 class="font-display-lg text-3xl sm:text-4xl" style="background:linear-gradient(90deg,#fde68a,#fbbf24,#f59e0b,#fbbf24,#fde68a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Drill Complete!</h2>
+            <p class="font-handwritten-note text-2xl sm:text-3xl text-yellow-200/90 max-w-xl leading-relaxed">
+              You answered every single question — no dodging, no escaping. Well done! 😄
+            </p>
+            <p class="text-yellow-400/70 text-sm uppercase tracking-widest font-bold">As the kind Enoch that I am, I made it so your answers are saved locally on your device so the other's can't see it. I would come and take ur device to read it 🫣</p>
+            <div class="flex gap-3 mt-2">
+              <span class="px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest border border-yellow-500/40 text-yellow-300" style="background:rgba(250,204,21,.12);">All questions answered</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </main>
 
     <div id="quiz-modal" class="fixed inset-0 z-[200] hidden bg-slate-950/75 backdrop-blur-md">
@@ -113,7 +142,7 @@
       <a data-feature="quiz" class="flex flex-col items-center text-yellow-400" href="quiz.html"><span class="material-symbols-outlined">quiz</span>Drill</a>
     </div>
 
-    <script src="assets/js/site-data.js"></script>
+    <script src="assets/js/music.js"></script><script src="assets/js/site-data.js"></script>
     <script src="assets/js/shell.js"></script>
     <script>
       var ANS_KEY = "oreCelebrations.quizAnswers.v1";
@@ -168,6 +197,19 @@
           document.getElementById("quiz-count").textContent = done + " of " + total + " answered";
           var pct = total ? Math.round((done / total) * 100) : 0;
           document.getElementById("quiz-bar").style.width = pct + "%";
+          /* Show golden banner when everything is done */
+          var banner = document.getElementById("quiz-complete-banner");
+          if (banner && total > 0 && done >= total) {
+            if (banner.classList.contains("hidden")) {
+              banner.classList.remove("hidden");
+              /* force reflow so animation triggers */
+              void banner.offsetWidth;
+              banner.classList.add("visible");
+              setTimeout(function(){
+                banner.scrollIntoView({ behavior: "smooth", block: "center" });
+              }, 200);
+            }
+          }
         }
 
         function renderCard(x) {

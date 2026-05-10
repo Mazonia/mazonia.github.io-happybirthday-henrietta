@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>The Ore Vault | Ore Celebrations</title>
+    <title>The Ore Vault | Henrietta's Birthday</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script src="assets/js/tailwind-config.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Caveat:wght@400;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" />
@@ -100,8 +100,84 @@
       <a data-feature="messages" class="flex flex-col items-center text-slate-400" href="messages.html"><span class="material-symbols-outlined">push_pin</span>Notes</a>
     </div>
 
+    <script src="assets/js/music.js"></script>
     <script src="assets/js/site-data.js"></script>
     <script src="assets/js/shell.js"></script>
+    <script>
+    /* ── Animated starfall canvas ─────────────────────────────────────── */
+    (function(){
+      var container = document.querySelector(".vault-starfield");
+      if (!container) return;
+      var canvas = document.createElement("canvas");
+      canvas.style.cssText = "position:absolute;inset:0;width:100%;height:100%;pointer-events:none;";
+      container.appendChild(canvas);
+      var ctx = canvas.getContext("2d");
+      var W, H, stars = [];
+      var COLORS = ["rgba(255,255,255,VAL)","rgba(223,196,130,VAL)","rgba(200,220,255,VAL)","rgba(255,200,200,VAL)"];
+
+      function resize(){
+        W = canvas.width  = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+      }
+
+      function mkStar(){
+        var c = COLORS[Math.floor(Math.random()*COLORS.length)];
+        return {
+          x: Math.random()*W, y: Math.random()*H,
+          r: Math.random()*1.4 + 0.3,
+          vx: Math.random()*0.18 + 0.04,
+          vy: Math.random()*0.35 + 0.12,
+          alpha: Math.random()*0.6 + 0.15,
+          twinkleSpeed: Math.random()*0.012 + 0.004,
+          twinkleDir: 1, color: c,
+          trail: Math.random() > 0.82  /* 18 % get a short trail */
+        };
+      }
+
+      function init(){
+        resize();
+        stars = [];
+        var count = Math.floor(W * H / 5200);
+        for (var i=0; i<count; i++) stars.push(mkStar());
+      }
+
+      function draw(){
+        ctx.clearRect(0,0,W,H);
+        stars.forEach(function(s){
+          /* twinkle */
+          s.alpha += s.twinkleSpeed * s.twinkleDir;
+          if (s.alpha > 0.85 || s.alpha < 0.08) s.twinkleDir *= -1;
+          /* drift */
+          s.x += s.vx; s.y += s.vy;
+          /* wrap */
+          if (s.y > H + 4) { s.y = -4; s.x = Math.random()*W; }
+          if (s.x > W + 4) s.x = -4;
+          /* draw */
+          var col = s.color.replace("VAL", s.alpha.toFixed(2));
+          if (s.trail) {
+            var grad = ctx.createLinearGradient(s.x - s.vx*18, s.y - s.vy*18, s.x, s.y);
+            grad.addColorStop(0, s.color.replace("VAL","0"));
+            grad.addColorStop(1, col);
+            ctx.beginPath();
+            ctx.moveTo(s.x - s.vx*18, s.y - s.vy*18);
+            ctx.lineTo(s.x, s.y);
+            ctx.strokeStyle = grad;
+            ctx.lineWidth = s.r * 0.8;
+            ctx.stroke();
+          }
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+          ctx.fillStyle = col;
+          ctx.fill();
+        });
+        requestAnimationFrame(draw);
+      }
+
+      window.addEventListener("resize", function(){ resize(); init(); });
+      init();
+      draw();
+    })();
+    </script>
     <script>
       var UNLOCK_KEY = "oreCelebrations.vaultUnlocked.v1";
       document.addEventListener("DOMContentLoaded", async function () {
