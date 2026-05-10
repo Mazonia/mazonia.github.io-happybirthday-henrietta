@@ -769,8 +769,8 @@
         sessionStorage.removeItem("oreCelebrations.postUnlock");
         runPageFireworks(5000, function() { startAmbientFireworks(); });
       } else if (opts && opts.active === "home") {
-        // Intense welcome burst, then gentle ambient forever
-        runPageFireworks(4000, function() { startAmbientFireworks(); });
+        // Intense welcome burst (10s), then gentle ambient forever
+        runPageFireworks(10000, function() { startAmbientFireworks(); });
       }
     }
     attachMediaProtection();
@@ -877,29 +877,29 @@
     var particles = [];
     var colors = ["#facc15","#f9a8d4","#22d3ee","#a78bfa","#fb7185","#fef08a","#86efac","#60a5fa"];
     var lastBurst = 0;
-    // Burst interval: 4000-6000ms (random), very small bursts
-    var nextInterval = 4000 + Math.random() * 2000;
+    // Burst interval: 2000-3500ms (random) — slightly more frequent
+    var nextInterval = 2000 + Math.random() * 1500;
 
     function ambientBurst() {
-      // One small burst at a random edge-ish position
+      // One small burst at a random position
       var x = 80 + Math.random() * (cv.width - 160);
-      var y = 30 + Math.random() * (cv.height * 0.45);
+      var y = 30 + Math.random() * (cv.height * 0.55);
       var color = colors[Math.floor(Math.random() * colors.length)];
-      var count = 18 + Math.floor(Math.random() * 12); // 18-30 particles (vs 60-90 intense)
+      var count = 30 + Math.floor(Math.random() * 20); // 30-50 particles
       for (var i = 0; i < count; i++) {
         var angle = (Math.PI * 2 * i) / count;
-        var speed = 1.2 + Math.random() * 2.2;
+        var speed = 1.5 + Math.random() * 2.8;
         particles.push({
           x: x, y: y,
           vx: Math.cos(angle) * speed,
-          vy: Math.sin(angle) * speed - 1,
-          alpha: 0.65,
+          vy: Math.sin(angle) * speed - 1.2,
+          alpha: 0.75,
           color: color,
-          size: 1.5 + Math.random() * 1.5,
-          life: 0.008 + Math.random() * 0.005  // fades gently
+          size: 1.8 + Math.random() * 2,
+          life: 0.007 + Math.random() * 0.005
         });
       }
-      nextInterval = 4000 + Math.random() * 2000;
+      nextInterval = 2000 + Math.random() * 1500;
     }
 
     function ambientFrame() {
