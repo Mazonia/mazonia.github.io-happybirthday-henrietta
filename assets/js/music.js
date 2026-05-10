@@ -13,29 +13,19 @@
   ];
 
   var STATE_KEY = "hbday.music.v1";
-  var TICK_MS   = 3000;   /* how often we save position */
+  var TICK_MS   = 4000;
 
   var audio   = null;
   var muted   = false;
   var started = false;
   var ticker  = null;
-
-  /* ── Resolve relative path to absolute so it matches across pages ── */
-  function absTrack(rel) {
-    /* Find the root by walking up until we find the music folder.
-       Simplest: build URL relative to the document's origin root. */
-    var origin = location.origin;
-    /* Strip any sub-path — music/ lives at the repo root */
-    var base = origin + "/";
-    return base + rel;
-  }
+  var curIdx  = 0;
 
   function saveState() {
     if (!audio) return;
     try {
-      var idx = TRACKS.indexOf(audio._rel);
       localStorage.setItem(STATE_KEY, JSON.stringify({
-        idx: idx >= 0 ? idx : 0,
+        idx: curIdx,
         pos: audio.currentTime || 0,
         ts : Date.now()
       }));
@@ -47,76 +37,80 @@
       var raw = localStorage.getItem(STATE_KEY);
       if (!raw) return null;
       var s = JSON.parse(raw);
-      /* Estimate how much real time elapsed since we last saved
-         (user was on another page). Add that to pos. */
-      var elapsed = (Date.now() - (s.ts || Date.now())) / 1000;
-      s.pos = (s.pos || 0) + elapsed;
+      /* add elapsed real time since save (spent on another page) */
+      s.pos = (s.pos || 0) + (Date.now() - (s.ts || Date.now())) / 1000;
       return s;
     } catch(e) { return null; }
   }
 
-  function createAudio(relSrc) {
-    var a = new Audio();
-    a.preload  = "auto";
-    a.volume   = muted ? 0 : 0.35;
-    a._rel     = relSrc;
-    a.src      = absTrack(relSrc);
-    return a;
-  }
-
   function playTrack(idx, startPos) {
     if (audio) {
-      audio.pause();
-      audio.onended = null;
       clearInterval(ticker);
+      audio.onended = null;
+      audio.pause();
     }
-    var rel = TRACKS[idx % TRACKS.length];
-    audio   = createAudio(rel);
 
-    audio.addEventListener("canplay", function onReady() {
-      audio.removeEventListener("canplay", onReady);
-      /* Seek into the track if we have a saved position.
-         Clamp to valid range so we don't seek past end. */
-      if (startPos && startPos > 0) {
+    curIdx = idx % TRACKS.length;
+    audio  = new Audio();
+    audio.volume  = muted ? 0 : 0.35;
+    audio.preload = "auto";
+    audio.src     = TRACKS[curIdx];
+
+    /* Seek to saved position once metadata is ready.
+       We do NOT wait for this before calling play() —
+       play() must be called synchronously inside the user gesture. */
+    if (startPos && startPos > 1) {
+      audio.addEventListener("loadedmetadata", function () {
         var dur = audio.duration;
-        /* duration may be NaN if metadata not yet loaded — handle both */
-        if (isNaN(dur) || startPos < dur - 2) {
-          try { audio.currentTime = startPos; } catch(e) {}
-        } else {
-          /* saved position past end → next track */
-          playTrack((idx + 1) % TRACKS.length, 0);
-          return;
+        if (!isNaN(dur) && startPos < dur - 2) {
+          audio.currentTime = startPos;
         }
-      }
-      audio.play().catch(function(){});
-      /* Persist state every few seconds */
-      ticker = setInterval(saveState, TICK_MS);
-    }, { once: false });
+        /* if startPos >= dur the track will just play from 0 which is fine */
+      }, { once: true });
+    }
 
     audio.onended = function () {
       clearInterval(ticker);
-      var nextIdx = (idx + 1) % TRACKS.length;
       saveState();
-      playTrack(nextIdx, 0);
+      playTrack((curIdx + 1) % TRACKS.length, 0);
     };
+
+    /* play() called immediately — still within the user gesture call stack */
+    var promise = audio.play();
+    if (promise && promise.catch) {
+      promise.catch(function(e) {
+        /* If blocked, retry once on next click */
+        if (!muted) {
+          function retry() {
+            document.removeEventListener("click", retry, true);
+            audio.play().catch(function(){});
+          }
+          document.addEventListener("click", retry, true);
+        }
+      });
+    }
+
+    /* Save position periodically */
+    clearInterval(ticker);
+    ticker = setInterval(saveState, TICK_MS);
   }
 
   function start() {
     if (started) return;
     started = true;
-
     var state = loadState();
-    var idx   = (state && state.idx >= 0) ? (state.idx % TRACKS.length) : 0;
-    var pos   = (state && state.pos > 0)  ? state.pos : 0;
+    var idx = (state && state.idx >= 0) ? (state.idx % TRACKS.length) : 0;
+    var pos = (state && state.pos > 1)  ? state.pos : 0;
     playTrack(idx, pos);
   }
 
-  /* ── Listen for page hide to snapshot position ── */
-  window.addEventListener("pagehide",  saveState);
-  window.addEventListener("visibilitychange", function() {
+  /* Save on page leave */
+  window.addEventListener("pagehide", saveState);
+  window.addEventListener("visibilitychange", function () {
     if (document.visibilityState === "hidden") saveState();
   });
 
+  /* Start on first interaction */
   function onFirst() {
     document.removeEventListener("click",   onFirst, true);
     document.removeEventListener("keydown", onFirst, true);

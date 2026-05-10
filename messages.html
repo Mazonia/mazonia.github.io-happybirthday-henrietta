@@ -106,11 +106,13 @@
           var forced = safeColor(m.textColor);
           var gem = m.shape === "gem";
           var badge = shapeBadge(m.shape);
+          var isLong = (m.body || "").length > 180;
+          var justifyCls = isLong ? "justify-start" : "justify-center";
           var inner =
             '<div class="grain absolute inset-0"></div>' +
             (gem ? '<span class="material-symbols-outlined text-secondary mb-4">favorite</span>' : "") +
             (badge ? '<span class="material-symbols-outlined text-secondary/80 mb-2">' + badge + "</span>" : "") +
-            '<div class="min-h-0 flex-1 overflow-auto flex flex-col items-center justify-start text-center">' +
+            '<div class="min-h-0 flex-1 overflow-auto flex flex-col items-center ' + justifyCls + ' text-center">' +
             '<p class="font-handwritten-note text-2xl leading-snug ' +
             pal.body +
             (forced ? '" style="color:' + forced + ";" : '"') +
